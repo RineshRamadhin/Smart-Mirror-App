@@ -77,6 +77,11 @@ namespace Smart_Mirror_App
                 // Ensure the current window is active
                 Window.Current.Activate();
             }
+
+            if (!rootFrame.Navigate(typeof(authentication.GoogleAuthentication), e.Arguments))
+            {
+                throw new Exception("Failed to create initial page");
+            }
         }
 
         /// <summary>
