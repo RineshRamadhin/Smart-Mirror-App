@@ -42,12 +42,13 @@ namespace Smart_Mirror_App.authentication
 
         private async void Login_Google_Plus(object sender, RoutedEventArgs e)
         {
-            String GoogleClientId = "64494997844-hgvqajn97080vlv95tvnnjbkvtkt8tap.apps.googleusercontent.com";
-            String GoogleCallbackUrl = "urn:ietf:wg:oauth:2.0:oob";
+            String googleClientId = "64494997844-hgvqajn97080vlv95tvnnjbkvtkt8tap.apps.googleusercontent.com";
+            String googleCallbackUrl = "urn:ietf:wg:oauth:2.0:oob";
+            String googleScope = "profile";
 
             try
             {
-                String GoogleURL = "https://accounts.google.com/o/oauth2/auth?client_id=" + Uri.EscapeDataString(GoogleClientId) + "&redirect_uri=" + Uri.EscapeDataString(GoogleCallbackUrl) + "&response_type=code&scope=" + Uri.EscapeDataString("http://picasaweb.google.com/data");
+                String GoogleURL = "https://accounts.google.com/o/oauth2/auth?client_id=" + Uri.EscapeDataString(googleClientId) + "&redirect_uri=" + Uri.EscapeDataString(googleCallbackUrl) + "&response_type=code&scope=" + googleScope;
 
                 Uri StartUri = new Uri(GoogleURL);
                 // When using the desktop flow, the success code is displayed in the html title of this end uri
