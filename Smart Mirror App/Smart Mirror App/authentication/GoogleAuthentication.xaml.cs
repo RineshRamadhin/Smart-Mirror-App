@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
+using System.Text;
+using System.Threading.Tasks;
 using Windows.Security.Authentication.Web;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
@@ -12,6 +12,7 @@ using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
+using Smart_Mirror_App.API.User;
 using Windows.UI.Xaml.Navigation;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
@@ -23,21 +24,39 @@ namespace Smart_Mirror_App.authentication
     /// </summary>
     public sealed partial class GoogleAuthentication : Page
     {
-        String googleApiToken = "";
+ 
+        UserOauthToken userToken = new UserOauthToken();
+        Windows.Storage.ApplicationDataContainer sharedPreferences = Windows.Storage.ApplicationData.Current.LocalSettings;
 
         public GoogleAuthentication()
         {
             this.InitializeComponent();
+            CheckCurrentAuthentication();
         }
 
-        public string GetToken()
+        private void CheckCurrentAuthentication()
         {
-            return googleApiToken;
+            if (sharedPreferences.Values["googleToken"] != null)
+            {
+                NavigateToMainPage();
+                //TODO: go to main page
+            }
+        }
+
+        private void NavigateToMainPage()
+        {
+            Window.Current.Content = new MainPage();
         }
 
         private void SetGoogleToken(String TokenUri)
         {
-            googleApiToken = TokenUri;
+            userToken.token = TokenUri;
+            sharedPreferences.Values["googleToken"] = TokenUri;
+        }
+
+        public String GetOAuthToken()
+        {
+            return userToken.token;
         }
 
         private async void Login_Google_Plus(object sender, RoutedEventArgs e)

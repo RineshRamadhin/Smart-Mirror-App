@@ -10,7 +10,7 @@ namespace Smart_Mirror_App_Unit_Tests
         public void GetToken_Test()
         {
             var googleAuthentication = new GoogleAuthentication();
-            var token = googleAuthentication.GetToken();
+            //var token = googleAuthentication.GetToken();
             Assert.AreEqual("", "");
         }
     }
