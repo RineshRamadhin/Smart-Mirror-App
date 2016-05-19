@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -40,7 +41,7 @@ namespace Smart_Mirror_App.authentication
             if (sharedPreferences.Values["googleToken"] != null)
             {
                 Object token = sharedPreferences.Values["googleToken"];
-                NavigateToMainPage();
+               // NavigateToMainPage();
             }
         }
 
@@ -62,14 +63,12 @@ namespace Smart_Mirror_App.authentication
 
         private async void Login_Google_Plus(object sender, RoutedEventArgs e)
         {
-            String googleClientId = "64494997844-hgvqajn97080vlv95tvnnjbkvtkt8tap.apps.googleusercontent.com";
-            String googleCallbackUrl = "urn:ietf:wg:oauth:2.0:oob";
-            String googleScope = "profile";
+
+            ArrayList scopes = SetupScope();
 
             try
             {
-                String GoogleURL = "https://accounts.google.com/o/oauth2/auth?client_id=" + Uri.EscapeDataString(googleClientId) + "&redirect_uri=" + Uri.EscapeDataString(googleCallbackUrl) + "&response_type=code&scope=" + googleScope;
-
+                String GoogleURL = SetupGoogleAuthenticationUrl(scopes);
                 Uri StartUri = new Uri(GoogleURL);
                 // When using the desktop flow, the success code is displayed in the html title of this end uri
                 Uri EndUri = new Uri("https://accounts.google.com/o/oauth2/approval?");
@@ -92,6 +91,33 @@ namespace Smart_Mirror_App.authentication
             {
                 
             }
+        }
+
+        private ArrayList SetupScope()
+        {
+            ArrayList scopes = new ArrayList();
+            scopes.Add("profile");
+            scopes.Add("https://www.googleapis.com/auth/calendar");
+            scopes.Add("https://mail.google.com/");
+
+            return scopes;
+        }
+
+        private String SetupGoogleAuthenticationUrl(ArrayList scopes)
+        {
+            String googleClientId = "64494997844-hgvqajn97080vlv95tvnnjbkvtkt8tap.apps.googleusercontent.com";
+            String googleCallbackUrl = "urn:ietf:wg:oauth:2.0:oob";
+
+            String GoogleUrl = "https://accounts.google.com/o/oauth2/auth?client_id="
+                    + Uri.EscapeDataString(googleClientId) + "&redirect_uri="
+                    + Uri.EscapeDataString(googleCallbackUrl)
+                    + "&response_type=code&scope=";
+
+            foreach (String scope in scopes) {
+                GoogleUrl = GoogleUrl + "+" + scope;
+            }
+
+            return GoogleUrl;
         }
     }
 }
