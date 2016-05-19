@@ -36,10 +36,11 @@ namespace Smart_Mirror_App.authentication
 
         private void CheckCurrentAuthentication()
         {
+            // TODO: Validation valid token
             if (sharedPreferences.Values["googleToken"] != null)
             {
+                Object token = sharedPreferences.Values["googleToken"];
                 NavigateToMainPage();
-                //TODO: go to main page
             }
         }
 

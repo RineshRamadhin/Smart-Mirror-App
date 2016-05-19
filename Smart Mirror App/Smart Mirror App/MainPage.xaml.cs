@@ -22,13 +22,9 @@ namespace Smart_Mirror_App
     /// </summary>
     public sealed partial class MainPage : Page
     {
-        public static MainPage Current;
-   
         public MainPage()
         {
-            this.InitializeComponent();
-            Current = this;
-            
+            this.InitializeComponent();  
         }
     }
 }

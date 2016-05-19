@@ -92,14 +92,14 @@
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Authentication\User\GetUserProfile.cs" />
-    <Compile Include="Authentication\User\UserModel.cs" />
+    <Compile Include="Authentication\UserOauthToken.cs" />
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="Authentication\GoogleAuthentication.xaml.cs">
       <DependentUpon>GoogleAuthentication.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Data\Google\UserProfile\UserModel.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
