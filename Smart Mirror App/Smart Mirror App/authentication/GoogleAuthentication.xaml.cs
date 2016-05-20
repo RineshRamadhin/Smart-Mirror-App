@@ -1,20 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Windows.Security.Authentication.Web;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
 using Smart_Mirror_App.API.User;
-using Windows.UI.Xaml.Navigation;
+using Smart_Mirror_App.Authentication;
+using System.Net.Http;
+using System.Threading.Tasks;
+using System.Diagnostics;
+using Newtonsoft.Json.Linq;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -50,25 +45,75 @@ namespace Smart_Mirror_App.authentication
             Window.Current.Content = new MainPage();
         }
 
-        private void SetGoogleToken(String TokenUri)
+        private async void SetGoogleToken(String TokenUri)
         {
-            userToken.token = TokenUri;
-            sharedPreferences.Values["googleToken"] = TokenUri;
+            string token = GetGoogleSuccessCode(TokenUri);
+            JToken tokens = await GetToken(token);
+            var accesToken = tokens.SelectToken("access_token");
+            var refreshToken = tokens.SelectToken("refresh_token");
+            var expireTime = tokens.SelectToken("expires_in");
+            var expireDate = SetExpireDate(Int32.Parse(expireTime.ToString()));
+
+            userToken.accesToken = accesToken.ToString();
+            userToken.refreshToken = refreshToken.ToString();
+            userToken.expireDate = expireDate;
+        }
+
+        private DateTime SetExpireDate(int seconds)
+        {
+            DateTime expireDate = DateTime.Now;
+            expireDate.AddSeconds(seconds);
+
+            return expireDate;
         }
 
         public String GetOAuthToken()
         {
-            return userToken.token;
+            // TODO;
+            return null;
+        }
+
+        private string GetGoogleSuccessCode(string data)
+        {
+            if (string.IsNullOrEmpty(data)) return null;
+            var parts = data.Split('=');
+            for (int i = 0; i < parts.Length; ++i)
+            {
+                if (parts[i] == "Success code")
+                {
+                    return parts[i + 1];
+                }
+            }
+            return null;
+        }
+
+        public async Task<JToken> GetToken(string code)
+        {
+            var client = new HttpClient();
+            var auth = await client.PostAsync("https://accounts.google.com/o/oauth2/token", new FormUrlEncodedContent(new[]
+            {
+                new KeyValuePair<string, string>("code", code),
+                new KeyValuePair<string, string>("client_id",AuthenticationConstants.GoogleClientId),
+                new KeyValuePair<string, string>("client_secret",AuthenticationConstants.GoogleClientSecret),
+                new KeyValuePair<string, string>("grant_type","authorization_code"),
+                new KeyValuePair<string, string>("redirect_uri","urn:ietf:wg:oauth:2.0:oob"),
+            }));
+
+            var data = await auth.Content.ReadAsStringAsync();
+            Debug.WriteLine(data);
+            var jToken = JToken.Parse(data);
+            
+            return jToken;
         }
 
         private async void Login_Google_Plus(object sender, RoutedEventArgs e)
         {
-
             ArrayList scopes = SetupScope();
+            String GoogleURL = SetupGoogleAuthenticationUrl(scopes);
 
             try
             {
-                String GoogleURL = SetupGoogleAuthenticationUrl(scopes);
+
                 Uri StartUri = new Uri(GoogleURL);
                 // When using the desktop flow, the success code is displayed in the html title of this end uri
                 Uri EndUri = new Uri("https://accounts.google.com/o/oauth2/approval?");
@@ -89,7 +134,7 @@ namespace Smart_Mirror_App.authentication
             }
             catch (Exception Error)
             {
-                
+
             }
         }
 

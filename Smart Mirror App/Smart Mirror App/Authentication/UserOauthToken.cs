@@ -8,6 +8,8 @@ namespace Smart_Mirror_App.API.User
 {
     public class UserOauthToken
     {
-        public String token { get; set; }
+        public string accesToken { get; set; }
+        public string refreshToken { get; set; }
+        public DateTime expireDate { get; set; }
     }
 }

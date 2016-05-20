@@ -92,7 +92,7 @@
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="API\HttpClient\HttpClient.cs" />
+    <Compile Include="Authentication\AuthenticationConstants.cs" />
     <Compile Include="Authentication\UserOauthToken.cs" />
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
