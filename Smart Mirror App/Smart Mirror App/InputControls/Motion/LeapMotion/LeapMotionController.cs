@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,27 +11,31 @@ namespace Smart_Mirror_App.InputControls.Motion.LeapMotion
 {
     class LeapMotionController
     {
-        private static Listener _listener;
-        private static Controller _controller;
-        private static LeapMotionData _data;
+        public Listener Listener { get; set; }
+        public Controller Controller { get; set; }
+        public LeapMotionData Data { get; set; }
 
-        public static void Init()
+        public void Init()
         {
-            _controller = new Controller();
-            _data = new LeapMotionData();
+            Debug.WriteLine("Initalizing leapmotioncontroller");
+
+            Listener = new LeapMotionListener();
+            Controller = new Controller();
+            Data = new LeapMotionData();
         }
 
-        public static bool Connect()
+        public bool Connect()
         {
-            // TODO: connect with leapmotion listener
+            Controller.AddListener(Listener);
 
             // on failure
             return false;
         }
 
-        public static bool Disconnect()
+        public bool Disconnect()
         {
-            // TODO: disconnect with the leapmotion listener
+            Controller.RemoveListener(Listener);
+            Controller.Dispose();
 
             // on failure
             return false;

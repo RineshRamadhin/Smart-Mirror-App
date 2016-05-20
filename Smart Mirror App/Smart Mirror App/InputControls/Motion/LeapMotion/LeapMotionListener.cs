@@ -10,5 +10,22 @@ namespace Smart_Mirror_App.InputControls.Motion.LeapMotion
     class LeapMotionListener : Listener
     {
         // TODO: overwrite default leapmotion listener functions
+
+        public override void OnConnect(Controller arg0)
+        {
+            base.OnConnect(arg0);
+        }
+
+        public override void OnDisconnect(Controller arg0)
+        {
+            base.OnDisconnect(arg0);
+        }
+
+        public override void Dispose()
+        {
+            base.Dispose();
+        }
+
+
     }
 }

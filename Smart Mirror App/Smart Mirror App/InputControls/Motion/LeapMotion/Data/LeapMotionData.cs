@@ -9,23 +9,24 @@ namespace Smart_Mirror_App.InputControls.Motion.LeapMotion.Data
 {
     class LeapMotionData
     {
-        public static Hands Hands { get; set; }
-        public static Fingers Fingers { get; set; }
-        public static Tools Tools { get; set; }
-        public static Gestures Gestures { get; set; }
+        public Hands Hands { get; set; }
+        public Fingers Fingers { get; set; }
+        public Tools Tools { get; set; }
+        public Gestures Gestures { get; set; }
 
-        public static void Init()
+        public LeapMotionData()
         {
-            Hands = new Hands();
-            Fingers = new Fingers();
-            Tools = new Tools();
-            Gestures = new Gestures();        
+            this.Hands = new Hands();
+            this.Fingers = new Fingers();
+            this.Tools = new Tools();
+            this.Gestures = new Gestures();
         }
 
-        public static bool UpdateData(Frame frame)
+        public bool UpdateData(Frame frame)
         {
             // TODO: call update function in all child object with object specific data
-            // child object throw exceptions on failure 
+            // child object throw exceptions on failure
+            this.Hands.UpdateData(frame);
 
             // if one fails show exception
             return false;
