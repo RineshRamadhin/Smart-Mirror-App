@@ -18,12 +18,16 @@ namespace Smart_Mirror_App.InputControls.Motion.LeapMotion.Data
 
         public bool UpdateData(Frame frame)
         {
-            // TODO: update data with object specific data
-            // throw exceptions on failure
-            this.prop = "updated value";
+            try
+            {
+                return true;
+            }
+            catch (Exception e)
+            {
 
-            // if one fails show exception
-            return false;
+                // Throw exception
+                return false;
+            }
         }
     }
 }

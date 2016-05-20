@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,15 +22,24 @@ namespace Smart_Mirror_App.InputControls.Motion.LeapMotion.Data
             this.Tools = new Tools();
             this.Gestures = new Gestures();
         }
-
+        
         public bool UpdateData(Frame frame)
         {
-            // TODO: call update function in all child object with object specific data
-            // child object throw exceptions on failure
-            this.Hands.UpdateData(frame);
+            try
+            {
+                this.Hands.UpdateData(frame);
+                this.Fingers.UpdateData(frame);
+                this.Tools.UpdateData(frame);
+                this.Gestures.UpdateData(frame);
 
-            // if one fails show exception
-            return false;
+                return true;
+            }
+            catch (Exception e)
+            {
+                
+                Debug.WriteLine("LeapMotionData.UpdateData: " + e);
+                return false;
+            }
         }
     
     }
