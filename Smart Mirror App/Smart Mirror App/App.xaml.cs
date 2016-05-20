@@ -1,4 +1,5 @@
 ﻿using Smart_Mirror_App.Clock;
+using Smart_Mirror_App.Controllers;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -48,6 +49,7 @@ namespace Smart_Mirror_App
 #endif
             var clockModel = new ClockModel();
             clockModel.Update();
+            TimerController.RegisterModel(clockModel);
             (Resources["clockViewModel"] as ClockViewModel).Initialize(clockModel);
 
             Frame rootFrame = Window.Current.Content as Frame;

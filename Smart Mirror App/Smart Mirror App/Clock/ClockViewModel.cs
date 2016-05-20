@@ -2,13 +2,12 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Smart_Mirror_App.Clock
 {
-    public class ClockViewModel : INotifyPropertyChanged
+    public class ClockViewModel : PropertyChangedBase
     {
         private string currentTime;
         private ClockModel model;
@@ -32,21 +31,20 @@ namespace Smart_Mirror_App.Clock
         {
             this.model = model;
             updateTime();
+            model.PropertyChanged += ModelPropertyChanged;
+        }
+     
+        private void ModelPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+           if(e.PropertyName == nameof(model.CurrentTime))
+            {
+                updateTime();
+            }
         }
 
         private void updateTime()
         {
-            CurrentTime = $"it is {model.CurrentTime.ToString("hh:mm:ss tt")}.";
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        private void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
-        {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-            }
+            CurrentTime = $"it is {model.CurrentTime.ToString("H:mm:ss")}.";
         }
     }
 }
