@@ -45,10 +45,8 @@ namespace Smart_Mirror_App.authentication
             Window.Current.Content = new MainPage();
         }
 
-        private async void SetGoogleToken(String TokenUri)
+        private void SetGoogleToken(JToken tokens)
         {
-            string token = GetGoogleSuccessCode(TokenUri);
-            JToken tokens = await GetToken(token);
             var accesToken = tokens.SelectToken("access_token");
             var refreshToken = tokens.SelectToken("refresh_token");
             var expireTime = tokens.SelectToken("expires_in");
@@ -57,6 +55,8 @@ namespace Smart_Mirror_App.authentication
             userToken.accesToken = accesToken.ToString();
             userToken.refreshToken = refreshToken.ToString();
             userToken.expireDate = expireDate;
+
+            this.RefreshTokens();
         }
 
         private DateTime SetExpireDate(int seconds)
@@ -67,10 +67,15 @@ namespace Smart_Mirror_App.authentication
             return expireDate;
         }
 
-        public String GetOAuthToken()
+        public String GetAccesToken()
         {
-            // TODO;
-            return null;
+            if (userToken.accesToken != null)
+            {
+                return userToken.accesToken;
+            } else
+            {
+                return "No Access Token Available";
+            }
         }
 
         private string GetGoogleSuccessCode(string data)
@@ -102,6 +107,31 @@ namespace Smart_Mirror_App.authentication
             var data = await auth.Content.ReadAsStringAsync();
             Debug.WriteLine(data);
             var jToken = JToken.Parse(data);
+
+            SetGoogleToken(jToken);
+            
+            return jToken;
+        }
+
+        public async void RefreshTokens()
+        {
+            JToken newTokens = await RequestNewTokens(userToken.refreshToken);
+            
+        }
+        private async Task<JToken> RequestNewTokens(string refreshToken)
+        {
+            var client = new HttpClient();
+            var auth = await client.PostAsync("https://accounts.google.com/o/oauth2/token", new FormUrlEncodedContent(new[]
+            {
+                new KeyValuePair<string, string>("refresh_token", refreshToken),
+                new KeyValuePair<string, string>("client_id",AuthenticationConstants.GoogleClientId),
+                new KeyValuePair<string, string>("client_secret",AuthenticationConstants.GoogleClientSecret),
+                new KeyValuePair<string, string>("grant_type","refresh_token"),
+            }));
+
+            var data = await auth.Content.ReadAsStringAsync();
+            Debug.WriteLine(data);
+            var jToken = JToken.Parse(data);
             
             return jToken;
         }
@@ -121,21 +151,25 @@ namespace Smart_Mirror_App.authentication
                 WebAuthenticationResult WebAuthenticationResult = await WebAuthenticationBroker.AuthenticateAsync(WebAuthenticationOptions.UseTitle, StartUri, EndUri);
                 if (WebAuthenticationResult.ResponseStatus == WebAuthenticationStatus.Success)
                 {
-                    SetGoogleToken(WebAuthenticationResult.ResponseData.ToString());
                 }
                 else if (WebAuthenticationResult.ResponseStatus == WebAuthenticationStatus.ErrorHttp)
                 {
-                    SetGoogleToken("HTTP Error returned by AuthenticateAsync() : " + WebAuthenticationResult.ResponseErrorDetail.ToString());
+                    NotifyError("HTTP Error returned by AuthenticateAsync() : " + WebAuthenticationResult.ResponseErrorDetail.ToString());
                 }
                 else
                 {
-                    SetGoogleToken("Error returned by AuthenticateAsync() : " + WebAuthenticationResult.ResponseStatus.ToString());
+                    NotifyError("Error returned by AuthenticateAsync() : " + WebAuthenticationResult.ResponseStatus.ToString());
                 }
             }
             catch (Exception Error)
             {
 
             }
+        }
+
+        private void NotifyError(string error)
+        {
+
         }
 
         private ArrayList SetupScope()
