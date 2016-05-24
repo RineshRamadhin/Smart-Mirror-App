@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -62,7 +63,9 @@ namespace Smart_Mirror_App.Clock
         private void updateTime()
         {
             CurrentTime = model.CurrentTime.ToString("H:mm");
-            CurrentDate = model.CurrentTime.ToString("d MMMM");
+
+            CultureInfo dutch = new CultureInfo("nl-NL");
+            CurrentDate = model.CurrentTime.ToString("d MMMM", dutch);
         }
     }
 }
