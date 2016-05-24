@@ -45,6 +45,11 @@ namespace Smart_Mirror_App.authentication
             Window.Current.Content = new MainPage();
         }
 
+        private void NotifyError(string error)
+        {
+
+        }
+      
         private void SetGoogleToken(JToken tokens)
         {
             var accesToken = tokens.SelectToken("access_token");
@@ -56,7 +61,18 @@ namespace Smart_Mirror_App.authentication
             userToken.refreshToken = refreshToken.ToString();
             userToken.expireDate = expireDate;
 
-            this.RefreshTokens();
+            AuthenticationDB authenticationDatabase = new AuthenticationDB();
+            authenticationDatabase.createUserDatabase();
+            Database.Models.UserDB user = new Database.Models.UserDB();
+            user.name = "test";
+            user.mail = "test@gmail.com";
+            user.accesToken = userToken.accesToken;
+            user.refreshToken = userToken.refreshToken;
+            user.expireDate = userToken.expireDate;
+  
+            authenticationDatabase.insertUser(user);
+            ArrayList users = authenticationDatabase.getAllUser();
+            Debug.WriteLine(users);
         }
 
         private DateTime SetExpireDate(int seconds)
@@ -116,8 +132,9 @@ namespace Smart_Mirror_App.authentication
         public async void RefreshTokens()
         {
             JToken newTokens = await RequestNewTokens(userToken.refreshToken);
-            
+            SetGoogleToken(newTokens);
         }
+
         private async Task<JToken> RequestNewTokens(string refreshToken)
         {
             var client = new HttpClient();
@@ -143,7 +160,6 @@ namespace Smart_Mirror_App.authentication
 
             try
             {
-
                 Uri StartUri = new Uri(GoogleURL);
                 // When using the desktop flow, the success code is displayed in the html title of this end uri
                 Uri EndUri = new Uri("https://accounts.google.com/o/oauth2/approval?");
@@ -151,6 +167,8 @@ namespace Smart_Mirror_App.authentication
                 WebAuthenticationResult WebAuthenticationResult = await WebAuthenticationBroker.AuthenticateAsync(WebAuthenticationOptions.UseTitle, StartUri, EndUri);
                 if (WebAuthenticationResult.ResponseStatus == WebAuthenticationStatus.Success)
                 {
+                    string authenticationCode = GetGoogleSuccessCode(WebAuthenticationResult.ResponseData.ToString());
+                    JToken tokens = await GetToken(authenticationCode);
                 }
                 else if (WebAuthenticationResult.ResponseStatus == WebAuthenticationStatus.ErrorHttp)
                 {
@@ -165,11 +183,6 @@ namespace Smart_Mirror_App.authentication
             {
 
             }
-        }
-
-        private void NotifyError(string error)
-        {
-
         }
 
         private ArrayList SetupScope()

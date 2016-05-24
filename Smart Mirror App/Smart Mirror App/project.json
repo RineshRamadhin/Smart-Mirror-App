@@ -2,7 +2,8 @@
   "dependencies": {
     "Google.Apis.Auth": "1.13.0",
     "Google.Apis.Calendar.v3": "1.13.0.493",
-    "Microsoft.NETCore.UniversalWindowsPlatform": "5.0.0"
+    "Microsoft.NETCore.UniversalWindowsPlatform": "5.0.0",
+    "SQLite.Net-PCL": "3.1.1"
   },
   "frameworks": {
     "uap10.0": {}

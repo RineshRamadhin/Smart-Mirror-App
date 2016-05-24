@@ -93,6 +93,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Authentication\AuthenticationConstants.cs" />
+    <Compile Include="Database\AuthenticationDB.cs" />
     <Compile Include="Authentication\UserOauthToken.cs" />
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
@@ -100,6 +101,7 @@
     <Compile Include="Authentication\GoogleAuthentication.xaml.cs">
       <DependentUpon>GoogleAuthentication.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Database\Models\UserDB.cs" />
     <Compile Include="Data\Google\UserProfile\UserModel.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
@@ -135,6 +137,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <SDKReference Include="SQLite.UWP.2015, Version=3.13.0">
+      <Name>SQLite for Universal Windows Platform</Name>
+    </SDKReference>
   </ItemGroup>
   <ItemGroup />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
