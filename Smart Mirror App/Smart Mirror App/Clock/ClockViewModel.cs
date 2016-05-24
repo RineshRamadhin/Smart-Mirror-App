@@ -44,7 +44,7 @@ namespace Smart_Mirror_App.Clock
 
         private void updateTime()
         {
-            CurrentTime = $"it is {model.CurrentTime.ToString("H:mm:ss")}.";
+            CurrentTime = model.CurrentTime.ToString("H:mm");
         }
     }
 }
