@@ -26,6 +26,23 @@ namespace Smart_Mirror_App.Clock
                 }
             }
         }
+        public string currentDate;
+        public string CurrentDate
+        {
+            get
+            {
+                return currentDate;
+            }
+            set
+            {
+                if (currentDate != value)
+                {
+                    currentDate = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
 
         internal void Initialize(ClockModel model)
         {
@@ -45,6 +62,7 @@ namespace Smart_Mirror_App.Clock
         private void updateTime()
         {
             CurrentTime = model.CurrentTime.ToString("H:mm");
+            CurrentDate = model.CurrentTime.ToString("d MMMM");
         }
     }
 }
