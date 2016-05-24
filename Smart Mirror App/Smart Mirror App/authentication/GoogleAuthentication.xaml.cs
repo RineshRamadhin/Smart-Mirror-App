@@ -61,6 +61,12 @@ namespace Smart_Mirror_App.authentication
             userToken.refreshToken = refreshToken.ToString();
             userToken.expireDate = expireDate;
 
+            InsertUserDB(userToken);
+        }
+
+        private void InsertUserDB(UserOauthToken tokens)
+        {
+            // TODO: get username and mail
             AuthenticationDB authenticationDatabase = new AuthenticationDB();
             authenticationDatabase.createUserDatabase();
             Database.Models.UserDB user = new Database.Models.UserDB();
@@ -69,10 +75,8 @@ namespace Smart_Mirror_App.authentication
             user.accesToken = userToken.accesToken;
             user.refreshToken = userToken.refreshToken;
             user.expireDate = userToken.expireDate;
-  
+
             authenticationDatabase.insertUser(user);
-            ArrayList users = authenticationDatabase.getAllUser();
-            Debug.WriteLine(users);
         }
 
         private DateTime SetExpireDate(int seconds)
