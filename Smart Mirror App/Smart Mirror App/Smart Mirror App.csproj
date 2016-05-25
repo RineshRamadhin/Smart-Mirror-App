@@ -92,17 +92,16 @@
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Authentication\AuthenticationConstants.cs" />
-    <Compile Include="Database\AuthenticationDB.cs" />
-    <Compile Include="Authentication\UserOauthToken.cs" />
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Authentication\AuthenticationConstants.cs" />
     <Compile Include="Authentication\GoogleAuthentication.xaml.cs">
       <DependentUpon>GoogleAuthentication.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Database\Models\UserDB.cs" />
-    <Compile Include="Data\Google\UserProfile\UserModel.cs" />
+    <Compile Include="Data\API\Google\GoogleUserData.cs" />
+    <Compile Include="Data\Database\AuthenticationDB.cs" />
+    <Compile Include="Data\Models\GoogleUserModel.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
@@ -130,8 +129,8 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Page Include="Authentication\GoogleAuthentication.xaml">
-      <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="MainPage.xaml">
       <Generator>MSBuild:Compile</Generator>

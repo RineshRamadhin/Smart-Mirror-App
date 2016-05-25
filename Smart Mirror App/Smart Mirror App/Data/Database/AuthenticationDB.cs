@@ -4,10 +4,10 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Smart_Mirror_App.Database.Models;
+using Smart_Mirror_App.Data.Models;
 using System.Collections;
 
-namespace Smart_Mirror_App.Authentication
+namespace Smart_Mirror_App.Data.Database
 {
     class AuthenticationDB
     {
@@ -23,24 +23,24 @@ namespace Smart_Mirror_App.Authentication
             conn = new SQLite.Net.SQLiteConnection(new
                SQLite.Net.Platform.WinRT.SQLitePlatformWinRT(), path);
 
-            conn.CreateTable<UserDB>();
+            conn.CreateTable<GoogleUserModel>();
         }
 
-        public void insertUser(UserDB user)
+        public void insertUser(GoogleUserModel user)
         {
             conn.Insert(user);
         }
 
         public ArrayList getAllUser()
         {
-            var query = conn.Table<UserDB>();
+            var query = conn.Table<GoogleUserModel>();
             ArrayList users = new ArrayList();
 
             foreach (var user in query)
             {
-                UserDB gotUser = new UserDB();
+                GoogleUserModel gotUser = new GoogleUserModel();
                 gotUser.id = user.id;
-                gotUser.mail = user.mail;
+                gotUser.name = user.name;
                 gotUser.avatarUrl = user.avatarUrl;
                 gotUser.accesToken = user.accesToken;
                 gotUser.refreshToken = user.refreshToken;

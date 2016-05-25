@@ -5,13 +5,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Smart_Mirror_App.Database.Models
+namespace Smart_Mirror_App.Data.Models
 {
-    class UserDB
+    class GoogleUserModel
     {
         [PrimaryKey, AutoIncrement]
         public int id { get; set; }
-        public string mail { get; set; }
         public string name { get; set; }
         public string avatarUrl { get; set; }
         public string accesToken { get; set; }

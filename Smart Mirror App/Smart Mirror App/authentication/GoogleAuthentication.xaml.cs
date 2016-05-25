@@ -4,16 +4,16 @@ using System.Collections;
 using Windows.Security.Authentication.Web;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Smart_Mirror_App.API.User;
-using Smart_Mirror_App.Authentication;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Diagnostics;
 using Newtonsoft.Json.Linq;
+using Smart_Mirror_App.Data.API.Google;
+using Smart_Mirror_App.Data.Database;
+using Smart_Mirror_App.Data.Models;
 
-// The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
-namespace Smart_Mirror_App.authentication
+namespace Smart_Mirror_App.Authentication
 {
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
@@ -21,7 +21,7 @@ namespace Smart_Mirror_App.authentication
     public sealed partial class GoogleAuthentication : Page
     {
  
-        UserOauthToken userToken = new UserOauthToken();
+        GoogleUserModel userToken = new GoogleUserModel();
         Windows.Storage.ApplicationDataContainer sharedPreferences = Windows.Storage.ApplicationData.Current.LocalSettings;
 
         public GoogleAuthentication()
@@ -49,8 +49,8 @@ namespace Smart_Mirror_App.authentication
         {
 
         }
-      
-        private void SetGoogleToken(JToken tokens)
+
+        private async void SetGoogleToken(JToken tokens)
         {
             var accesToken = tokens.SelectToken("access_token");
             var refreshToken = tokens.SelectToken("refresh_token");
@@ -61,22 +61,28 @@ namespace Smart_Mirror_App.authentication
             userToken.refreshToken = refreshToken.ToString();
             userToken.expireDate = expireDate;
 
+            GetUserProfile();
+
+        }
+
+        private async void GetUserProfile()
+        {
+            GoogleUserData userProfile = new GoogleUserData(userToken.accesToken);
+            await userProfile.RequestUserProfile();
+            GoogleUserModel user = userProfile.GetUserProfile();
+            userToken.name = user.name;
+
             InsertUserDB(userToken);
         }
 
-        private void InsertUserDB(UserOauthToken tokens)
+        private void InsertUserDB(GoogleUserModel tokens)
         {
             // TODO: get username and mail
             AuthenticationDB authenticationDatabase = new AuthenticationDB();
             authenticationDatabase.createUserDatabase();
-            Database.Models.UserDB user = new Database.Models.UserDB();
-            user.name = "test";
-            user.mail = "test@gmail.com";
-            user.accesToken = userToken.accesToken;
-            user.refreshToken = userToken.refreshToken;
-            user.expireDate = userToken.expireDate;
+            authenticationDatabase.insertUser(userToken);
 
-            authenticationDatabase.insertUser(user);
+            ArrayList test = authenticationDatabase.getAllUser();
         }
 
         private DateTime SetExpireDate(int seconds)
