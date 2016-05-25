@@ -8,7 +8,7 @@ using Leap;
 
 namespace Smart_Mirror_App.InputControls.Motion.LeapMotion.Data
 {
-    class LeapMotionData
+    class LeapMotionData : IMotionData
     {
         public Hands Hands { get; set; }
         public Fingers Fingers { get; set; }

@@ -95,13 +95,17 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="InputControls\Motion\IMotion.cs" />
+    <Compile Include="InputControls\Motion\IMotionData.cs" />
     <Compile Include="InputControls\Motion\LeapMotion\Data\Fingers.cs" />
     <Compile Include="InputControls\Motion\LeapMotion\Data\Gestures.cs" />
     <Compile Include="InputControls\Motion\LeapMotion\Data\Hands.cs" />
     <Compile Include="InputControls\Motion\LeapMotion\Data\LeapMotionData.cs" />
     <Compile Include="InputControls\Motion\LeapMotion\Data\Tools.cs" />
+    <Compile Include="InputControls\Motion\LeapMotion\LeapMotion.cs" />
     <Compile Include="InputControls\Motion\LeapMotion\LeapMotionController.cs" />
     <Compile Include="InputControls\Motion\LeapMotion\LeapMotionListener.cs" />
+    <Compile Include="InputControls\Motion\IMotionController.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>

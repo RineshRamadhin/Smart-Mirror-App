@@ -9,36 +9,35 @@ using Smart_Mirror_App.InputControls.Motion.LeapMotion.Data;
 
 namespace Smart_Mirror_App.InputControls.Motion.LeapMotion
 {
-    class LeapMotionController
+    class LeapMotionController : Controller
     {
-        public Listener Listener { get; set; }
-        public Controller Controller { get; set; }
-        public LeapMotionData Data { get; set; }
-
-        public void Init()
+        public bool Connect(Listener listener)
         {
-            Debug.WriteLine("Initalizing leapmotioncontroller");
-
-            Listener = new LeapMotionListener();
-            Controller = new Controller();
-            Data = new LeapMotionData();
+            try
+            {
+                AddListener(listener);
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+            
+            return true;
         }
 
-        public bool Connect()
+        public bool Disconnect(Listener listener)
         {
-            Controller.AddListener(Listener);
+            try
+            {
+                RemoveListener(listener);
+                Dispose();
+            }
+            catch (Exception)
+            {
+                return false;
+            }
 
-            // on failure
-            return false;
-        }
-
-        public bool Disconnect()
-        {
-            Controller.RemoveListener(Listener);
-            Controller.Dispose();
-
-            // on failure
-            return false;
+            return true;
         }
 
     }
