@@ -1,6 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 using System;
-using Smart_Mirror_App.authentication;
+using Smart_Mirror_App.Authentication;
 namespace Smart_Mirror_App_Unit_Tests
 {
     [TestClass]
