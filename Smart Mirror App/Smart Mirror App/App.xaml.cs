@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Smart_Mirror_App.Clock;
+using Smart_Mirror_App.Controllers;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -42,9 +44,14 @@ namespace Smart_Mirror_App
 #if DEBUG
             if (System.Diagnostics.Debugger.IsAttached)
             {
-                this.DebugSettings.EnableFrameRateCounter = true;
+                this.DebugSettings.EnableFrameRateCounter = false;
             }
 #endif
+            var clockModel = new ClockModel();
+            clockModel.Update();
+            TimerController.RegisterModel(clockModel);
+            (Resources["clockViewModel"] as ClockViewModel).Initialize(clockModel);
+
             Frame rootFrame = Window.Current.Content as Frame;
 
             // Do not repeat app initialization when the Window already has content,
@@ -72,7 +79,7 @@ namespace Smart_Mirror_App
                     // When the navigation stack isn't restored navigate to the first page,
                     // configuring the new page by passing required information as a navigation
                     // parameter
-                    rootFrame.Navigate(typeof(MainPage), e.Arguments);
+                    rootFrame.Navigate(typeof(BlankPage1), e.Arguments);
                 }
                 // Ensure the current window is active
                 Window.Current.Activate();
