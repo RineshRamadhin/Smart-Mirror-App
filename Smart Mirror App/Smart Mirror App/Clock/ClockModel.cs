@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 
 namespace Smart_Mirror_App.Clock
 {
-    class ClockModel : BaseModel
+     class ClockModel : BaseModel
     {
-        DateTime currentTime;
+
+            DateTime currentTime;
         public DateTime CurrentTime
         {
             get

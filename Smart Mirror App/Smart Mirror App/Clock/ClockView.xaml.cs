@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Runtime.InteropServices.WindowsRuntime;
+using Windows.Data.Json;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -22,9 +25,40 @@ namespace Smart_Mirror_App.Clock
     /// </summary>
     public sealed partial class BlankPage1 : Page
     {
+        private string city;
+
         public BlankPage1()
         {
             this.InitializeComponent();
         }
+        public async void RequestWeather()
+        {
+            WeatherModel requestResponse = new WeatherModel();
+            HttpClient httpClient = new HttpClient();
+
+            var searchUrl = "http://api.openweathermap.org/data/2.5/weather?q=Rotterdam&APPID=44bb36849c892e284affdb12b216d70e";
+
+            try
+            {
+                HttpResponseMessage response = await httpClient.GetAsync(searchUrl);
+                //(response);
+                string jsonWeather = await response.Content.ReadAsStringAsync();
+                JsonObject weatherObject = JsonObject.Parse(jsonWeather);
+                string city = weatherObject.GetNamedString("name");
+                requestResponse.city = city;
+                this.city = city;
+
+                Debug.WriteLine(response.Content);
+            }
+            catch (HttpRequestException httpError)
+            {
+                Debug.WriteLine(httpError);
+            }
+        }
+        private void getWeather()
+        {
+            RequestWeather();
+        }
+
     }
 }

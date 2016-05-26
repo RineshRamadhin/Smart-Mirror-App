@@ -5,6 +5,10 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Smart_Mirror_App.weather;
+using System.Net.Http;
+using System.Diagnostics;
+using Windows.Data.Json;
 
 namespace Smart_Mirror_App.Clock
 {
@@ -63,7 +67,6 @@ namespace Smart_Mirror_App.Clock
         private void updateTime()
         {
             CurrentTime = model.CurrentTime.ToString("H:mm");
-
             CultureInfo dutch = new CultureInfo("nl-NL");
             CurrentDate = model.CurrentTime.ToString("d MMMM", dutch);
         }
