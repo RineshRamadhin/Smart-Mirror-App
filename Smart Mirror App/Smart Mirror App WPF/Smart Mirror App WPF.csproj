@@ -35,6 +35,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="LeapCSharp.NET4.0">
+      <HintPath>D:\Temp downloads\Leap_Motion_SDK_Windows_2.3.1\LeapDeveloperKit_2.3.1+31549_win\LeapSDK\lib\x64\LeapCSharp.NET4.0.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
@@ -63,6 +66,17 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Input\Motion\IMotion.cs" />
+    <Compile Include="Input\Motion\IMotionController.cs" />
+    <Compile Include="Input\Motion\IMotionData.cs" />
+    <Compile Include="Input\Motion\LeapMotion\Data\Fingers.cs" />
+    <Compile Include="Input\Motion\LeapMotion\Data\Gestures.cs" />
+    <Compile Include="Input\Motion\LeapMotion\Data\Hands.cs" />
+    <Compile Include="Input\Motion\LeapMotion\Data\LeapMotionData.cs" />
+    <Compile Include="Input\Motion\LeapMotion\Data\Tools.cs" />
+    <Compile Include="Input\Motion\LeapMotion\LeapMotion.cs" />
+    <Compile Include="Input\Motion\LeapMotion\LeapMotionController.cs" />
+    <Compile Include="Input\Motion\LeapMotion\LeapMotionListener.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -99,7 +113,13 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>xcopy /yr "E:\Documents\GitHub\Smart-Mirror-App\Smart Mirror App\Smart Mirror App WPF\Resources\Post-build\Leap.dll" "$(TargetDir)"
+xcopy /yr "E:\Documents\GitHub\Smart-Mirror-App\Smart Mirror App\Smart Mirror App WPF\Resources\Post-build\LeapCSharp.dll" "$(TargetDir)"
+</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
