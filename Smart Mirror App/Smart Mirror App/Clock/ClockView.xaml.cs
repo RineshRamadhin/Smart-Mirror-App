@@ -30,6 +30,7 @@ namespace Smart_Mirror_App.Clock
         public BlankPage1()
         {
             this.InitializeComponent();
+            RequestWeather();
         }
         public async void RequestWeather()
         {
