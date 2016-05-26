@@ -55,14 +55,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="Authentication\GoogleAuthentication.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Clock\ClockView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -71,32 +63,6 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Authentication\AuthenticationConstants.cs" />
-    <Compile Include="Authentication\AuthenticationGoogle.cs" />
-    <Compile Include="Authentication\GoogleAuthentication.xaml.cs">
-      <DependentUpon>GoogleAuthentication.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Clock\ClockModel.cs" />
-    <Compile Include="Clock\ClockView.xaml.cs">
-      <DependentUpon>ClockView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Clock\ClockViewModel.cs" />
-    <Compile Include="Clock\WeatherModel.cs" />
-    <Compile Include="Controllers\TimerController.cs" />
-    <Compile Include="Data\API\Google\GoogleUserData.cs" />
-    <Compile Include="Data\Database\AuthenticationDB.cs" />
-    <Compile Include="Data\Models\GoogleUserModel.cs" />
-    <Compile Include="InputControls\Motion\IMotion.cs" />
-    <Compile Include="InputControls\Motion\IMotionController.cs" />
-    <Compile Include="InputControls\Motion\IMotionData.cs" />
-    <Compile Include="InputControls\Motion\LeapMotion\Data\Fingers.cs" />
-    <Compile Include="InputControls\Motion\LeapMotion\Data\Gestures.cs" />
-    <Compile Include="InputControls\Motion\LeapMotion\Data\Hands.cs" />
-    <Compile Include="InputControls\Motion\LeapMotion\Data\LeapMotionData.cs" />
-    <Compile Include="InputControls\Motion\LeapMotion\Data\Tools.cs" />
-    <Compile Include="InputControls\Motion\LeapMotion\LeapMotion.cs" />
-    <Compile Include="InputControls\Motion\LeapMotion\LeapMotionController.cs" />
-    <Compile Include="InputControls\Motion\LeapMotion\LeapMotionListener.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
