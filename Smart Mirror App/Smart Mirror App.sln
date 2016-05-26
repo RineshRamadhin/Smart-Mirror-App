@@ -5,6 +5,8 @@ VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Smart Mirror App", "Smart Mirror App\Smart Mirror App.csproj", "{CDCECFFC-719F-4ADD-BA49-A52A9F7B7432}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Smart Mirror App Unit Tests", "Smart Mirror App Unit Tests\Smart Mirror App Unit Tests.csproj", "{8AAAF086-BB1D-476B-A44D-BAB6D1411922}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|ARM = Debug|ARM
@@ -33,6 +35,24 @@ Global
 		{CDCECFFC-719F-4ADD-BA49-A52A9F7B7432}.Release|x86.ActiveCfg = Release|x86
 		{CDCECFFC-719F-4ADD-BA49-A52A9F7B7432}.Release|x86.Build.0 = Release|x86
 		{CDCECFFC-719F-4ADD-BA49-A52A9F7B7432}.Release|x86.Deploy.0 = Release|x86
+		{8AAAF086-BB1D-476B-A44D-BAB6D1411922}.Debug|ARM.ActiveCfg = Debug|ARM
+		{8AAAF086-BB1D-476B-A44D-BAB6D1411922}.Debug|ARM.Build.0 = Debug|ARM
+		{8AAAF086-BB1D-476B-A44D-BAB6D1411922}.Debug|ARM.Deploy.0 = Debug|ARM
+		{8AAAF086-BB1D-476B-A44D-BAB6D1411922}.Debug|x64.ActiveCfg = Debug|x64
+		{8AAAF086-BB1D-476B-A44D-BAB6D1411922}.Debug|x64.Build.0 = Debug|x64
+		{8AAAF086-BB1D-476B-A44D-BAB6D1411922}.Debug|x64.Deploy.0 = Debug|x64
+		{8AAAF086-BB1D-476B-A44D-BAB6D1411922}.Debug|x86.ActiveCfg = Debug|x86
+		{8AAAF086-BB1D-476B-A44D-BAB6D1411922}.Debug|x86.Build.0 = Debug|x86
+		{8AAAF086-BB1D-476B-A44D-BAB6D1411922}.Debug|x86.Deploy.0 = Debug|x86
+		{8AAAF086-BB1D-476B-A44D-BAB6D1411922}.Release|ARM.ActiveCfg = Release|ARM
+		{8AAAF086-BB1D-476B-A44D-BAB6D1411922}.Release|ARM.Build.0 = Release|ARM
+		{8AAAF086-BB1D-476B-A44D-BAB6D1411922}.Release|ARM.Deploy.0 = Release|ARM
+		{8AAAF086-BB1D-476B-A44D-BAB6D1411922}.Release|x64.ActiveCfg = Release|x64
+		{8AAAF086-BB1D-476B-A44D-BAB6D1411922}.Release|x64.Build.0 = Release|x64
+		{8AAAF086-BB1D-476B-A44D-BAB6D1411922}.Release|x64.Deploy.0 = Release|x64
+		{8AAAF086-BB1D-476B-A44D-BAB6D1411922}.Release|x86.ActiveCfg = Release|x86
+		{8AAAF086-BB1D-476B-A44D-BAB6D1411922}.Release|x86.Build.0 = Release|x86
+		{8AAAF086-BB1D-476B-A44D-BAB6D1411922}.Release|x86.Deploy.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
