@@ -24,7 +24,7 @@ namespace Smart_Mirror_App
     {
         public MainPage()
         {
-            this.InitializeComponent();
+            this.InitializeComponent();  
         }
     }
 }
