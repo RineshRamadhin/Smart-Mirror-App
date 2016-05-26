@@ -44,7 +44,6 @@ namespace Smart_Mirror_App.Data.API.Google
             {
                 Debug.WriteLine(httpError);
             }
-
         }
 
         private async void ParseUserResponse(HttpResponseMessage response)
@@ -55,13 +54,16 @@ namespace Smart_Mirror_App.Data.API.Google
             {
                 JsonObject jsonObject = JsonObject.Parse(jsonContent);
                 string name = jsonObject.GetNamedString("displayName");
-                SetUserProfile(name);
+                JsonObject image = jsonObject.GetNamedObject("image");
+                string imageUrl = image.GetNamedString("url");
+                SetUserProfile(name, imageUrl);
             }
         }
 
-        private void SetUserProfile(string name)
+        private void SetUserProfile(string name, string imageUrl)
         {
             userProfile.name = name;
+            userProfile.avatarUrl = imageUrl;
         }
     }
 }

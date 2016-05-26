@@ -96,6 +96,7 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="Authentication\AuthenticationConstants.cs" />
+    <Compile Include="Authentication\AuthenticationGoogle.cs" />
     <Compile Include="Authentication\GoogleAuthentication.xaml.cs">
       <DependentUpon>GoogleAuthentication.xaml</DependentUpon>
     </Compile>
