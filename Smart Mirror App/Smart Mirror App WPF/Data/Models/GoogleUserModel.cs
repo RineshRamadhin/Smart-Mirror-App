@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Smart_Mirror_App_WPF.Data.Models
 {
-    class GoogleUserModel
+    public class GoogleUserModel
     {
         public int id { get; set; }
         public string name { get; set; }

@@ -22,19 +22,25 @@ namespace Smart_Mirror_App_WPF.Authentication.Google
     public class AuthenticationGoogle
     {
         private GoogleUserModel currentUser = new GoogleUserModel();
-        private string smartMirrorUser;
+        private string dataStoreLocation = "Test.Auth.Store";
+        private string googleClientSecretFileLocation = "client_secret.json";
 
-        public async Task LoginGoogle(string user)
+        /// <summary>
+        /// Starts OAuth2.0 web authorization against Google
+        /// </summary>
+        /// <param name="smartMirrorUsername">The custom username id to verify which user it is in our application</param>
+        /// <returns></returns>
+        public async Task LoginGoogle(string smartMirrorUsername)
         {
             try
             {
                 UserCredential credential;
-                using (var stream = new FileStream("client_secret.json", FileMode.Open, FileAccess.Read))
+                using (var stream = new FileStream(googleClientSecretFileLocation, FileMode.Open, FileAccess.Read))
                 {
                     credential = await GoogleWebAuthorizationBroker.AuthorizeAsync(
                         GoogleClientSecrets.Load(stream).Secrets,
                         new[] { CalendarService.Scope.Calendar, GmailService.Scope.GmailReadonly, PlusService.Scope.PlusMe },
-                        user, CancellationToken.None, new FileDataStore("Test.Auth.Store"));
+                        smartMirrorUsername, CancellationToken.None, new FileDataStore(this.dataStoreLocation));
                 };
 
                 var Service = new BaseClientService.Initializer()
@@ -43,7 +49,7 @@ namespace Smart_Mirror_App_WPF.Authentication.Google
                     ApplicationName = "Google API Sample",
                 };
 
-                this.SetCurrentUser(credential);
+                this.SetCurrentUser(credential, smartMirrorUsername);
             }
             catch (Exception Error)
             {
@@ -51,33 +57,46 @@ namespace Smart_Mirror_App_WPF.Authentication.Google
             }
         }
 
-        public async Task LogoutGoogle(string user)
+        /// <summary>
+        /// Deletes the user from our datastore
+        /// </summary>
+        /// <param name="smartMirrorUsername">The custom username id to verify which user it is in our application</param>
+        /// <returns></returns>
+        public async Task LogoutGoogle(string smartMirrorUsername)
         {
             this.currentUser = new GoogleUserModel();
-            FileDataStore dataStore = new FileDataStore("Test.Auth.Store");
-            await dataStore.DeleteAsync<TokenResponse>(user);
-            this.smartMirrorUser = "";
+            FileDataStore dataStore = new FileDataStore(this.dataStoreLocation);
+            await dataStore.DeleteAsync<TokenResponse>(smartMirrorUsername);
         }
 
-        public async void SwitchGoogleUser(string user)
+        /// <summary>
+        /// Switch the current user of the smart mirror to someone else if he/she exist in our application
+        /// </summary>
+        /// <param name="smartMirrorUsername">The custom username id to verify which user it is in our application</param>
+        public async void SwitchGoogleUser(string smartMirrorUsername)
         {
-            FileDataStore dataStore = new FileDataStore("Test.Auth.Store");
-            TokenResponse otherUser = await dataStore.GetAsync<TokenResponse>(user);
+            FileDataStore dataStore = new FileDataStore(this.dataStoreLocation);
+            TokenResponse otherUser = await dataStore.GetAsync<TokenResponse>(smartMirrorUsername);
             if (otherUser != null)
             {
-                await LoginGoogle(user);
+                await LoginGoogle(smartMirrorUsername);
             }
             else
             {
-                Debug.WriteLine(user + " does not exist in this application yet");
+                Debug.WriteLine(smartMirrorUsername + " does not exist in this application yet");
             }
         }
 
-        private void SetCurrentUser(UserCredential credential)
+        public GoogleUserModel GetCurrentUser()
+        {
+            return currentUser;
+        }
+
+        private void SetCurrentUser(UserCredential credential, string smartMirrorUsername)
         {
             this.currentUser.accesToken = credential.Token.AccessToken;
             this.currentUser.refreshToken = credential.Token.RefreshToken;
-            this.currentUser.name = smartMirrorUser;
+            this.currentUser.name = smartMirrorUsername;
 
             double expireInSeconds = (double)credential.Token.ExpiresInSeconds;
             this.currentUser.expireDate = this.ConvertExpireData(expireInSeconds);
