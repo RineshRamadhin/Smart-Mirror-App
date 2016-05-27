@@ -24,12 +24,7 @@ namespace Smart_Mirror_App_WPF.Authentication.Google
         private GoogleUserModel currentUser = new GoogleUserModel();
         private string smartMirrorUser;
 
-        public AuthenticationGoogle(string smartMirrorUsername)
-        {
-            this.smartMirrorUser = smartMirrorUsername;
-        }
-
-        public async Task LoginGoogle()
+        public async Task LoginGoogle(string user)
         {
             try
             {
@@ -39,7 +34,7 @@ namespace Smart_Mirror_App_WPF.Authentication.Google
                     credential = await GoogleWebAuthorizationBroker.AuthorizeAsync(
                         GoogleClientSecrets.Load(stream).Secrets,
                         new[] { CalendarService.Scope.Calendar, GmailService.Scope.GmailReadonly, PlusService.Scope.PlusMe },
-                        this.smartMirrorUser, CancellationToken.None, new FileDataStore("Test.Auth.Store"));
+                        user, CancellationToken.None, new FileDataStore("Test.Auth.Store"));
                 };
 
                 var Service = new BaseClientService.Initializer()
@@ -59,9 +54,23 @@ namespace Smart_Mirror_App_WPF.Authentication.Google
         public async Task LogoutGoogle(string user)
         {
             this.currentUser = new GoogleUserModel();
-            FileDataStore test = new FileDataStore("Test.Auth.Store");
-            await test.DeleteAsync<TokenResponse>(user);
+            FileDataStore dataStore = new FileDataStore("Test.Auth.Store");
+            await dataStore.DeleteAsync<TokenResponse>(user);
             this.smartMirrorUser = "";
+        }
+
+        public async void SwitchGoogleUser(string user)
+        {
+            FileDataStore dataStore = new FileDataStore("Test.Auth.Store");
+            TokenResponse otherUser = await dataStore.GetAsync<TokenResponse>(user);
+            if (otherUser != null)
+            {
+                await LoginGoogle(user);
+            }
+            else
+            {
+                Debug.WriteLine(user + " does not exist in this application yet");
+            }
         }
 
         private void SetCurrentUser(UserCredential credential)

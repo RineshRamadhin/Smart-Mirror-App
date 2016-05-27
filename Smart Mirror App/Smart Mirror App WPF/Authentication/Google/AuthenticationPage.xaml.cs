@@ -36,8 +36,8 @@ namespace Smart_Mirror_App_WPF.Authentication.Google
 
         private async void LoginGoogle()
         {
-            AuthenticationGoogle googleAuthenticationService = new AuthenticationGoogle("user");
-            await googleAuthenticationService.LoginGoogle();
+            AuthenticationGoogle googleAuthenticationService = new AuthenticationGoogle();
+            await googleAuthenticationService.LoginGoogle("user");
         }
     }
 }
