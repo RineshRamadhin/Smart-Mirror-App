@@ -15,6 +15,7 @@ using Google.Apis.Util.Store;
 using System.Diagnostics;
 using Smart_Mirror_App_WPF.Data.Models;
 using System.Threading.Tasks;
+using Google.Apis.Auth.OAuth2.Responses;
 
 namespace Smart_Mirror_App_WPF.Authentication.Google
 {
@@ -48,12 +49,19 @@ namespace Smart_Mirror_App_WPF.Authentication.Google
                 };
 
                 this.SetCurrentUser(credential);
-                Debug.WriteLine(credential);
             }
             catch (Exception Error)
             {
                 Debug.WriteLine(Error);
             }
+        }
+
+        public async Task LogoutGoogle(string user)
+        {
+            this.currentUser = new GoogleUserModel();
+            FileDataStore test = new FileDataStore("Test.Auth.Store");
+            await test.DeleteAsync<TokenResponse>(user);
+            this.smartMirrorUser = "";
         }
 
         private void SetCurrentUser(UserCredential credential)
@@ -62,7 +70,7 @@ namespace Smart_Mirror_App_WPF.Authentication.Google
             this.currentUser.refreshToken = credential.Token.RefreshToken;
             this.currentUser.name = smartMirrorUser;
 
-            double expireInSeconds = (double) credential.Token.ExpiresInSeconds;
+            double expireInSeconds = (double)credential.Token.ExpiresInSeconds;
             this.currentUser.expireDate = this.ConvertExpireData(expireInSeconds);
         }
 
