@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using Smart_Mirror_App_WPF.Input.Motion.LeapMotion.Data;
 
 namespace Smart_Mirror_App_WPF.Input.Motion.LeapMotion
@@ -13,9 +14,37 @@ namespace Smart_Mirror_App_WPF.Input.Motion.LeapMotion
         {
             Debug.WriteLine("Initalizing leapmotion");
 
-            Listener = new LeapMotionListener();
-            Controller = new LeapMotionController();
             Data = new LeapMotionData();
-        }   
+            Listener = new LeapMotionListener(Data);
+            Controller = new LeapMotionController();
+        }
+
+        public bool Connect()
+        {
+            try
+            {
+                Controller.Connect(Listener);
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        public bool Disconnect()
+        {
+            try
+            {
+                Controller.Disconnect(Listener);
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+
+            return true;
+        }  
     }
 }

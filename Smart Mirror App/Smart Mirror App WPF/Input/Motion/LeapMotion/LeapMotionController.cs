@@ -3,7 +3,7 @@ using Leap;
 
 namespace Smart_Mirror_App_WPF.Input.Motion.LeapMotion
 {
-    class LeapMotionController : Controller
+    class LeapMotionController : Controller, IMotionController
     {
         public bool Connect(Listener listener)
         {
@@ -33,6 +33,5 @@ namespace Smart_Mirror_App_WPF.Input.Motion.LeapMotion
 
             return true;
         }
-
     }
 }

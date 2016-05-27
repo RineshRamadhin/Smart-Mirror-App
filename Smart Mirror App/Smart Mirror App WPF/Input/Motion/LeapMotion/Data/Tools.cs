@@ -12,16 +12,14 @@ namespace Smart_Mirror_App_WPF.Input.Motion.LeapMotion.Data
             this.prop = "TODO";
         }
 
-        public bool UpdateData(Frame frame)
+        public bool UpdateData(ToolList tools)
         {
             try
             {
                 return true;
             }
-            catch (Exception e)
+            catch (Exception)
             {
-
-                // Throw exception
                 return false;
             }
         }

@@ -1,8 +1,10 @@
-﻿namespace Smart_Mirror_App_WPF.Input.Motion
+﻿using Leap;
+
+namespace Smart_Mirror_App_WPF.Input.Motion
 {
     interface IMotionController
     {
-        bool Connect();
-        bool Disconnect();
+        bool Connect(Listener listener);
+        bool Disconnect(Listener listener);
     }
 }
