@@ -6,7 +6,6 @@ namespace Smart_Mirror_App_WPF.Data.Database
 {
     public class UsersDatabase
     {
-        string path;
         SQLiteConnection userDb;
 
         public UsersDatabase()
