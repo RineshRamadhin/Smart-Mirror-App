@@ -162,7 +162,10 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Authentication\Google\AuthenticationGoogle.cs" />
+    <Compile Include="Data\Database\UsersDatabase.cs" />
     <Compile Include="Data\Models\GoogleUserModel.cs" />
+    <Compile Include="SQLite.cs" />
+    <Compile Include="SQLiteAsync.cs" />
     <Compile Include="Util\RelayCommand.cs" />
     <Page Include="Authentication\Google\AuthenticationPage.xaml">
       <SubType>Designer</SubType>
@@ -220,6 +223,7 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" />
   <Target Name="EnsureBclBuildImported" BeforeTargets="BeforeBuild" Condition="'$(BclBuildImported)' == ''">

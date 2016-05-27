@@ -16,6 +16,8 @@ using System.Diagnostics;
 using Smart_Mirror_App_WPF.Data.Models;
 using System.Threading.Tasks;
 using Google.Apis.Auth.OAuth2.Responses;
+using Smart_Mirror_App_WPF.Data.Database;
+using System.Collections;
 
 namespace Smart_Mirror_App_WPF.Authentication.Google
 {
@@ -87,6 +89,10 @@ namespace Smart_Mirror_App_WPF.Authentication.Google
             }
         }
 
+        /// <summary>
+        /// Get the current user
+        /// </summary>
+        /// <returns>The current user using GoogleUserModel</returns>
         public GoogleUserModel GetCurrentUser()
         {
             return currentUser;
@@ -100,6 +106,16 @@ namespace Smart_Mirror_App_WPF.Authentication.Google
 
             double expireInSeconds = (double)credential.Token.ExpiresInSeconds;
             this.currentUser.expireDate = this.ConvertExpireData(expireInSeconds);
+
+            InsertUserInDb();
+        }
+
+        private void InsertUserInDb()
+        {
+            UsersDatabase usersDb = new UsersDatabase();
+            usersDb.InsertUser(currentUser);
+            ArrayList allUsers = usersDb.GetAllUser();
+            Debug.WriteLine(allUsers);
         }
 
         private DateTime ConvertExpireData(double seconds)
