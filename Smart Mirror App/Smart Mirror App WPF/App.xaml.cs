@@ -5,6 +5,8 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using Owin;
+using Microsoft.Owin.Security.Google;
 
 namespace Smart_Mirror_App_WPF
 {

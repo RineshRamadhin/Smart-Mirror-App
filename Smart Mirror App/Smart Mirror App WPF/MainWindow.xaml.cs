@@ -1,17 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
+﻿using System.Windows;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using System.Windows.Shapes;
+
+using Smart_Mirror_App_WPF.Util;
+using System;
 
 namespace Smart_Mirror_App_WPF
 {
@@ -20,9 +12,38 @@ namespace Smart_Mirror_App_WPF
     /// </summary>
     public partial class MainWindow : Window
     {
+        private ICommand _navigateToAuthenticationPage;
+
         public MainWindow()
         {
             InitializeComponent();
+            NavigateToPage();
+        }
+
+        public ICommand NavigateToAuthenticationPage
+        {
+            get
+            {
+                if (_navigateToAuthenticationPage == null)
+                {
+                    _navigateToAuthenticationPage = new RelayCommand(
+                        param => this.NavigateToPage(),
+                        param => this.CanNavigate()
+                    );
+                }
+                return _navigateToAuthenticationPage;
+            }
+        }
+
+        private void NavigateToPage()
+        {
+            Authentication.Google.AuthenticationPage nextPage = new Authentication.Google.AuthenticationPage();
+            MainFrame.Navigate(nextPage);
+        }
+
+        private bool CanNavigate()
+        {
+            return true;
         }
     }
 }
