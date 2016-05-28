@@ -20,7 +20,15 @@ namespace Smart_Mirror_App_WPF.Data.Database
 
         public void InsertUser(GoogleUserModel user)
         {
-            userDb.Insert(user);
+            GoogleUserModel wantedUser = this.GetSpecificUser(user.name);
+            if (wantedUser == null)
+            {
+                userDb.Insert(user);
+            } else
+            {
+                this.UpdateUserRow(user);
+            }
+            
         }
 
         public ArrayList GetAllUsers()
@@ -53,11 +61,9 @@ namespace Smart_Mirror_App_WPF.Data.Database
 
         public void UpdateUserRow(GoogleUserModel newUserCredentials)
         {
-            var wantedUser = from user in userDb.Table<GoogleUserModel>()
-                              where user.name.Equals(newUserCredentials.name)
-                              select user;
+            var wantedUser = this.GetSpecificUser(newUserCredentials.name);
 
-            if (wantedUser.FirstOrDefault() != null)
+            if (wantedUser != null)
             {
                 userDb.BeginTransaction();
                 userDb.Update(newUserCredentials);

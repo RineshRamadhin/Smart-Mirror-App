@@ -71,6 +71,7 @@ namespace Smart_Mirror_App_WPF.Authentication.Google
             this.currentUser = new GoogleUserModel();
             FileDataStore dataStore = new FileDataStore(this.dataStoreLocation);
             await dataStore.DeleteAsync<TokenResponse>(smartMirrorUsername);
+            DeleteSpecificUserFromDb(smartMirrorUsername);
         }
 
         /// <summary>
@@ -126,6 +127,12 @@ namespace Smart_Mirror_App_WPF.Authentication.Google
             GoogleUserModel specificUser = usersDb.GetSpecificUser(smartMirrorUsername);
 
             return specificUser;
+        }
+
+        public void DeleteSpecificUserFromDb(string smartMirrorUsername)
+        {
+            UsersDatabase usersDb = new UsersDatabase();
+            usersDb.DeleteSpecificUser(smartMirrorUsername);
         }
 
         private DateTime ConvertExpireData(double seconds)

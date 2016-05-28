@@ -19,12 +19,21 @@ namespace Smart_Mirror_App_WPF_Unit_Tests
         string testUsername = "user";
         GoogleUserModel testUser = new GoogleUserModel();
 
+        /// <summary>
+        /// Tests if we can init AuthenticationGoogle
+        /// </summary>
         [TestMethod]
         public void CanInstantiateAuthenticationGoogle()
         {
             AuthenticationGoogle googleAuthenticatorService = new AuthenticationGoogle();
         }
 
+        /// <summary>
+        /// Test if we user request user credentials from Google OAuth2.0 sign in
+        /// NOTE!!: The next tests only works when you have signed in once with smart mirror username: "user"
+        /// Reason: Since Google only allows web authentication, we cant automatically sign in and require user input;
+        /// </summary>
+        /// <returns></returns>
         [TestMethod]
         public async Task GoogleAuthentication()
         {
@@ -49,6 +58,10 @@ namespace Smart_Mirror_App_WPF_Unit_Tests
             }
         }
 
+        /// <summary>
+        /// Checks if user is inserted to databas
+        /// </summary>
+        /// <returns></returns>
         [TestMethod]
         public async Task InsertedUserToDb()
         {
@@ -91,11 +104,13 @@ namespace Smart_Mirror_App_WPF_Unit_Tests
             this.GetSpecificUser();
         }
 
+        //TODO: Check if DB is cleared
         public void ClearUserDb()
         {
             UsersDatabase userDb = new UsersDatabase();
             userDb.ClearUserDatabase(true);
         }
+
 
         public async Task DeleteUserFromApplication()
         {
