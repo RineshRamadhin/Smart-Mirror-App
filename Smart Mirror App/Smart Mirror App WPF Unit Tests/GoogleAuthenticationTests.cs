@@ -71,6 +71,19 @@ namespace Smart_Mirror_App_WPF_Unit_Tests
         }
 
         [TestMethod]
+        public async Task UpdateSpecificUser()
+        {
+            AuthenticationGoogle googleAuthenticatorService = new AuthenticationGoogle();
+            UsersDatabase userDb = new UsersDatabase();
+            await googleAuthenticatorService.LoginGoogle(testUsername);
+            GoogleUserModel user = googleAuthenticatorService.GetCurrentUser();
+            userDb.UpdateUserRow(user);
+            GoogleUserModel updatedUser = googleAuthenticatorService.GetSpecificUser(testUsername);
+
+            Assert.AreNotEqual(user.expireDate, updatedUser.expireDate);
+        }
+
+        [TestMethod]
         public void DeleteSpecificUserFromDb()
         {
             UsersDatabase userDb = new UsersDatabase();

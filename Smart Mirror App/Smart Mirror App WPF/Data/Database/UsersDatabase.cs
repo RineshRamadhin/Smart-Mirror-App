@@ -51,9 +51,18 @@ namespace Smart_Mirror_App_WPF.Data.Database
             return user.FirstOrDefault();
         }
 
-        private void UpdateUserRow(string username)
+        public void UpdateUserRow(GoogleUserModel newUserCredentials)
         {
-            var query = userDb.Table<GoogleUserModel>().Where(user => user.name == username);
+            var wantedUser = from user in userDb.Table<GoogleUserModel>()
+                              where user.name.Equals(newUserCredentials.name)
+                              select user;
+
+            if (wantedUser.FirstOrDefault() != null)
+            {
+                userDb.BeginTransaction();
+                userDb.Update(newUserCredentials);
+                userDb.Commit();
+            }
         }
 
         public void DeleteSpecificUser(string username)
