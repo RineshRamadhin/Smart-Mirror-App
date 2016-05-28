@@ -5,8 +5,7 @@ namespace Smart_Mirror_App_WPF.Data.Models
 {
     public class GoogleUserModel
     {
-        [PrimaryKey, AutoIncrement]
-        public int id { get; set; }
+        [PrimaryKey]
         public string name { get; set; }
         public string avatarUrl { get; set; }
         public string accesToken { get; set; }

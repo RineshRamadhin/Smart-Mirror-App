@@ -11,6 +11,8 @@ using Google.Apis.Gmail.v1;
 using Google.Apis.Gmail.v1.Data;
 using Google.Apis.Services;
 using Google.Apis.Util.Store;
+using Google.Apis.Json;
+using Newtonsoft.Json;
 
 using System.Diagnostics;
 using Smart_Mirror_App_WPF.Data.Models;
@@ -23,7 +25,7 @@ namespace Smart_Mirror_App_WPF.Authentication.Google
 {
     public class AuthenticationGoogle
     {
-        private GoogleUserModel currentUser = new GoogleUserModel();
+        private GoogleUserModel currentUser;
         private string dataStoreLocation = "Test.Auth.Store";
         private string googleClientSecretFileLocation = "client_secret.json";
 
@@ -98,8 +100,30 @@ namespace Smart_Mirror_App_WPF.Authentication.Google
             return currentUser;
         }
 
+        public async Task<GoogleUserModel> GetSpecificUser(string smartMirrorUsername)
+        {
+            FileDataStore dataStore = new FileDataStore(this.dataStoreLocation);
+            TokenResponse otherUser = await dataStore.GetAsync<TokenResponse>(smartMirrorUsername);
+            
+            if (otherUser != null)
+            {
+                GoogleUserModel specificUser = new GoogleUserModel();
+                specificUser.accesToken = otherUser.AccessToken;
+                specificUser.refreshToken = otherUser.RefreshToken;
+                double expireInSeconds = (double)otherUser.ExpiresInSeconds;
+                specificUser.expireDate = this.ConvertExpireData(expireInSeconds);
+
+                return specificUser;
+            } else
+            {
+                return null;
+            }
+        }
+
         private void SetCurrentUser(UserCredential credential, string smartMirrorUsername)
         {
+            this.currentUser = new GoogleUserModel();
+
             this.currentUser.accesToken = credential.Token.AccessToken;
             this.currentUser.refreshToken = credential.Token.RefreshToken;
             this.currentUser.name = smartMirrorUsername;
@@ -107,7 +131,6 @@ namespace Smart_Mirror_App_WPF.Authentication.Google
             double expireInSeconds = (double)credential.Token.ExpiresInSeconds;
             this.currentUser.expireDate = this.ConvertExpireData(expireInSeconds);
 
-            InsertUserInDb();
         }
 
         private void InsertUserInDb()
@@ -123,5 +146,6 @@ namespace Smart_Mirror_App_WPF.Authentication.Google
             DateTime expireDate = DateTime.Now;
             return expireDate.AddSeconds(seconds);
         }
+
     }
 }

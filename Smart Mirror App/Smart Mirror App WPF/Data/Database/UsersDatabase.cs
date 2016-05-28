@@ -31,7 +31,6 @@ namespace Smart_Mirror_App_WPF.Data.Database
             foreach (var user in query)
             {
                 GoogleUserModel gotUser = new GoogleUserModel();
-                gotUser.id = user.id;
                 gotUser.name = user.name;
                 gotUser.avatarUrl = user.avatarUrl;
                 gotUser.accesToken = user.accesToken;
