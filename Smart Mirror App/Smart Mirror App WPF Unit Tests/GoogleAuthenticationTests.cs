@@ -19,9 +19,6 @@ namespace Smart_Mirror_App_WPF_Unit_Tests
         string testUsername = "user";
         GoogleUserModel testUser = new GoogleUserModel();
 
-        /// <summary>
-        /// Tests if we can init AuthenticationGoogle
-        /// </summary>
         [TestMethod]
         public void CanInstantiateAuthenticationGoogle()
         {

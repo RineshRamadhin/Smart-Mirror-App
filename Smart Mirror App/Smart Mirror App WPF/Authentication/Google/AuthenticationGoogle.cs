@@ -20,6 +20,9 @@ using System.Threading.Tasks;
 using Google.Apis.Auth.OAuth2.Responses;
 using Smart_Mirror_App_WPF.Data.Database;
 using System.Collections;
+using Google.Apis.Auth.OAuth2.Flows;
+using System.Net.Http;
+using System.Collections.Generic;
 
 namespace Smart_Mirror_App_WPF.Authentication.Google
 {
@@ -35,6 +38,18 @@ namespace Smart_Mirror_App_WPF.Authentication.Google
         /// <param name="smartMirrorUsername">The custom username id to verify which user it is in our application</param>
         /// <returns></returns>
         public async Task LoginGoogle(string smartMirrorUsername)
+        {
+            GoogleUserModel user = GetSpecificUser(smartMirrorUsername);
+            if (user != null)
+            {
+                await RefreshAuthenticationTokens(user); 
+            } else
+            {
+                await AuthorizeUsingWeb(smartMirrorUsername);
+            }
+        }
+
+        private async Task AuthorizeUsingWeb(string smartMirrorUsername)
         {
             try
             {
@@ -53,7 +68,31 @@ namespace Smart_Mirror_App_WPF.Authentication.Google
                     ApplicationName = "Google API Sample",
                 };
 
-                this.SetCurrentUser(credential, smartMirrorUsername);
+                GoogleUserModel newUser = this.ParseUserCredentials(credential, smartMirrorUsername);
+                this.SetCurrentUser(newUser);
+            }
+            catch (Exception Error)
+            {
+                Debug.WriteLine(Error);
+            }
+        }
+
+        public async Task RefreshAuthenticationTokens(GoogleUserModel user)
+        {
+            try
+            {
+                var client = new HttpClient();
+                var auth = await client.PostAsync("https://accounts.google.com/o/oauth2/token", new FormUrlEncodedContent(new[]
+                {
+                new KeyValuePair<string, string>("refresh_token", user.refreshToken),
+                new KeyValuePair<string, string>("client_id",AuthenticationConstants.GoogleClientId),
+                new KeyValuePair<string, string>("client_secret",AuthenticationConstants.GoogleClientSecret),
+                new KeyValuePair<string, string>("grant_type","refresh_token"),
+            }));
+                var tokensJson = await auth.Content.ReadAsStringAsync();
+                GoogleRefreshTokenModel refreshTokens = JsonConvert.DeserializeObject<GoogleRefreshTokenModel>(tokensJson);
+                user = this.ParseRefreshTokens(refreshTokens, user);
+                this.SetCurrentUser(user);
             }
             catch (Exception Error)
             {
@@ -101,18 +140,46 @@ namespace Smart_Mirror_App_WPF.Authentication.Google
             return currentUser;
         }
 
-        private void SetCurrentUser(UserCredential credential, string smartMirrorUsername)
+        private GoogleUserModel ParseUserCredentials(UserCredential credential, string smartMirrorUsername)
         {
-            this.currentUser = new GoogleUserModel();
+            GoogleUserModel user = new GoogleUserModel();
 
-            this.currentUser.accesToken = credential.Token.AccessToken;
-            this.currentUser.refreshToken = credential.Token.RefreshToken;
-            this.currentUser.name = smartMirrorUsername;
+            user.accessToken = credential.Token.AccessToken;
+            user.refreshToken = credential.Token.RefreshToken;
+            user.name = smartMirrorUsername;
 
             double expireInSeconds = (double)credential.Token.ExpiresInSeconds;
-            this.currentUser.expireDate = this.ConvertExpireData(expireInSeconds);
+            user.expireDate = this.ConvertExpireData(expireInSeconds);
 
+            return user;
+        }
+
+
+        private GoogleUserModel ParseRefreshTokens(GoogleRefreshTokenModel refreshTokens, GoogleUserModel user)
+        {
+            user.accessToken = refreshTokens.access_token;
+            double expireInSeconds = (double) refreshTokens.expires_in;
+            user.expireDate = this.ConvertExpireData(expireInSeconds);
+
+            return user;
+        }
+
+        private void SetCurrentUser(GoogleUserModel user)
+        {
+            this.currentUser = user;
             this.InsertUserInDb(this.currentUser);
+        }
+
+        private bool CheckUserExist(string smartMirrorUsername)
+        {
+            var user = this.GetSpecificUser(smartMirrorUsername);
+            if (user == null)
+            {
+                return false;
+            } else
+            {
+                return true;
+            }
         }
 
         private void InsertUserInDb(GoogleUserModel user)

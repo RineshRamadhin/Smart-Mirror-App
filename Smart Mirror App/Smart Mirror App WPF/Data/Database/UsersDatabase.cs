@@ -41,7 +41,7 @@ namespace Smart_Mirror_App_WPF.Data.Database
                 GoogleUserModel gotUser = new GoogleUserModel();
                 gotUser.name = user.name;
                 gotUser.avatarUrl = user.avatarUrl;
-                gotUser.accesToken = user.accesToken;
+                gotUser.accessToken = user.accessToken;
                 gotUser.refreshToken = user.refreshToken;
                 gotUser.expireDate = user.expireDate;
 
