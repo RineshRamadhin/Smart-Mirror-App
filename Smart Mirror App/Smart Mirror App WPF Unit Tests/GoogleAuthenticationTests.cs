@@ -17,6 +17,7 @@ namespace Smart_Mirror_App_WPF_Unit_Tests
     public class GoogleAuthenticationTests
     {
         string testUsername = "user";
+        GoogleUserModel testUser = new GoogleUserModel();
 
         [TestMethod]
         public void CanInstantiateAuthenticationGoogle()
@@ -30,6 +31,7 @@ namespace Smart_Mirror_App_WPF_Unit_Tests
             AuthenticationGoogle googleAuthenticatorService = new AuthenticationGoogle();
             await googleAuthenticatorService.LoginGoogle(testUsername);
             GoogleUserModel user =  googleAuthenticatorService.GetCurrentUser();
+            testUser = user;
             if (user == null)
             {
                 Assert.Fail();
@@ -41,9 +43,9 @@ namespace Smart_Mirror_App_WPF_Unit_Tests
         {
             AuthenticationGoogle googleAuthenticatorService = new AuthenticationGoogle();
             GoogleUserModel user = googleAuthenticatorService.GetSpecificUser(testUsername);
-            if (user == null)
+            if (user == null )
             {
-                Assert.Fail();
+                Assert.IsNull(user);
             }
         }
 
@@ -58,6 +60,28 @@ namespace Smart_Mirror_App_WPF_Unit_Tests
             GoogleUserModel user = userDb.GetSpecificUser(wantedUserInDb);
             
             Assert.AreEqual(user.name, wantedUserInDb);
+        }
+
+        [TestMethod]
+        public void GetAllUsersFromDb()
+        {
+            AuthenticationGoogle googleAuthenticatorService = new AuthenticationGoogle();
+            UsersDatabase userDb = new UsersDatabase();
+            ArrayList allUsers = userDb.GetAllUsers();
+        }
+
+        [TestMethod]
+        public void DeleteSpecificUserFromDb()
+        {
+            UsersDatabase userDb = new UsersDatabase();
+            userDb.DeleteSpecificUser(testUsername);
+            this.GetSpecificUser();
+        }
+
+        public void ClearUserDb()
+        {
+            UsersDatabase userDb = new UsersDatabase();
+            userDb.ClearUserDatabase(true);
         }
 
         public async Task DeleteUserFromApplication()

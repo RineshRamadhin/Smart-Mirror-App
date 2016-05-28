@@ -44,8 +44,29 @@ namespace Smart_Mirror_App_WPF.Data.Database
 
         public GoogleUserModel GetSpecificUser(string username)
         {
-            var user = userDb.Get<GoogleUserModel>(username);
-            return user;
+            var user = from wantedUser in userDb.Table<GoogleUserModel>()
+                       where wantedUser.name.Equals(username)
+                       select wantedUser;
+   
+            return user.FirstOrDefault();
+        }
+
+        private void UpdateUserRow(string username)
+        {
+            var query = userDb.Table<GoogleUserModel>().Where(user => user.name == username);
+        }
+
+        public void DeleteSpecificUser(string username)
+        {
+            userDb.Delete<GoogleUserModel>(username);
+        }
+
+        public void ClearUserDatabase(bool areYouSure)
+        {
+            if (areYouSure)
+            {
+                userDb.DeleteAll<GoogleUserModel>();
+            }            
         }
     }
 }

@@ -111,6 +111,7 @@ namespace Smart_Mirror_App_WPF.Authentication.Google
             double expireInSeconds = (double)credential.Token.ExpiresInSeconds;
             this.currentUser.expireDate = this.ConvertExpireData(expireInSeconds);
 
+            this.InsertUserInDb(this.currentUser);
         }
 
         private void InsertUserInDb(GoogleUserModel user)
