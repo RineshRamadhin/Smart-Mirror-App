@@ -23,7 +23,7 @@ namespace Smart_Mirror_App_WPF.Data.Database
             userDb.Insert(user);
         }
 
-        public ArrayList GetAllUser()
+        public ArrayList GetAllUsers()
         {
             var query = userDb.Table<GoogleUserModel>();
             ArrayList users = new ArrayList();
@@ -40,6 +40,12 @@ namespace Smart_Mirror_App_WPF.Data.Database
                 users.Add(gotUser);
             }
             return users;
+        }
+
+        public GoogleUserModel GetSpecificUser(string username)
+        {
+            var user = userDb.Get<GoogleUserModel>(username);
+            return user;
         }
     }
 }

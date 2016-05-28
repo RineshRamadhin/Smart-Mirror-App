@@ -11,7 +11,7 @@ namespace Smart_Mirror_App_WPF_Unit_Tests
 {
     /// <summary>
     /// This unit test will test the OAuth2.0 authorization process in our application including saving users in our database.
-    /// !!! Before you start running these test you must have logged in before in our application using the username: test-user
+    /// !!!Before you start running these test you must have logged in before in our application using the username: test-user
     /// </summary>
     [TestClass]
     public class GoogleAuthenticationTests
@@ -34,6 +34,30 @@ namespace Smart_Mirror_App_WPF_Unit_Tests
             {
                 Assert.Fail();
             }
+        }
+
+        [TestMethod]
+        public void GetSpecificUser()
+        {
+            AuthenticationGoogle googleAuthenticatorService = new AuthenticationGoogle();
+            GoogleUserModel user = googleAuthenticatorService.GetSpecificUser(testUsername);
+            if (user == null)
+            {
+                Assert.Fail();
+            }
+        }
+
+        [TestMethod]
+        public async Task InsertedUserToDb()
+        {
+            string wantedUserInDb = testUsername;
+            AuthenticationGoogle googleAuthenticatorService = new AuthenticationGoogle();
+            UsersDatabase userDb = new UsersDatabase();
+   
+            await googleAuthenticatorService.LoginGoogle(wantedUserInDb);
+            GoogleUserModel user = userDb.GetSpecificUser(wantedUserInDb);
+            
+            Assert.AreEqual(user.name, wantedUserInDb);
         }
 
         public async Task DeleteUserFromApplication()

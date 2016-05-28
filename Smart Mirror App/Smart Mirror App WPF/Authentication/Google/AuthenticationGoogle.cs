@@ -100,26 +100,6 @@ namespace Smart_Mirror_App_WPF.Authentication.Google
             return currentUser;
         }
 
-        public async Task<GoogleUserModel> GetSpecificUser(string smartMirrorUsername)
-        {
-            FileDataStore dataStore = new FileDataStore(this.dataStoreLocation);
-            TokenResponse otherUser = await dataStore.GetAsync<TokenResponse>(smartMirrorUsername);
-            
-            if (otherUser != null)
-            {
-                GoogleUserModel specificUser = new GoogleUserModel();
-                specificUser.accesToken = otherUser.AccessToken;
-                specificUser.refreshToken = otherUser.RefreshToken;
-                double expireInSeconds = (double)otherUser.ExpiresInSeconds;
-                specificUser.expireDate = this.ConvertExpireData(expireInSeconds);
-
-                return specificUser;
-            } else
-            {
-                return null;
-            }
-        }
-
         private void SetCurrentUser(UserCredential credential, string smartMirrorUsername)
         {
             this.currentUser = new GoogleUserModel();
@@ -133,12 +113,18 @@ namespace Smart_Mirror_App_WPF.Authentication.Google
 
         }
 
-        private void InsertUserInDb()
+        private void InsertUserInDb(GoogleUserModel user)
         {
             UsersDatabase usersDb = new UsersDatabase();
-            usersDb.InsertUser(currentUser);
-            ArrayList allUsers = usersDb.GetAllUser();
-            Debug.WriteLine(allUsers);
+            usersDb.InsertUser(user);
+        }
+
+        public GoogleUserModel GetSpecificUser(string smartMirrorUsername)
+        {
+            UsersDatabase usersDb = new UsersDatabase();
+            GoogleUserModel specificUser = usersDb.GetSpecificUser(smartMirrorUsername);
+
+            return specificUser;
         }
 
         private DateTime ConvertExpireData(double seconds)
