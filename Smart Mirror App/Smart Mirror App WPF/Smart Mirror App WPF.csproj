@@ -70,6 +70,7 @@
     <Compile Include="Input\Motion\IMotionController.cs" />
     <Compile Include="Input\Motion\IMotionData.cs" />
     <Compile Include="Input\Motion\IMotionListener.cs" />
+    <Compile Include="Input\Motion\LeapMotion\Data\Devices.cs" />
     <Compile Include="Input\Motion\LeapMotion\Data\Fingers.cs" />
     <Compile Include="Input\Motion\LeapMotion\Data\Gestures.cs" />
     <Compile Include="Input\Motion\LeapMotion\Data\Hands.cs" />

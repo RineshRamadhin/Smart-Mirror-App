@@ -1,6 +1,4 @@
-﻿using System;
-using System.Diagnostics;
-using Leap;
+﻿using Leap;
 using Smart_Mirror_App_WPF.Input.Motion.LeapMotion.Data;
 
 namespace Smart_Mirror_App_WPF.Input.Motion.LeapMotion

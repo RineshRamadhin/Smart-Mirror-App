@@ -13,7 +13,7 @@ namespace Smart_Mirror_App_WPF
             InitializeComponent();
 
             LeapMotion leapmotion = new LeapMotion();
-            leapmotion.Controller.Connect(leapmotion.Listener);
+            leapmotion.Connect();
         }
     }
 }
