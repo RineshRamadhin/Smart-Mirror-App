@@ -10,6 +10,6 @@ namespace Smart_Mirror_App_WPF.Data.Models
     {
         public string displayName { get; set; }
         public string gender { get; set; }
-        public string imageUrl { get; set; }
+        public Dictionary<string, string> image { get; set; }
     }
 }

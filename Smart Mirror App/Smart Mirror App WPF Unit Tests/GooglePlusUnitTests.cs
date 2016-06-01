@@ -16,7 +16,13 @@ namespace Smart_Mirror_App_WPF_Unit_Tests
             AuthenticationGoogle googleAuthenticator = new AuthenticationGoogle();
             await googleAuthenticator.LoginGoogle("user");
             GoogleUserModel user = googleAuthenticator.GetCurrentUser();
+            GooglePlusData googlePlus = new GooglePlusData(user.accessToken);
             await googlePlus.RequestUserProfile();
+            GoogleProfileModel userProfile = googlePlus.GetUserProfile();
+            if (userProfile.displayName == null)
+            {
+                Assert.Fail();
+            }
         }
     }
 }

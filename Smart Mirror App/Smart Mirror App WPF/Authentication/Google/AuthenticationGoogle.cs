@@ -62,12 +62,6 @@ namespace Smart_Mirror_App_WPF.Authentication.Google
                         smartMirrorUsername, CancellationToken.None, new FileDataStore(this.dataStoreLocation));
                 };
 
-                var Service = new BaseClientService.Initializer()
-                {
-                    HttpClientInitializer = credential,
-                    ApplicationName = "Google API Sample",
-                };
-
                 GoogleUserModel newUser = this.ParseUserCredentials(credential, smartMirrorUsername);
                 this.SetCurrentUser(newUser);
             }

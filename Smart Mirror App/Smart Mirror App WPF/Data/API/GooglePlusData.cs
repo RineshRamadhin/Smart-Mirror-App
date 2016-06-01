@@ -32,13 +32,13 @@ namespace Smart_Mirror_App_WPF.Data.API
             GoogleProfileModel requestResponse = new GoogleProfileModel();
             HttpClient httpClient = new HttpClient();
 
-            var searchUrl = "https://www.googleapis.com/plus/v1/people/me";
+            var requestUrl = "https://www.googleapis.com/plus/v1/people/me";
             httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + accesToken);
 
             try
             {
-                HttpResponseMessage response = await httpClient.GetAsync(searchUrl);
-                ParseUserResponse(response);
+                HttpResponseMessage response = await httpClient.GetAsync(requestUrl);
+                await ParseUserResponse(response);
             }
             catch (HttpRequestException httpError)
             {
@@ -46,21 +46,22 @@ namespace Smart_Mirror_App_WPF.Data.API
             }
         }
 
-        private async void ParseUserResponse(HttpResponseMessage response)
+        private async Task ParseUserResponse(HttpResponseMessage response)
         {
             GoogleProfileModel parsedUserProfile = new GoogleProfileModel();
             string jsonContent = await response.Content.ReadAsStringAsync();
             GoogleProfileModel profile = JsonConvert.DeserializeObject<GoogleProfileModel>(jsonContent);
-            if (jsonContent != null)
+            if (profile != null)
             {
-
+                SetUserProfile(profile);
             }
         }
 
-        private void SetUserProfile(string name, string imageUrl)
+        private void SetUserProfile(GoogleProfileModel profile)
         {
-            userProfile.displayName = name;
-            userProfile.imageUrl = imageUrl;
+            userProfile.displayName = profile.displayName;
+            userProfile.image = profile.image;
+            userProfile.gender = profile.gender;
         }
     }
 }

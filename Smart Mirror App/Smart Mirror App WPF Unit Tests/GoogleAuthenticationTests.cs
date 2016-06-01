@@ -27,7 +27,7 @@ namespace Smart_Mirror_App_WPF_Unit_Tests
 
         /// <summary>
         /// Test if we user request user credentials from Google OAuth2.0 sign in
-        /// NOTE!!: The next tests only works when you have signed in once with smart mirror username: "user"
+        /// NOTE!!: The next tests only works when you have signed in once using the web
         /// Reason: Since Google only allows web authentication, we cant automatically sign in and require user input;
         /// </summary>
         /// <returns></returns>
