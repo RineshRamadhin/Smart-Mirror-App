@@ -93,7 +93,6 @@ namespace Smart_Mirror_App_WPF_Unit_Tests
             Assert.AreNotEqual(user.expireDate, updatedUser.expireDate);
         }
 
-        [TestMethod]
         public void DeleteSpecificUserFromDb()
         {
             UsersDatabase userDb = new UsersDatabase();
@@ -108,11 +107,11 @@ namespace Smart_Mirror_App_WPF_Unit_Tests
             userDb.ClearUserDatabase(true);
         }
 
-
         public async Task DeleteUserFromApplication()
         {
             AuthenticationGoogle googleAuthenticatorService = new AuthenticationGoogle();
             await googleAuthenticatorService.LogoutGoogle(testUsername);
+
         }
     }
 }

@@ -173,6 +173,7 @@
     </ApplicationDefinition>
     <Compile Include="Authentication\Google\AuthenticationGoogle.cs" />
     <Compile Include="Data\API\GooglePlusData.cs" />
+    <Compile Include="Data\Database\GoogleProfileTable.cs" />
     <Compile Include="Data\Database\UsersDatabase.cs" />
     <Compile Include="Data\Models\GoogleProfileModel.cs" />
     <Compile Include="Data\Models\GoogleRefreshTokenModel.cs" />
