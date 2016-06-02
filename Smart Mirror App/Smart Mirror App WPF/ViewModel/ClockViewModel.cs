@@ -1,9 +1,8 @@
-﻿using Smart_Mirror_App_Unit_Tests.Model;
-using Smart_Mirror_App_WPF.Model;
+﻿using Smart_Mirror_App_WPF.Model;
 using System.ComponentModel;
 using System.Globalization;
 
-namespace Smart_Mirror_App.Clock
+namespace Smart_Mirror_App_WPF.ViewModel
 {
     public class ClockViewModel : PropertyChangedBase
     {
