@@ -1,14 +1,15 @@
-﻿using SQLite;
+﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Smart_Mirror_App_WPF.Data.Models
 {
-    public class GoogleProfileModel
+    class GoogleProfileResponseModel
     {
-        [PrimaryKey]
-        public string smartMirrorUsername { get; set; }
         public string displayName { get; set; }
         public string gender { get; set; }
-        public string imageUrl { get; set; }
+        public Dictionary<string, string> image { get; set; }
     }
 }

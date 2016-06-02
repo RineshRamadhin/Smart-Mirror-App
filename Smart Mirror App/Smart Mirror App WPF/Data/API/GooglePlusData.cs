@@ -8,18 +8,20 @@ using System.Text;
 using System.Threading.Tasks;
 
 using Newtonsoft.Json;
+using Smart_Mirror_App_WPF.Data.Database;
 
 namespace Smart_Mirror_App_WPF.Data.API
 {
     public class GooglePlusData
     {
-        private string accesToken;
+        private string accessToken;
         private GoogleProfileModel userProfile;
 
-        public GooglePlusData(string accesToken)
+        public GooglePlusData(string accessToken, string username)
         {
-            this.accesToken = accesToken;
             userProfile = new GoogleProfileModel();
+            this.userProfile.smartMirrorUsername = username;
+            this.accessToken = accessToken;
         }
 
         public GoogleProfileModel GetUserProfile()
@@ -33,7 +35,7 @@ namespace Smart_Mirror_App_WPF.Data.API
             HttpClient httpClient = new HttpClient();
 
             var requestUrl = "https://www.googleapis.com/plus/v1/people/me";
-            httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + accesToken);
+            httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + accessToken);
 
             try
             {
@@ -50,18 +52,28 @@ namespace Smart_Mirror_App_WPF.Data.API
         {
             GoogleProfileModel parsedUserProfile = new GoogleProfileModel();
             string jsonContent = await response.Content.ReadAsStringAsync();
-            GoogleProfileModel profile = JsonConvert.DeserializeObject<GoogleProfileModel>(jsonContent);
-            if (profile != null)
+            GoogleProfileResponseModel profileResponse = JsonConvert.DeserializeObject<GoogleProfileResponseModel>(jsonContent);
+            if (profileResponse != null)
             {
-                SetUserProfile(profile);
+                SetUserProfile(profileResponse);
             }
         }
 
-        private void SetUserProfile(GoogleProfileModel profile)
+        private void SetUserProfile(GoogleProfileResponseModel profile)
         {
             userProfile.displayName = profile.displayName;
-            userProfile.image = profile.image;
+            string imageUrl; 
+            profile.image.TryGetValue("url", out imageUrl);
+            userProfile.imageUrl = imageUrl;
             userProfile.gender = profile.gender;
+
+            this.InsertProfileToDb(this.userProfile);
+        }
+
+        private void InsertProfileToDb(GoogleProfileModel profile)
+        {
+            GoogleProfileTable profileDb = new GoogleProfileTable();
+            profileDb.InsertProfile(profile);
         }
     }
 }
