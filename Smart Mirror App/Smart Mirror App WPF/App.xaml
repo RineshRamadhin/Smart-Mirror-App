@@ -4,7 +4,8 @@
              xmlns:local="clr-namespace:Smart_Mirror_App_WPF"
              xmlns:clock="clr-namespace:Smart_Mirror_App_WPF.View"
              xmlns:test="clr-namespace:Smart_Mirror_App_WPF.View"
-             StartupUri="MainWindow.xaml">
+             StartupUri="MainWindow.xaml"
+             >
 
     <Application.Resources>
         <clock:ClockView x:Key="clock"/>
