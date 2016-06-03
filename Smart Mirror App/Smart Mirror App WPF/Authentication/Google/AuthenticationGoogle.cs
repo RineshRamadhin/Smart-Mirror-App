@@ -19,8 +19,6 @@ using Smart_Mirror_App_WPF.Data.Models;
 using System.Threading.Tasks;
 using Google.Apis.Auth.OAuth2.Responses;
 using Smart_Mirror_App_WPF.Data.Database;
-using System.Collections;
-using Google.Apis.Auth.OAuth2.Flows;
 using System.Net.Http;
 using System.Collections.Generic;
 

@@ -12,24 +12,36 @@ using Smart_Mirror_App_WPF.Data.Database;
 
 namespace Smart_Mirror_App_WPF.Data.API
 {
-    public class GooglePlusData
+    public class GooglePlusData : DefaultGoogleData<GoogleProfileModel>
     {
         private string _accessToken;
-        private GoogleProfileModel userProfile;
+        private GoogleProfileModel _userProfile;
 
         public GooglePlusData(string accessToken, string username)
         {
-            userProfile = new GoogleProfileModel();
-            this.userProfile.smartMirrorUsername = username;
+            _userProfile = new GoogleProfileModel();
+            this._userProfile.smartMirrorUsername = username;
             this._accessToken = accessToken;
         }
 
-        public GoogleProfileModel GetUserProfile()
+        private GoogleProfileModel ParseUserProfile(GoogleProfileResponseModel profileResponse, GoogleProfileModel profile)
         {
-            return userProfile;
+            profile.displayName = profileResponse.displayName;
+            string imageUrl;
+            profileResponse.image.TryGetValue("url", out imageUrl);
+            profile.imageUrl = imageUrl;
+            profile.gender = profileResponse.gender;
+
+            return profile;
         }
 
-        public async Task RequestUserProfile()
+        private void InsertProfileToDb(GoogleProfileModel profile)
+        {
+            GoogleProfileTable profileDb = new GoogleProfileTable();
+            profileDb.InsertRow(profile);
+        }
+
+        public override async Task HttpRequestData()
         {
             GoogleProfileModel requestResponse = new GoogleProfileModel();
             HttpClient httpClient = new HttpClient();
@@ -40,7 +52,7 @@ namespace Smart_Mirror_App_WPF.Data.API
             try
             {
                 HttpResponseMessage response = await httpClient.GetAsync(requestUrl);
-                await ParseUserResponse(response);
+                ResponseParser(response);
             }
             catch (HttpRequestException httpError)
             {
@@ -48,29 +60,33 @@ namespace Smart_Mirror_App_WPF.Data.API
             }
         }
 
-        private async Task ParseUserResponse(HttpResponseMessage response)
+        protected override async void ResponseParser(HttpResponseMessage response)
         {
             GoogleProfileModel parsedUserProfile = new GoogleProfileModel();
             string jsonContent = await response.Content.ReadAsStringAsync();
             GoogleProfileResponseModel profileResponse = JsonConvert.DeserializeObject<GoogleProfileResponseModel>(jsonContent);
             if (profileResponse != null)
             {
-                SetUserProfile(profileResponse);
+                parsedUserProfile = this.ParseUserProfile(profileResponse, parsedUserProfile);
+                this.SetData(parsedUserProfile);
             }
         }
 
-        private void SetUserProfile(GoogleProfileResponseModel profile)
+        public override GoogleProfileModel GetData()
         {
-            userProfile.displayName = profile.displayName;
-            string imageUrl; 
-            profile.image.TryGetValue("url", out imageUrl);
-            userProfile.imageUrl = imageUrl;
-            userProfile.gender = profile.gender;
-
-            this.InsertProfileToDb(this.userProfile);
+            return _userProfile;
         }
 
-        private void InsertProfileToDb(GoogleProfileModel profile)
+        protected override void SetData(GoogleProfileModel profile)
+        {
+            _userProfile.displayName = profile.displayName;
+            _userProfile.imageUrl = profile.imageUrl;
+            _userProfile.gender = profile.gender;
+
+            this.InsertProfileToDb(this._userProfile);
+        }
+
+        public override void InsertToDb(GoogleProfileModel profile)
         {
             GoogleProfileTable profileDb = new GoogleProfileTable();
             profileDb.InsertRow(profile);

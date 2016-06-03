@@ -172,6 +172,8 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Authentication\Google\AuthenticationGoogle.cs" />
+    <Compile Include="Data\API\DefaultGoogleData.cs" />
+    <Compile Include="Data\API\GoogleCalendarData.cs" />
     <Compile Include="Data\API\GooglePlusData.cs" />
     <Compile Include="Data\Database\DefaultDatabase.cs" />
     <Compile Include="Data\Database\DefaultDatabaseTable.cs" />

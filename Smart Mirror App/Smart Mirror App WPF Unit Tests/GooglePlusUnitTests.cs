@@ -44,8 +44,8 @@ namespace Smart_Mirror_App_WPF_Unit_Tests
             await googleAuthenticator.LoginGoogle("user");
             this.user = googleAuthenticator.GetCurrentUser();
             this.googlePlus = new GooglePlusData(user.accessToken, user.name);
-            await googlePlus.RequestUserProfile();
-            this.userProfile = googlePlus.GetUserProfile();
+            await googlePlus.HttpRequestData();
+            this.userProfile = googlePlus.GetData();
         }
     }
 }
