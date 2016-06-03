@@ -21,12 +21,14 @@ using Google.Apis.Auth.OAuth2.Responses;
 using Smart_Mirror_App_WPF.Data.Database;
 using System.Net.Http;
 using System.Collections.Generic;
+using Google.Apis.Auth.OAuth2.Flows;
 
 namespace Smart_Mirror_App_WPF.Authentication.Google
 {
     public class AuthenticationGoogle
     {
         private GoogleUserModel _currentUser;
+        private UserCredential _currentUserCredential;
         private string _dataStoreLocation = "Test.Auth.Store";
         private string _googleClientSecretFileLocation = "client_secret.json";
 
@@ -37,14 +39,7 @@ namespace Smart_Mirror_App_WPF.Authentication.Google
         /// <returns></returns>
         public async Task LoginGoogle(string smartMirrorUsername)
         {
-            GoogleUserModel user = GetSpecificUser(smartMirrorUsername);
-            if (user != null)
-            {
-                await RefreshAuthenticationTokens(user); 
-            } else
-            {
-                await AuthorizeUsingWeb(smartMirrorUsername);
-            }
+            await AuthorizeUsingWeb(smartMirrorUsername);
         }
 
         private async Task AuthorizeUsingWeb(string smartMirrorUsername)
@@ -56,12 +51,13 @@ namespace Smart_Mirror_App_WPF.Authentication.Google
                 {
                     credential = await GoogleWebAuthorizationBroker.AuthorizeAsync(
                         GoogleClientSecrets.Load(stream).Secrets,
-                        new[] { CalendarService.Scope.Calendar, GmailService.Scope.GmailReadonly, PlusService.Scope.PlusMe },
+                        new[] { CalendarService.Scope.Calendar, GmailService.Scope.GmailReadonly, GmailService.Scope.MailGoogleCom, PlusService.Scope.PlusMe },
                         smartMirrorUsername, CancellationToken.None, new FileDataStore(this._dataStoreLocation));
                 };
 
                 GoogleUserModel newUser = this.ParseUserCredentials(credential, smartMirrorUsername);
                 this.SetCurrentUser(newUser);
+                this._currentUserCredential = credential;
             }
             catch (Exception Error)
             {
@@ -130,6 +126,11 @@ namespace Smart_Mirror_App_WPF.Authentication.Google
         public GoogleUserModel GetCurrentUser()
         {
             return _currentUser;
+        }
+
+        public UserCredential GetCurrentCredentials()
+        {
+            return _currentUserCredential;
         }
 
         private GoogleUserModel ParseUserCredentials(UserCredential credential, string smartMirrorUsername)

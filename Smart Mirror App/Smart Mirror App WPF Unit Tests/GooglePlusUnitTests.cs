@@ -5,6 +5,7 @@ using Smart_Mirror_App_WPF.Authentication.Google;
 using Smart_Mirror_App_WPF.Data.Models;
 using System.Threading.Tasks;
 using Smart_Mirror_App_WPF.Data.Database;
+using Google.Apis.Auth.OAuth2;
 
 namespace Smart_Mirror_App_WPF_Unit_Tests
 {
@@ -37,6 +38,15 @@ namespace Smart_Mirror_App_WPF_Unit_Tests
             {
                 Assert.Fail();
             }
+        }
+
+        [TestMethod]
+        public async Task RequestGoogleGmailData()
+        {
+            await googleAuthenticator.LoginGoogle("user");
+            UserCredential credential = googleAuthenticator.GetCurrentCredentials();
+            GoogleGmailService test = new GoogleGmailService(credential);
+            test.CreateGoogleService();
         }
 
         private async Task SetupTestEnvironment()

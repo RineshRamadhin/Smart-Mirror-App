@@ -107,11 +107,11 @@ namespace Smart_Mirror_App_WPF_Unit_Tests
             userTable.ClearUserDatabase(true);
         }
 
+        //[TestMethod]
         public async Task DeleteUserFromApplication()
         {
             AuthenticationGoogle googleAuthenticatorService = new AuthenticationGoogle();
             await googleAuthenticatorService.LogoutGoogle(testUsername);
-
         }
     }
 }

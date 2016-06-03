@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Smart_Mirror_App_WPF.Data.Models
+namespace Smart_Mirror_App_WPF.Data.API.Models
 {
     class GoogleProfileResponseModel
     {
