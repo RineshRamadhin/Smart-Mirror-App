@@ -14,14 +14,14 @@ namespace Smart_Mirror_App_WPF.Data.API
 {
     public class GooglePlusData
     {
-        private string accessToken;
+        private string _accessToken;
         private GoogleProfileModel userProfile;
 
         public GooglePlusData(string accessToken, string username)
         {
             userProfile = new GoogleProfileModel();
             this.userProfile.smartMirrorUsername = username;
-            this.accessToken = accessToken;
+            this._accessToken = accessToken;
         }
 
         public GoogleProfileModel GetUserProfile()
@@ -35,7 +35,7 @@ namespace Smart_Mirror_App_WPF.Data.API
             HttpClient httpClient = new HttpClient();
 
             var requestUrl = "https://www.googleapis.com/plus/v1/people/me";
-            httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + accessToken);
+            httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + _accessToken);
 
             try
             {

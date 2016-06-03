@@ -19,6 +19,10 @@ namespace Smart_Mirror_App_WPF.Data.Database
             database.CreateTable<GoogleProfileModel>();
         }
 
+        /// <summary>
+        /// Inserts the google user profile or updates it if user already exists
+        /// </summary>
+        /// <param name="profile">Google user profile from GooglePlusData</param>
         public override void InsertRow(GoogleProfileModel profile)
         {
             if (CheckIfProfileExist(profile))
