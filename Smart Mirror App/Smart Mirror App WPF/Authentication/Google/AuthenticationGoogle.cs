@@ -178,22 +178,22 @@ namespace Smart_Mirror_App_WPF.Authentication.Google
 
         private void InsertUserInDb(GoogleUserModel user)
         {
-            UsersDatabase usersDb = new UsersDatabase();
-            usersDb.InsertUser(user);
+            UsersTable userTable = new UsersTable();
+            userTable.InsertRow(user);
         }
 
         public GoogleUserModel GetSpecificUser(string smartMirrorUsername)
         {
-            UsersDatabase usersDb = new UsersDatabase();
-            GoogleUserModel specificUser = usersDb.GetSpecificUser(smartMirrorUsername);
+            UsersTable userTable = new UsersTable();
+            GoogleUserModel specificUser = userTable.GetRow(smartMirrorUsername);
 
             return specificUser;
         }
 
         public void DeleteSpecificUserFromDb(string smartMirrorUsername)
         {
-            UsersDatabase usersDb = new UsersDatabase();
-            usersDb.DeleteSpecificUser(smartMirrorUsername);
+            UsersTable userTable = new UsersTable();
+            userTable.DeleteRow(smartMirrorUsername);
         }
 
         private DateTime ConvertExpireData(double seconds)

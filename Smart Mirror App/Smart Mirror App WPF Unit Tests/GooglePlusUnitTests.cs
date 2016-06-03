@@ -32,7 +32,7 @@ namespace Smart_Mirror_App_WPF_Unit_Tests
         public async Task InsertedGoogleUserProfileInDb()
         {
             await this.SetupTestEnvironment();
-            GoogleProfileModel dbUserProfile = googleProfileDb.GetSpecificUserProfile(userProfile.smartMirrorUsername);
+            GoogleProfileModel dbUserProfile = googleProfileDb.GetRow(userProfile.smartMirrorUsername);
             if (dbUserProfile.smartMirrorUsername == null)
             {
                 Assert.Fail();

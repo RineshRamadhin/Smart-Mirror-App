@@ -73,7 +73,7 @@ namespace Smart_Mirror_App_WPF.Data.API
         private void InsertProfileToDb(GoogleProfileModel profile)
         {
             GoogleProfileTable profileDb = new GoogleProfileTable();
-            profileDb.InsertProfile(profile);
+            profileDb.InsertRow(profile);
         }
     }
 }

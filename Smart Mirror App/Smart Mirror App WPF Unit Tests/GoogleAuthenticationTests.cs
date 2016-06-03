@@ -64,10 +64,10 @@ namespace Smart_Mirror_App_WPF_Unit_Tests
         {
             string wantedUserInDb = testUsername;
             AuthenticationGoogle googleAuthenticatorService = new AuthenticationGoogle();
-            UsersDatabase userDb = new UsersDatabase();
-   
+            UsersTable userTable = new UsersTable();
+
             await googleAuthenticatorService.LoginGoogle(wantedUserInDb);
-            GoogleUserModel user = userDb.GetSpecificUser(wantedUserInDb);
+            GoogleUserModel user = userTable.GetRow(wantedUserInDb);
             
             Assert.AreEqual(user.name, wantedUserInDb);
         }
@@ -76,18 +76,18 @@ namespace Smart_Mirror_App_WPF_Unit_Tests
         public void GetAllUsersFromDb()
         {
             AuthenticationGoogle googleAuthenticatorService = new AuthenticationGoogle();
-            UsersDatabase userDb = new UsersDatabase();
-            ArrayList allUsers = userDb.GetAllUsers();
+            UsersTable userTable = new UsersTable();
+            ArrayList allUsers = userTable.GetAllUsers();
         }
 
         [TestMethod]
         public async Task UpdateSpecificUser()
         {
             AuthenticationGoogle googleAuthenticatorService = new AuthenticationGoogle();
-            UsersDatabase userDb = new UsersDatabase();
+            UsersTable userTable = new UsersTable();
             await googleAuthenticatorService.LoginGoogle(testUsername);
             GoogleUserModel user = googleAuthenticatorService.GetCurrentUser();
-            userDb.UpdateUserRow(user);
+            userTable.InsertRow(user);
             GoogleUserModel updatedUser = googleAuthenticatorService.GetSpecificUser(testUsername);
 
             Assert.AreNotEqual(user.expireDate, updatedUser.expireDate);
@@ -95,16 +95,16 @@ namespace Smart_Mirror_App_WPF_Unit_Tests
 
         public void DeleteSpecificUserFromDb()
         {
-            UsersDatabase userDb = new UsersDatabase();
-            userDb.DeleteSpecificUser(testUsername);
+            UsersTable userTable = new UsersTable();
+            userTable.DeleteRow(testUsername);
             this.GetSpecificUser();
         }
 
         //TODO: Check if DB is cleared
         public void ClearUserDb()
         {
-            UsersDatabase userDb = new UsersDatabase();
-            userDb.ClearUserDatabase(true);
+            UsersTable userTable = new UsersTable();
+            userTable.ClearUserDatabase(true);
         }
 
         public async Task DeleteUserFromApplication()

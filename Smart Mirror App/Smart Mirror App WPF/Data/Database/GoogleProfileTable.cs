@@ -1,66 +1,73 @@
-﻿using Smart_Mirror_App_WPF.Data.Models;
+﻿using System;
+using Smart_Mirror_App_WPF.Data.Models;
 using SQLite;
 
 namespace Smart_Mirror_App_WPF.Data.Database
 {
-    public class GoogleProfileTable
+    public class GoogleProfileTable : DefaultDatabaseTable<GoogleProfileModel>
     {
-        SQLiteConnection db;
+        SQLiteConnection database;
         public GoogleProfileTable()
         {
-            CreateGoogleProfileTable();
+            this.CreateTable();
         }
-
-        public void CreateGoogleProfileTable()
+        
+        protected override void CreateTable()
         {
-            db = new SQLiteConnection("usersdatabase.db");
-            db.CreateTable<GoogleProfileModel>();
+            DefaultDatabase databaseConn = new DefaultDatabase();
+            database = databaseConn.CreateDb();
+            database.CreateTable<GoogleProfileModel>();
         }
 
-        public void InsertProfile(GoogleProfileModel profile)
+        public override void InsertRow(GoogleProfileModel profile)
         {
             if (CheckIfProfileExist(profile))
             {
-                this.UpdateUserProfile(profile);
-            } else
+                this.UpdateRow(profile);
+            }
+            else
             {
-                db.Insert(profile);
+                database.Insert(profile);
             }
         }
 
-        public GoogleProfileModel GetSpecificUserProfile(string username)
+        public override void DeleteRow(string primaryKey)
         {
-            var userProfile = from wantedProfile in db.Table<GoogleProfileModel>()
+            throw new NotImplementedException();
+        }
+
+        protected override void UpdateRow(GoogleProfileModel profile)
+        {
+            var existingProfile = this.GetRow(profile.smartMirrorUsername);
+
+            if (existingProfile != null)
+            {
+                database.BeginTransaction();
+                database.Update(profile);
+                database.Commit();
+            }
+        }
+
+        public override GoogleProfileModel GetRow(string username)
+        {
+            var userProfile = from wantedProfile in database.Table<GoogleProfileModel>()
                               where wantedProfile.smartMirrorUsername.Equals(username)
                               select wantedProfile;
 
             return userProfile.FirstOrDefault();
         }
 
-        private void UpdateUserProfile(GoogleProfileModel profile)
-        {
-            var existingProfile = this.GetSpecificUserProfile(profile.smartMirrorUsername);
-
-            if (existingProfile != null)
-            {
-                db.BeginTransaction();
-                db.Update(profile);
-                db.Commit();
-            }
-        }
-
         private bool CheckIfProfileExist(GoogleProfileModel profile)
         {
-            GoogleProfileModel existingProfile = this.GetSpecificUserProfile(profile.smartMirrorUsername);
+            GoogleProfileModel existingProfile = this.GetRow(profile.smartMirrorUsername);
             if (existingProfile == null)
             {
                 return false;
-            } else
+            }
+            else
             {
                 return true;
             }
         }
-        
-
-     }
+    }
 }
