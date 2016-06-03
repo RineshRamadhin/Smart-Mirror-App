@@ -15,7 +15,7 @@ namespace Smart_Mirror_App_WPF.Data.API
 {
     public class GoogleGmailService : DefaultGoogleData<GoogleGmailModel>
     {
-        private GoogleGmailModel _gmails;
+        private IList<GoogleUserModel> _gmails;
         private UserCredential _credential;
         private string _applicationName = "Smart Mirror Gmail Service";
 
@@ -51,23 +51,6 @@ namespace Smart_Mirror_App_WPF.Data.API
                     Message mail = mailRequest.Execute();
                 }
             }
-
-
-            // List labels.
-            IList<Label> labels = request.Execute().Labels;
-            Console.WriteLine("Labels:");
-            if (labels != null && labels.Count > 0)
-            {
-                foreach (var labelItem in labels)
-                {
-                    Console.WriteLine("{0}", labelItem.Name);
-                }
-            }
-            else
-            {
-                Console.WriteLine("No labels found.");
-            }
-            Console.Read();
         }
 
         public override async Task HttpRequestData()
