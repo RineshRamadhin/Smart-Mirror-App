@@ -1,11 +1,6 @@
 ﻿using Smart_Mirror_App_WPF.Data.Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Net.Http;
-using System.Diagnostics;
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Gmail.v1;
 using Google.Apis.Services;
@@ -13,9 +8,9 @@ using Google.Apis.Gmail.v1.Data;
 
 namespace Smart_Mirror_App_WPF.Data.API
 {
-    public class GoogleGmailService : DefaultGoogleData<GoogleGmailModel>
+    public class GoogleGmailService : DefaultGoogleService<GoogleGmailModel, List<GoogleGmailModel>, Message>
     {
-        private IList<GoogleUserModel> _gmails;
+        private List<GoogleGmailModel> _gmails = new List<GoogleGmailModel>();
         private UserCredential _credential;
         private string _applicationName = "Smart Mirror Gmail Service";
 
@@ -24,12 +19,17 @@ namespace Smart_Mirror_App_WPF.Data.API
             this._credential = credential;
         }
 
-        public override GoogleGmailModel GetData()
+        public override List<GoogleGmailModel> GetData()
         {
-            throw new NotImplementedException();
+            return _gmails;
         }
 
-        public void CreateGoogleService()
+        protected override void SetData(GoogleGmailModel dataModel)
+        {
+            _gmails.Add(dataModel);
+        }
+
+        public override void CreateService()
         {
             var service = new GmailService(new BaseClientService.Initializer()
             {
@@ -37,11 +37,9 @@ namespace Smart_Mirror_App_WPF.Data.API
                 ApplicationName = _applicationName,
             });
 
-            // Define parameters of request.
-            UsersResource.LabelsResource.ListRequest request = service.Users.Labels.List("me");
-            UsersResource.MessagesResource.ListRequest request2 = service.Users.Messages.List("me");
+            UsersResource.MessagesResource.ListRequest allMailRequest = service.Users.Messages.List("me");
 
-            IList<Message> messages = request2.Execute().Messages;
+            IList<Message> messages = allMailRequest.Execute().Messages;
 
             if (messages != null && messages.Count > 0)
             {
@@ -49,39 +47,32 @@ namespace Smart_Mirror_App_WPF.Data.API
                 {
                     UsersResource.MessagesResource.GetRequest mailRequest = service.Users.Messages.Get("me", message.Id);
                     Message mail = mailRequest.Execute();
+                    this.ResponseParser(mail);
                 }
             }
         }
 
-        public override async Task HttpRequestData()
+        protected override void ResponseParser(Message response)
         {
-            HttpClient httpClient = new HttpClient();
-
-            var requestUrl = "https://www.googleapis.com/gmail/v1/users/me/messages?maxResults=20&fields=messages";
-            httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " );
-
-            try
+            GoogleGmailModel email = new GoogleGmailModel();
+            email.snippet = response.Snippet;
+            email.id = response.Id;
+            email.labels = response.LabelIds;
+            foreach (var header in response.Payload.Headers)
             {
-                HttpResponseMessage response = await httpClient.GetAsync(requestUrl);
-                ResponseParser(response);
+                if (header.Name == "From")
+                {
+                    email.from = header.Value;
+                }
+                if (header.Name == "Subject")
+                {
+                    email.subject = header.Value;
+                }
             }
-            catch (HttpRequestException httpError)
-            {
-                Debug.WriteLine(httpError);
-            }
+            this.SetData(email);
         }
 
-        public override void InsertToDb(GoogleGmailModel data)
-        {
-            throw new NotImplementedException();
-        }
-
-        protected override async void ResponseParser(HttpResponseMessage response)
-        {
-            string jsonContent = await response.Content.ReadAsStringAsync();
-        }
-
-        protected override void SetData(GoogleGmailModel dataModel)
+        public override void InsertToDb(List<GoogleGmailModel> data)
         {
             throw new NotImplementedException();
         }

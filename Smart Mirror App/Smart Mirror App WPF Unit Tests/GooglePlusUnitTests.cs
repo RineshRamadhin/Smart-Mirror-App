@@ -46,7 +46,8 @@ namespace Smart_Mirror_App_WPF_Unit_Tests
             await googleAuthenticator.LoginGoogle("user");
             UserCredential credential = googleAuthenticator.GetCurrentCredentials();
             GoogleGmailService test = new GoogleGmailService(credential);
-            test.CreateGoogleService();
+            test.CreateService();
+            var mails = test.GetData();
         }
 
         private async Task SetupTestEnvironment()
