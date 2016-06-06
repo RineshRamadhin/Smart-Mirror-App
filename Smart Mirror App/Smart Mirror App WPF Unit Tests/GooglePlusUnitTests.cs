@@ -50,6 +50,16 @@ namespace Smart_Mirror_App_WPF_Unit_Tests
             var mails = test.GetData();
         }
 
+        [TestMethod]
+        public async Task RequestGoogleCalendarData()
+        {
+            await googleAuthenticator.LoginGoogle("user");
+            var credential = googleAuthenticator.GetCurrentCredentials();
+            GoogleCalendarService calendarService = new GoogleCalendarService(credential);
+            calendarService.CreateService();
+
+        }
+
         private async Task SetupTestEnvironment()
         {
             await googleAuthenticator.LoginGoogle("user");

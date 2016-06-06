@@ -7,50 +7,60 @@ using System.Threading.Tasks;
 using System.Net.Http;
 using System.Diagnostics;
 using Google.Apis.Auth.OAuth2;
+using Google.Apis.Calendar.v3.Data;
+using Google.Apis.Calendar.v3;
+using Google.Apis.Services;
 
 namespace Smart_Mirror_App_WPF.Data.API
 {
-    class GoogleCalendarData : DefaultGoogleData<GoogleCalendarModel>
+    public class GoogleCalendarService : DefaultGoogleService<GoogleCalendarModel, List<GoogleCalendarModel>, Events>
     {
+        private List<GoogleCalendarModel> _gmails = new List<GoogleCalendarModel>();
+        private UserCredential _credential;
+        private string _applicationName = "Smart Mirror Google Calendar Service";
 
-        private GoogleCalendarModel _calendar;
-        private string _accessToken;
-
-        public override GoogleCalendarModel GetData()
+        public GoogleCalendarService(UserCredential credential)
         {
-            return _calendar;
+            this._credential = credential;
         }
 
-        public override async Task HttpRequestData()
+        public override void CreateService()
         {
-
-            HttpClient httpClient = new HttpClient();
-
-            var requestUrl = "https://www.googleapis.com/plus/v1/people/me";
-            httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + _accessToken);
-
-            try
+            var service = new CalendarService(new BaseClientService.Initializer()
             {
-                HttpResponseMessage response = await httpClient.GetAsync(requestUrl);
-                ResponseParser(response);
-            }
-            catch (HttpRequestException httpError)
-            {
-                Debug.WriteLine(httpError);
-            }
+                HttpClientInitializer = this._credential,
+                ApplicationName = _applicationName,
+            });
+
+            // Define parameters of request.
+            EventsResource.ListRequest request = service.Events.List("primary");
+            request.TimeMin = DateTime.Now;
+            request.ShowDeleted = false;
+            request.SingleEvents = true;
+            request.MaxResults = 10;
+            request.OrderBy = EventsResource.ListRequest.OrderByEnum.StartTime;
+
+            // List events.
+            Events events = request.Execute();
+            this.ResponseParser(events);
         }
 
-        public override void InsertToDb(GoogleCalendarModel data)
+        protected override void ResponseParser(Events response)
         {
-            throw new NotImplementedException();
+            
         }
 
-        protected override void ResponseParser(HttpResponseMessage response)
+        public override List<GoogleCalendarModel> GetData()
         {
             throw new NotImplementedException();
         }
 
         protected override void SetData(GoogleCalendarModel dataModel)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void InsertToDb(List<GoogleCalendarModel> data)
         {
             throw new NotImplementedException();
         }
