@@ -86,7 +86,35 @@ namespace Smart_Mirror_App_WPF_Unit_Tests
             var credential = googleAuthenticator.GetCurrentCredentials();
             GoogleCalendarService calendarService = new GoogleCalendarService(credential);
             calendarService.CreateService();
+        }
 
+        [TestMethod]
+        public void InsertGoogleCalendarData()
+        {
+            var calendarTable = new GoogleCalendarTable();
+            var testEvent = new GoogleCalendarModel();
+            testEvent.id = _testMailId;
+            calendarTable.InsertRow(testEvent);
+            Assert.IsNotNull(calendarTable.GetRow(_testMailId)); 
+        }
+
+        [TestMethod]
+        public void UpdateGoogleCalendarEvent()
+        {
+            var calendarTable = new GoogleCalendarTable();
+            var testEvent = new GoogleCalendarModel();
+            testEvent.id = _testMailId;
+            testEvent.summary = "Test Event WPF";
+            calendarTable.InsertRow(testEvent);
+            Assert.IsNotNull(calendarTable.GetRow(_testMailId).summary);
+        }
+
+        [TestMethod]
+        public void DeleteGoogleCalendarEvent()
+        {
+            var calendarTable = new GoogleCalendarTable();
+            calendarTable.DeleteRow(_testMailId);
+            Assert.IsNull(calendarTable.GetRow(_testMailId));
         }
 
         private async Task SetupTestEnvironment()

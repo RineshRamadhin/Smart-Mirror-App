@@ -16,17 +16,46 @@ namespace Smart_Mirror_App_WPF.Data.Database
 
         public override GoogleCalendarModel GetRow(string primaryKey)
         {
-            throw new NotImplementedException();
+            var calendarEvent = from wantedEvent in database.Table<GoogleCalendarModel>()
+                        where wantedEvent.id.Equals(primaryKey)
+                        select wantedEvent;
+
+            return calendarEvent.FirstOrDefault();
         }
 
         public override void InsertRow(GoogleCalendarModel model)
         {
-            database.Insert(model);
+            if (CheckIfRecordExist(model.id))
+            {
+                this.UpdateRow(model);
+            } else
+            {
+                database.Insert(model);
+            } 
         }
 
         protected override void UpdateRow(GoogleCalendarModel model)
         {
-            throw new NotImplementedException();
+            var existingEvent = this.GetRow(model.id);
+
+            if (existingEvent != null)
+            {
+                database.BeginTransaction();
+                database.Update(model);
+                database.Commit();
+            }
+        }
+
+        private bool CheckIfRecordExist(string primaryKey)
+        {
+            var existingRecord = this.GetRow(primaryKey);
+            if (existingRecord == null)
+            {
+                return false;
+            } else
+            {
+                return true;
+            }
         }
     }
 }

@@ -6,6 +6,7 @@ using Google.Apis.Auth.OAuth2;
 using Google.Apis.Calendar.v3.Data;
 using Google.Apis.Calendar.v3;
 using Google.Apis.Services;
+using Smart_Mirror_App_WPF.Data.Database;
 
 namespace Smart_Mirror_App_WPF.Data.API
 {
@@ -38,6 +39,7 @@ namespace Smart_Mirror_App_WPF.Data.API
                     allEvents.Add(parsedItem);
                 }
                 this.SetData(allEvents);
+                this.InsertToDb(allEvents);
             } catch (Exception error)
             {
                 Debug.WriteLine(error);
@@ -83,7 +85,11 @@ namespace Smart_Mirror_App_WPF.Data.API
 
         public override void InsertToDb(List<GoogleCalendarModel> data)
         {
-            throw new NotImplementedException();
+            var calendarTable = new GoogleCalendarTable();
+            foreach (var calendarEvent in data)
+            {
+                calendarTable.InsertRow(calendarEvent);
+            }
         }
     }
 }
