@@ -6,6 +6,7 @@ using Google.Apis.Gmail.v1;
 using Google.Apis.Services;
 using Google.Apis.Gmail.v1.Data;
 using System.Diagnostics;
+using Smart_Mirror_App_WPF.Data.Database;
 
 namespace Smart_Mirror_App_WPF.Data.API
 {
@@ -42,7 +43,12 @@ namespace Smart_Mirror_App_WPF.Data.API
             try
             {
                 IList<Message> messages = allMailRequest.Execute().Messages;
-                this.GetDetailsMail(messages, service);
+                if (messages != null && messages.Count > 0)
+                {
+                    var allMails = this.GetDetailsMail(messages, service);
+                    this.SetData(allMails);
+                    this.InsertToDb(_gmails);
+                }
             } catch (Exception error)
             {
                 // TODO; Catch 400 error meaning user has no gmail 
@@ -50,21 +56,17 @@ namespace Smart_Mirror_App_WPF.Data.API
             }
         }
  
-        private void GetDetailsMail(IList<Message> emails, GmailService service)
+        private List<GoogleGmailModel> GetDetailsMail(IList<Message> emails, GmailService service)
         {
-            if (emails != null && emails.Count > 0)
+            var allMails = new List<GoogleGmailModel>();
+            foreach (var message in emails)
             {
-                List<GoogleGmailModel> allMails = new List<GoogleGmailModel>();
-                foreach (var message in emails)
-                {
-                    UsersResource.MessagesResource.GetRequest mailRequest = service.Users.Messages.Get("me", message.Id);
-                    Message mailDetails = mailRequest.Execute();
-                    var email = this.ResponseParser(mailDetails);
-                    allMails.Add(email);
-
-                }
-                this.SetData(allMails);
+                UsersResource.MessagesResource.GetRequest mailRequest = service.Users.Messages.Get("me", message.Id);
+                Message mailDetails = mailRequest.Execute();
+                var email = this.ResponseParser(mailDetails);
+                allMails.Add(email);
             }
+            return allMails;
         }
 
         protected override GoogleGmailModel ResponseParser(Message response)
@@ -100,9 +102,10 @@ namespace Smart_Mirror_App_WPF.Data.API
 
         public override void InsertToDb(List<GoogleGmailModel> data)
         {
+            var gmailTable = new GoogleGmailTable();
             foreach (var mail in data)
             {
-
+                gmailTable.InsertRow(mail);
             }
         }
     }

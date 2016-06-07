@@ -68,6 +68,18 @@ namespace Smart_Mirror_App_WPF_Unit_Tests
         }
 
         [TestMethod]
+        public void UpdateGoogleMailRecord()
+        {
+            GoogleGmailTable gmailTable = new GoogleGmailTable();
+            GoogleGmailModel mail = new GoogleGmailModel();
+            mail.id = _testMailId;
+            mail.subject = "testSubject";
+            gmailTable.InsertRow(mail);
+            var retrievedMail = gmailTable.GetRow(_testMailId);
+            Assert.IsNotNull(retrievedMail.subject);
+        }
+
+        [TestMethod]
         public void DeleteGoogleGmailRecord()
         {
             GoogleGmailTable gmailTable = new GoogleGmailTable();
