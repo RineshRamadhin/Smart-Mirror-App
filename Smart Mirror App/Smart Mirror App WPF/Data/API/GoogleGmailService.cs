@@ -5,6 +5,7 @@ using Google.Apis.Auth.OAuth2;
 using Google.Apis.Gmail.v1;
 using Google.Apis.Services;
 using Google.Apis.Gmail.v1.Data;
+using System.Diagnostics;
 
 namespace Smart_Mirror_App_WPF.Data.API
 {
@@ -38,12 +39,22 @@ namespace Smart_Mirror_App_WPF.Data.API
             });
 
             UsersResource.MessagesResource.ListRequest allMailRequest = service.Users.Messages.List("me");
-
-            IList<Message> messages = allMailRequest.Execute().Messages;
-
-            if (messages != null && messages.Count > 0)
+            try
             {
-                foreach (var message in messages)
+                IList<Message> messages = allMailRequest.Execute().Messages;
+                this.GetDetailsMail(messages, service);
+            } catch (Exception error)
+            {
+                // TODO; Catch 400 error meaning user has no gmail 
+                Debug.WriteLine(error);
+            }
+        }
+ 
+        private void GetDetailsMail(IList<Message> emails, GmailService service)
+        {
+            if (emails != null && emails.Count > 0)
+            {
+                foreach (var message in emails)
                 {
                     UsersResource.MessagesResource.GetRequest mailRequest = service.Users.Messages.Get("me", message.Id);
                     Message mail = mailRequest.Execute();

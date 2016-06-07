@@ -93,6 +93,7 @@ namespace Smart_Mirror_App_WPF_Unit_Tests
             Assert.AreNotEqual(user.expireDate, updatedUser.expireDate);
         }
 
+       // [TestMethod]
         public void DeleteSpecificUserFromDb()
         {
             UsersTable userTable = new UsersTable();

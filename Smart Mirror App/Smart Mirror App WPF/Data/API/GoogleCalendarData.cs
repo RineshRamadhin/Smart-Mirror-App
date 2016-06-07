@@ -15,7 +15,7 @@ namespace Smart_Mirror_App_WPF.Data.API
 {
     public class GoogleCalendarService : DefaultGoogleService<GoogleCalendarModel, List<GoogleCalendarModel>, Events>
     {
-        private List<GoogleCalendarModel> _gmails = new List<GoogleCalendarModel>();
+        private List<GoogleCalendarModel> _calendarEvents = new List<GoogleCalendarModel>();
         private UserCredential _credential;
         private string _applicationName = "Smart Mirror Google Calendar Service";
 
@@ -33,6 +33,22 @@ namespace Smart_Mirror_App_WPF.Data.API
             });
 
             // Define parameters of request.
+            var calendarRequest = this.SetupServiceRequest(service);
+
+            try
+            {
+                // List events.
+                Events events = calendarRequest.Execute();
+                this.ResponseParser(events);
+            } catch (Exception error)
+            {
+                Debug.WriteLine(error);
+            }
+            
+        }
+
+        private EventsResource.ListRequest SetupServiceRequest(CalendarService service)
+        {
             EventsResource.ListRequest request = service.Events.List("primary");
             request.TimeMin = DateTime.Now;
             request.ShowDeleted = false;
@@ -40,13 +56,22 @@ namespace Smart_Mirror_App_WPF.Data.API
             request.MaxResults = 10;
             request.OrderBy = EventsResource.ListRequest.OrderByEnum.StartTime;
 
-            // List events.
-            Events events = request.Execute();
-            this.ResponseParser(events);
+            return request;
         }
 
         protected override void ResponseParser(Events response)
         {
+            foreach (var item in response.Items) {
+                GoogleCalendarModel calenderItem = new GoogleCalendarModel();
+                calenderItem.id = item.Id;
+                calenderItem.htmlLink = item.HtmlLink;
+                calenderItem.location = item.Location;
+                calenderItem.startDate = (DateTime) item.Start.DateTime;
+                calenderItem.summary = item.Summary;
+                calenderItem.creatorName = item.Creator.DisplayName;
+                calenderItem.creatorMail = item.Creator.Email;
+                this.SetData(calenderItem);
+            }
             
         }
 
@@ -57,7 +82,7 @@ namespace Smart_Mirror_App_WPF.Data.API
 
         protected override void SetData(GoogleCalendarModel dataModel)
         {
-            throw new NotImplementedException();
+            this._calendarEvents.Add(dataModel);
         }
 
         public override void InsertToDb(List<GoogleCalendarModel> data)
