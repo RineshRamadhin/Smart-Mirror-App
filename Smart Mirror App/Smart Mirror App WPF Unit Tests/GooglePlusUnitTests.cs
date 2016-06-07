@@ -6,6 +6,7 @@ using Smart_Mirror_App_WPF.Data.Models;
 using System.Threading.Tasks;
 using Smart_Mirror_App_WPF.Data.Database;
 using Google.Apis.Auth.OAuth2;
+using System.Collections.Generic;
 
 namespace Smart_Mirror_App_WPF_Unit_Tests
 {
@@ -18,6 +19,7 @@ namespace Smart_Mirror_App_WPF_Unit_Tests
         private GoogleUserModel user;
         private GoogleProfileModel userProfile;
         private GooglePlusData googlePlus;
+        string _testMailId = "test";
 
         [TestMethod]
         public async Task RequestGoogleUserProfile()
@@ -48,6 +50,30 @@ namespace Smart_Mirror_App_WPF_Unit_Tests
             GoogleGmailService test = new GoogleGmailService(credential);
             test.CreateService();
             var mails = test.GetData();
+        }
+
+        [TestMethod]
+        public void InsertedGoogleGmailData()
+        {
+            GoogleGmailTable gmailTable = new GoogleGmailTable();
+            GoogleGmailModel mail = new GoogleGmailModel();
+            mail.id = _testMailId;
+
+            gmailTable.InsertRow(mail);
+            var retrievedMail = gmailTable.GetRow(_testMailId);
+            if (retrievedMail == null)
+            {
+                Assert.Fail();
+            }
+        }
+
+        [TestMethod]
+        public void DeleteGoogleGmailRecord()
+        {
+            GoogleGmailTable gmailTable = new GoogleGmailTable();
+            gmailTable.DeleteRow(_testMailId);
+            var retrievedMail = gmailTable.GetRow(_testMailId);
+            Assert.IsNull(retrievedMail);
         }
 
         [TestMethod]

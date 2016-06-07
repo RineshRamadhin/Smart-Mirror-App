@@ -70,9 +70,10 @@ namespace Smart_Mirror_App_WPF.Data.API
         protected override GoogleGmailModel ResponseParser(Message response)
         {
             GoogleGmailModel email = new GoogleGmailModel();
+            email.userId = _credential.UserId;
             email.snippet = response.Snippet;
             email.id = response.Id;
-            email.labels = response.LabelIds;
+            email.labels = FilterLabels(response.LabelIds);
             foreach (var header in response.Payload.Headers)
             {
                 if (header.Name == "From")
@@ -87,7 +88,15 @@ namespace Smart_Mirror_App_WPF.Data.API
             return email;
         }
 
-        
+        private string FilterLabels(IList<string> labels)
+        {
+            string returnLabel = "";
+            foreach (var label in labels)
+            {
+                returnLabel += label + "-";
+            }
+            return returnLabel;
+        }
 
         public override void InsertToDb(List<GoogleGmailModel> data)
         {

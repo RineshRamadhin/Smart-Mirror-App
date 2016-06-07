@@ -1,4 +1,5 @@
 ﻿using Smart_Mirror_App_WPF.Data.Database;
+using SQLite;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,9 +16,17 @@ namespace Smart_Mirror_App_WPF.Data.Database
 
     public abstract class DefaultDatabaseTable<T> : ITableFuctions<T>
     {
-        abstract protected void CreateTable();
+        protected SQLiteConnection database;
+        protected void CreateTable() {
+            DefaultDatabase databaseConn = new DefaultDatabase();
+            database = databaseConn.CreateDb();
+            database.CreateTable<T>();
+        }
+        
         abstract public void InsertRow(T model);
-        abstract public void DeleteRow(string primaryKey);
+        public void DeleteRow(string primaryKey) {
+            database.Delete<T>(primaryKey);
+        }
         abstract protected void UpdateRow(T model);
         abstract public T GetRow(string primaryKey);
     }

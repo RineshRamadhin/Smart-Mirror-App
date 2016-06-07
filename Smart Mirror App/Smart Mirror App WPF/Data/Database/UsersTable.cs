@@ -6,23 +6,12 @@ namespace Smart_Mirror_App_WPF.Data.Database
 {
     public class UsersTable : DefaultDatabaseTable<GoogleUserModel>
     {
-        SQLiteConnection database;
+
         public UsersTable()
         {
             this.CreateTable();
         }
 
-        protected override void CreateTable()
-        {
-            DefaultDatabase databaseConn = new DefaultDatabase();
-            database = databaseConn.CreateDb();
-            database.CreateTable<GoogleUserModel>();
-        }
-
-        public override void DeleteRow(string username)
-        {
-            database.Delete<GoogleUserModel>(username);
-        }
         public override void InsertRow(GoogleUserModel user)
         {
             GoogleUserModel wantedUser = this.GetRow(user.name);

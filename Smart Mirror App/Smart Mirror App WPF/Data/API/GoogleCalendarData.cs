@@ -31,7 +31,6 @@ namespace Smart_Mirror_App_WPF.Data.API
             var calendarRequest = this.SetupServiceRequest(service);
             try
             {
-                // List events.
                 Events events = calendarRequest.Execute();
                 List<GoogleCalendarModel> allEvents = new List<GoogleCalendarModel>();
                 foreach (var item in events.Items) {
@@ -70,6 +69,7 @@ namespace Smart_Mirror_App_WPF.Data.API
         protected override GoogleCalendarModel ResponseParser(Event response)
         {
             GoogleCalendarModel calenderItem = new GoogleCalendarModel();
+            calenderItem.userId = _credential.UserId;
             calenderItem.id = response.Id;
             calenderItem.htmlLink = response.HtmlLink;
             calenderItem.location = response.Location;

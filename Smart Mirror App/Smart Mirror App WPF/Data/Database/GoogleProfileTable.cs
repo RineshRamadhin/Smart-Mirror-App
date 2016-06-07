@@ -6,19 +6,11 @@ namespace Smart_Mirror_App_WPF.Data.Database
 {
     public class GoogleProfileTable : DefaultDatabaseTable<GoogleProfileModel>
     {
-        SQLiteConnection database;
         public GoogleProfileTable()
         {
             this.CreateTable();
         }
-        
-        protected override void CreateTable()
-        {
-            DefaultDatabase databaseConn = new DefaultDatabase();
-            database = databaseConn.CreateDb();
-            database.CreateTable<GoogleProfileModel>();
-        }
-
+   
         /// <summary>
         /// Inserts the google user profile or updates it if user already exists
         /// </summary>
@@ -33,11 +25,6 @@ namespace Smart_Mirror_App_WPF.Data.Database
             {
                 database.Insert(profile);
             }
-        }
-
-        public override void DeleteRow(string primaryKey)
-        {
-            throw new NotImplementedException();
         }
 
         protected override void UpdateRow(GoogleProfileModel profile)
