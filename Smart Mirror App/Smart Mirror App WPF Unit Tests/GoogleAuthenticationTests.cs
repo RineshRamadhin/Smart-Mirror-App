@@ -38,10 +38,7 @@ namespace Smart_Mirror_App_WPF_Unit_Tests
             await googleAuthenticatorService.LoginGoogle(testUsername);
             GoogleUserModel user =  googleAuthenticatorService.GetCurrentUser();
             testUser = user;
-            if (user == null)
-            {
-                Assert.Fail();
-            }
+            Assert.IsNotNull(user);
         }
 
         [TestMethod]
@@ -49,7 +46,7 @@ namespace Smart_Mirror_App_WPF_Unit_Tests
         {
             AuthenticationGoogle googleAuthenticatorService = new AuthenticationGoogle();
             GoogleUserModel user = googleAuthenticatorService.GetSpecificUser(testUsername);
-            if (user == null )
+            if (user == null)
             {
                 Assert.IsNull(user);
             }

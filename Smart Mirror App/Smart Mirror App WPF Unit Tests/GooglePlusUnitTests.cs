@@ -25,10 +25,7 @@ namespace Smart_Mirror_App_WPF_Unit_Tests
         public async Task RequestGoogleUserProfile()
         {
             await this.SetupTestEnvironment();
-            if (userProfile.displayName == null)
-            {
-                Assert.Fail();
-            }
+            Assert.IsNotNull(userProfile.displayName);
         }
 
         [TestMethod]
@@ -36,10 +33,7 @@ namespace Smart_Mirror_App_WPF_Unit_Tests
         {
             await this.SetupTestEnvironment();
             GoogleProfileModel dbUserProfile = googleProfileDb.GetRow(userProfile.smartMirrorUsername);
-            if (dbUserProfile.smartMirrorUsername == null)
-            {
-                Assert.Fail();
-            }
+            Assert.IsNotNull(dbUserProfile.smartMirrorUsername);
         }
 
         [TestMethod]
@@ -61,10 +55,7 @@ namespace Smart_Mirror_App_WPF_Unit_Tests
 
             gmailTable.InsertRow(mail);
             var retrievedMail = gmailTable.GetRow(_testMailId);
-            if (retrievedMail == null)
-            {
-                Assert.Fail();
-            }
+            Assert.IsNotNull(retrievedMail);
         }
 
         [TestMethod]
