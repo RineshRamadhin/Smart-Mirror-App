@@ -7,6 +7,9 @@ using Newtonsoft.Json;
 using Smart_Mirror_App_WPF.Data.Database;
 using Smart_Mirror_App_WPF.Data.API.Models;
 using Google.Apis.Auth.OAuth2;
+using Google.Apis.Services;
+using Google.Apis.Plus.v1;
+using Google.Apis.Plus.v1.Data;
 
 namespace Smart_Mirror_App_WPF.Data.API
 {
