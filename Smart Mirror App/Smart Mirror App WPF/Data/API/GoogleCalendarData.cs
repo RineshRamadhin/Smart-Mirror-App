@@ -1,10 +1,6 @@
 ﻿using Smart_Mirror_App_WPF.Data.Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Net.Http;
 using System.Diagnostics;
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Calendar.v3.Data;
@@ -13,7 +9,7 @@ using Google.Apis.Services;
 
 namespace Smart_Mirror_App_WPF.Data.API
 {
-    public class GoogleCalendarService : DefaultGoogleService<GoogleCalendarModel, List<GoogleCalendarModel>, Events>
+    public class GoogleCalendarService : DefaultGoogleService<GoogleCalendarModel, List<GoogleCalendarModel>, Event>
     {
         private List<GoogleCalendarModel> _calendarEvents = new List<GoogleCalendarModel>();
         private UserCredential _credential;
@@ -32,19 +28,21 @@ namespace Smart_Mirror_App_WPF.Data.API
                 ApplicationName = _applicationName,
             });
 
-            // Define parameters of request.
             var calendarRequest = this.SetupServiceRequest(service);
-
             try
             {
                 // List events.
                 Events events = calendarRequest.Execute();
-                this.ResponseParser(events);
+                List<GoogleCalendarModel> allEvents = new List<GoogleCalendarModel>();
+                foreach (var item in events.Items) {
+                    var parsedItem = this.ResponseParser(item);
+                    allEvents.Add(parsedItem);
+                }
+                this.SetData(allEvents);
             } catch (Exception error)
             {
                 Debug.WriteLine(error);
-            }
-            
+            }       
         }
 
         private EventsResource.ListRequest SetupServiceRequest(CalendarService service)
@@ -59,30 +57,28 @@ namespace Smart_Mirror_App_WPF.Data.API
             return request;
         }
 
-        protected override void ResponseParser(Events response)
-        {
-            foreach (var item in response.Items) {
-                GoogleCalendarModel calenderItem = new GoogleCalendarModel();
-                calenderItem.id = item.Id;
-                calenderItem.htmlLink = item.HtmlLink;
-                calenderItem.location = item.Location;
-                calenderItem.startDate = (DateTime) item.Start.DateTime;
-                calenderItem.summary = item.Summary;
-                calenderItem.creatorName = item.Creator.DisplayName;
-                calenderItem.creatorMail = item.Creator.Email;
-                this.SetData(calenderItem);
-            }
-            
-        }
-
         public override List<GoogleCalendarModel> GetData()
         {
-            throw new NotImplementedException();
+            return this._calendarEvents;
         }
 
-        protected override void SetData(GoogleCalendarModel dataModel)
+        protected override void SetData(List<GoogleCalendarModel> dataModel)
         {
-            this._calendarEvents.Add(dataModel);
+            this._calendarEvents = dataModel;
+        }
+
+        protected override GoogleCalendarModel ResponseParser(Event response)
+        {
+            GoogleCalendarModel calenderItem = new GoogleCalendarModel();
+            calenderItem.id = response.Id;
+            calenderItem.htmlLink = response.HtmlLink;
+            calenderItem.location = response.Location;
+            calenderItem.startDate = (DateTime)response.Start.DateTime;
+            calenderItem.summary = response.Summary;
+            calenderItem.creatorName = response.Creator.DisplayName;
+            calenderItem.creatorMail = response.Creator.Email;
+
+            return calenderItem;
         }
 
         public override void InsertToDb(List<GoogleCalendarModel> data)

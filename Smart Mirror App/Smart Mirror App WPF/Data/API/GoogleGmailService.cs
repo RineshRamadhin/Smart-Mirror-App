@@ -25,9 +25,9 @@ namespace Smart_Mirror_App_WPF.Data.API
             return _gmails;
         }
 
-        protected override void SetData(GoogleGmailModel dataModel)
+        protected override void SetData(List<GoogleGmailModel> itemList)
         {
-            _gmails.Add(dataModel);
+            this._gmails = itemList;
         }
 
         public override void CreateService()
@@ -54,16 +54,20 @@ namespace Smart_Mirror_App_WPF.Data.API
         {
             if (emails != null && emails.Count > 0)
             {
+                List<GoogleGmailModel> allMails = new List<GoogleGmailModel>();
                 foreach (var message in emails)
                 {
                     UsersResource.MessagesResource.GetRequest mailRequest = service.Users.Messages.Get("me", message.Id);
-                    Message mail = mailRequest.Execute();
-                    this.ResponseParser(mail);
+                    Message mailDetails = mailRequest.Execute();
+                    var email = this.ResponseParser(mailDetails);
+                    allMails.Add(email);
+
                 }
+                this.SetData(allMails);
             }
         }
 
-        protected override void ResponseParser(Message response)
+        protected override GoogleGmailModel ResponseParser(Message response)
         {
             GoogleGmailModel email = new GoogleGmailModel();
             email.snippet = response.Snippet;
@@ -80,12 +84,17 @@ namespace Smart_Mirror_App_WPF.Data.API
                     email.subject = header.Value;
                 }
             }
-            this.SetData(email);
+            return email;
         }
+
+        
 
         public override void InsertToDb(List<GoogleGmailModel> data)
         {
-            throw new NotImplementedException();
+            foreach (var mail in data)
+            {
+
+            }
         }
     }
 }
