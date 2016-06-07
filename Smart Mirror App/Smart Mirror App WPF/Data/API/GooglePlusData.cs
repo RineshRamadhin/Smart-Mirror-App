@@ -6,19 +6,20 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Smart_Mirror_App_WPF.Data.Database;
 using Smart_Mirror_App_WPF.Data.API.Models;
+using Google.Apis.Auth.OAuth2;
 
 namespace Smart_Mirror_App_WPF.Data.API
 {
     public class GooglePlusData : DefaultGoogleData<GoogleProfileModel>
     {
-        private string _accessToken;
         private GoogleProfileModel _userProfile;
+        private UserCredential _credentials;
 
-        public GooglePlusData(string accessToken, string username)
+        public GooglePlusData(UserCredential credential)
         {
             _userProfile = new GoogleProfileModel();
-            this._userProfile.smartMirrorUsername = username;
-            this._accessToken = accessToken;
+            this._credentials = credential;
+            this._userProfile.smartMirrorUsername = credential.UserId;
         }
 
         private GoogleProfileModel ParseUserProfile(GoogleProfileResponseModel profileResponse, GoogleProfileModel profile)
@@ -44,7 +45,7 @@ namespace Smart_Mirror_App_WPF.Data.API
             HttpClient httpClient = new HttpClient();
 
             var requestUrl = "https://www.googleapis.com/plus/v1/people/me";
-            httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + _accessToken);
+            httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + _credentials.Token.AccessToken);
 
             try
             {

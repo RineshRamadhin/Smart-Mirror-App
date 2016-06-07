@@ -16,7 +16,7 @@ namespace Smart_Mirror_App_WPF_Unit_Tests
         private AuthenticationGoogle googleAuthenticator = new AuthenticationGoogle();
         private GoogleProfileTable googleProfileDb = new GoogleProfileTable();
 
-        private GoogleUserModel user;
+        private UserCredential user;
         private GoogleProfileModel userProfile;
         private GooglePlusData googlePlus;
         string _testMailId = "test";
@@ -120,8 +120,8 @@ namespace Smart_Mirror_App_WPF_Unit_Tests
         private async Task SetupTestEnvironment()
         {
             await googleAuthenticator.LoginGoogle("user");
-            this.user = googleAuthenticator.GetCurrentUser();
-            this.googlePlus = new GooglePlusData(user.accessToken, user.name);
+            this.user = googleAuthenticator.GetCurrentCredentials();
+            this.googlePlus = new GooglePlusData(user);
             await googlePlus.HttpRequestData();
             this.userProfile = googlePlus.GetData();
         }
