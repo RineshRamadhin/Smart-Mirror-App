@@ -39,7 +39,7 @@ namespace Smart_Mirror_App_WPF.Data.API
 
             profiles.Add(profile);
             this.SetData(profiles);
-
+            this.InsertToDb(profiles);
         }
 
         public override List<GoogleProfileModel> GetData()
@@ -49,7 +49,7 @@ namespace Smart_Mirror_App_WPF.Data.API
 
         public GoogleProfileModel GetUserProfile()
         {
-            return _currentUserProfile; ;
+            return _currentUserProfile;
         }
 
         public override void InsertToDb(List<GoogleProfileModel> data)
