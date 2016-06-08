@@ -184,7 +184,6 @@
     <Compile Include="Data\Database\GoogleGmailTable.cs" />
     <Compile Include="Data\Database\GoogleProfileTable.cs" />
     <Compile Include="Data\Database\UsersTable.cs" />
-    <Compile Include="Data\Models\BaseGoogleModel.cs" />
     <Compile Include="Data\Models\GoogleCalendarModel.cs" />
     <Compile Include="Data\API\Models\GoogleCalendarResponseModel.cs" />
     <Compile Include="Data\Models\GoogleGmailModel.cs" />

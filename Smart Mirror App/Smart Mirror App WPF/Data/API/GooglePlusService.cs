@@ -61,7 +61,7 @@ namespace Smart_Mirror_App_WPF.Data.API
         protected override GoogleProfileModel ResponseParser(Person response)
         {
             var userProfile = new GoogleProfileModel();
-            userProfile.userId = _credential.UserId;
+            userProfile.smartMirrorUsername = _credential.UserId;
             userProfile.displayName = response.DisplayName;
             userProfile.gender = response.Gender;
             userProfile.imageUrl = response.Image.Url;

@@ -29,7 +29,7 @@ namespace Smart_Mirror_App_WPF.Data.Database
 
         protected override void UpdateRow(GoogleProfileModel profile)
         {
-            var existingProfile = this.GetRow(profile.userId);
+            var existingProfile = this.GetRow(profile.smartMirrorUsername);
 
             if (existingProfile != null)
             {
@@ -42,7 +42,7 @@ namespace Smart_Mirror_App_WPF.Data.Database
         public override GoogleProfileModel GetRow(string username)
         {
             var userProfile = from wantedProfile in database.Table<GoogleProfileModel>()
-                              where wantedProfile.userId.Equals(username)
+                              where wantedProfile.smartMirrorUsername.Equals(username)
                               select wantedProfile;
 
             return userProfile.FirstOrDefault();
@@ -50,7 +50,7 @@ namespace Smart_Mirror_App_WPF.Data.Database
 
         private bool CheckIfProfileExist(GoogleProfileModel profile)
         {
-            GoogleProfileModel existingProfile = this.GetRow(profile.userId);
+            GoogleProfileModel existingProfile = this.GetRow(profile.smartMirrorUsername);
             if (existingProfile == null)
             {
                 return false;
