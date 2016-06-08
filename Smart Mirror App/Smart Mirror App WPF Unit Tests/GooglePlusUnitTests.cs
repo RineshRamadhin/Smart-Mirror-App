@@ -18,7 +18,7 @@ namespace Smart_Mirror_App_WPF_Unit_Tests
 
         private UserCredential user;
         private GoogleProfileModel userProfile;
-        private GooglePlusData googlePlus;
+        private GooglePlusService googlePlusService;
         string _testMailId = "test";
 
         [TestMethod]
@@ -117,13 +117,32 @@ namespace Smart_Mirror_App_WPF_Unit_Tests
             Assert.IsNull(calendarTable.GetRow(_testMailId));
         }
 
+        [TestMethod]
+        public async void RequestUserProfileService()
+        {
+            await googleAuthenticator.LoginGoogle("user");
+            var credential = googleAuthenticator.GetCurrentCredentials();
+            var googlePlusService = new GooglePlusService(credential);
+            googlePlusService.CreateService();
+            var profile = googlePlusService.GetUserProfile();
+            Assert.IsNotNull(profile);
+        }
+
+        [TestMethod]
+        public void InsertedGoogleProfileInDb()
+        {
+            var googleProfileTable = new GoogleProfileTable();
+            var profile = googleProfileTable.GetRow("user");
+            Assert.IsNotNull(profile);
+        }
+
         private async Task SetupTestEnvironment()
         {
             await googleAuthenticator.LoginGoogle("user");
             this.user = googleAuthenticator.GetCurrentCredentials();
-            this.googlePlus = new GooglePlusData(user);
-            await googlePlus.HttpRequestData();
-            this.userProfile = googlePlus.GetData();
+            this.googlePlusService = new GooglePlusService(user);
+            googlePlusService.CreateService();
+            this.userProfile = googlePlusService.GetUserProfile();
         }
     }
 }

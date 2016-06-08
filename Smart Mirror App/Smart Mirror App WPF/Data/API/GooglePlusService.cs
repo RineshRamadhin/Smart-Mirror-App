@@ -2,6 +2,7 @@
 using Google.Apis.Plus.v1;
 using Google.Apis.Plus.v1.Data;
 using Google.Apis.Services;
+using Smart_Mirror_App_WPF.Data.Database;
 using Smart_Mirror_App_WPF.Data.Models;
 using System;
 using System.Collections.Generic;
@@ -14,6 +15,7 @@ namespace Smart_Mirror_App_WPF.Data.API
     public class GooglePlusService : DefaultGoogleService<GoogleProfileModel, List<GoogleProfileModel>, Person>
     {
         private List<GoogleProfileModel> _profiles = new List<GoogleProfileModel>();
+        private GoogleProfileModel _currentUserProfile = new GoogleProfileModel();
         private UserCredential _credential;
         private string _applicationName = "Smart Mirror Google Plus Service";
         
@@ -32,7 +34,11 @@ namespace Smart_Mirror_App_WPF.Data.API
 
             PeopleResource.GetRequest personRequest = service.People.Get("me");
             Person me = personRequest.Execute();
-            this.ResponseParser(me);
+            var profile = this.ResponseParser(me);
+            var profiles = new List<GoogleProfileModel>();
+
+            profiles.Add(profile);
+            this.SetData(profiles);
 
         }
 
@@ -43,12 +49,13 @@ namespace Smart_Mirror_App_WPF.Data.API
 
         public GoogleProfileModel GetUserProfile()
         {
-            return _profiles.FirstOrDefault();
+            return _currentUserProfile; ;
         }
 
         public override void InsertToDb(List<GoogleProfileModel> data)
         {
-            throw new NotImplementedException();
+            var googleProfileTable = new GoogleProfileTable();
+            googleProfileTable.InsertRow(data.FirstOrDefault());
         }
 
         protected override GoogleProfileModel ResponseParser(Person response)
@@ -64,7 +71,8 @@ namespace Smart_Mirror_App_WPF.Data.API
 
         protected override void SetData(List<GoogleProfileModel> itemList)
         {
-            throw new NotImplementedException();
+            this._profiles = itemList;
+            this._currentUserProfile = _profiles.FirstOrDefault();
         }
     }
 }

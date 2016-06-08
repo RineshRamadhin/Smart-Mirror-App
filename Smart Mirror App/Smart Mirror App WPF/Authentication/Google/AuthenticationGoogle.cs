@@ -184,9 +184,7 @@ namespace Smart_Mirror_App_WPF.Authentication.Google
         public GoogleUserModel GetSpecificUser(string smartMirrorUsername)
         {
             UsersTable userTable = new UsersTable();
-            GoogleUserModel specificUser = userTable.GetRow(smartMirrorUsername);
-
-            return specificUser;
+            return userTable.GetRow(smartMirrorUsername);
         }
 
         public void DeleteSpecificUserFromDb(string smartMirrorUsername)
@@ -197,8 +195,7 @@ namespace Smart_Mirror_App_WPF.Authentication.Google
 
         private DateTime ConvertExpireData(double seconds)
         {
-            DateTime expireDate = DateTime.Now;
-            return expireDate.AddSeconds(seconds);
+            return DateTime.Now.AddSeconds(seconds);
         }
 
     }
