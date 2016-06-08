@@ -19,7 +19,8 @@ namespace Smart_Mirror_App_WPF_Unit_Tests
         private UserCredential user;
         private GoogleProfileModel userProfile;
         private GooglePlusService googlePlusService;
-        string _testMailId = "test";
+        private string _testMailId = "test";
+        private string _testUsername = "user";
 
         [TestMethod]
         public async Task RequestGoogleUserProfile()
@@ -32,14 +33,14 @@ namespace Smart_Mirror_App_WPF_Unit_Tests
         public async Task InsertedGoogleUserProfileInDb()
         {
             await this.SetupTestEnvironment();
-            GoogleProfileModel dbUserProfile = googleProfileDb.GetRow(userProfile.smartMirrorUsername);
-            Assert.IsNotNull(dbUserProfile.smartMirrorUsername);
+            GoogleProfileModel dbUserProfile = googleProfileDb.GetRow(userProfile.userId);
+            Assert.IsNotNull(dbUserProfile.userId);
         }
 
         [TestMethod]
         public async Task RequestGoogleGmailData()
         {
-            await googleAuthenticator.LoginGoogle("user");
+            await googleAuthenticator.LoginGoogle(_testUsername);
             UserCredential credential = googleAuthenticator.GetCurrentCredentials();
             GoogleGmailService test = new GoogleGmailService(credential);
             test.CreateService();
@@ -82,7 +83,7 @@ namespace Smart_Mirror_App_WPF_Unit_Tests
         [TestMethod]
         public async Task RequestGoogleCalendarData()
         {
-            await googleAuthenticator.LoginGoogle("user");
+            await googleAuthenticator.LoginGoogle(_testUsername);
             var credential = googleAuthenticator.GetCurrentCredentials();
             GoogleCalendarService calendarService = new GoogleCalendarService(credential);
             calendarService.CreateService();
@@ -120,7 +121,7 @@ namespace Smart_Mirror_App_WPF_Unit_Tests
         [TestMethod]
         public async Task RequestUserProfileService()
         {
-            await googleAuthenticator.LoginGoogle("user");
+            await googleAuthenticator.LoginGoogle(_testUsername);
             var credential = googleAuthenticator.GetCurrentCredentials();
             var googlePlusService = new GooglePlusService(credential);
             googlePlusService.CreateService();
@@ -132,14 +133,14 @@ namespace Smart_Mirror_App_WPF_Unit_Tests
         public void InsertedGoogleProfileInDb()
         {
             var googleProfileTable = new GoogleProfileTable();
-            var profile = googleProfileTable.GetRow("user");
+            var profile = googleProfileTable.GetRow(_testUsername);
             Assert.IsNotNull(profile);
         }
 
         [TestMethod]
         public async Task TestGoogleApiClient()
         {
-            await googleAuthenticator.LoginGoogle("user");
+            await googleAuthenticator.LoginGoogle(_testUsername);
             var credentials = googleAuthenticator.GetCurrentCredentials();
             var googleApiClient = new GoogleApiClient(credentials);
             Assert.IsNotNull(googleApiClient.GetCurrentUser());
@@ -150,7 +151,7 @@ namespace Smart_Mirror_App_WPF_Unit_Tests
 
         private async Task SetupTestEnvironment()
         {
-            await googleAuthenticator.LoginGoogle("user");
+            await googleAuthenticator.LoginGoogle(_testUsername);
             this.user = googleAuthenticator.GetCurrentCredentials();
             this.googlePlusService = new GooglePlusService(user);
             googlePlusService.CreateService();
