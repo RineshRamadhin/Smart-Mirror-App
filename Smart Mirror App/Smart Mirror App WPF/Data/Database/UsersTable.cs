@@ -14,7 +14,7 @@ namespace Smart_Mirror_App_WPF.Data.Database
 
         public override void InsertRow(GoogleUserModel user)
         {
-            GoogleUserModel wantedUser = this.GetRow(user.name);
+            var wantedUser = this.GetRow(user.name);
             if (wantedUser == null)
             {
                 database.Insert(user);
@@ -49,7 +49,7 @@ namespace Smart_Mirror_App_WPF.Data.Database
         public ArrayList GetAllUsers()
         {
             var query = database.Table<GoogleUserModel>();
-            ArrayList users = new ArrayList();
+            var users = new ArrayList();
 
             foreach (var user in query)
             {

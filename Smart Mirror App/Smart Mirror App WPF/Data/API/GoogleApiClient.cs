@@ -12,6 +12,13 @@ namespace Smart_Mirror_App_WPF.Data.API
     {
         private UserCredential _credential;
 
+        /// <summary>
+        /// The Google Api Client for retrieving google data. Support the following API:
+        /// - Google Calendar
+        /// - Gmail
+        /// - Google Plus (user profile)
+        /// </summary>
+        /// <param name="credential"></param>
         public GoogleApiClient(UserCredential credential)
         {
             this._credential = credential;

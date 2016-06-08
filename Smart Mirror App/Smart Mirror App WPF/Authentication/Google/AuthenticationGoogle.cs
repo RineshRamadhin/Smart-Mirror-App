@@ -42,6 +42,12 @@ namespace Smart_Mirror_App_WPF.Authentication.Google
             await AuthorizeUsingWeb(smartMirrorUsername);
         }
 
+        /// <summary>
+        /// Authorize using OAuth2.0 with Google API using Web
+        /// User won't be redirected to the app so need to close the browser/tab.
+        /// </summary>
+        /// <param name="smartMirrorUsername"></param>
+        /// <returns></returns>
         private async Task AuthorizeUsingWeb(string smartMirrorUsername)
         {
             try
@@ -65,6 +71,12 @@ namespace Smart_Mirror_App_WPF.Authentication.Google
             }
         }
 
+        /// <summary>
+        /// NOT USED!! Since the Google API handles tokens refreshing automatically
+        /// Request new tokens with a refresh token
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
         public async Task RefreshAuthenticationTokens(GoogleUserModel user)
         {
             try
@@ -128,6 +140,10 @@ namespace Smart_Mirror_App_WPF.Authentication.Google
             return _currentUser;
         }
 
+        /// <summary>
+        /// Get the credentials of the user
+        /// </summary>
+        /// <returns></returns>
         public UserCredential GetCurrentCredentials()
         {
             return _currentUserCredential;

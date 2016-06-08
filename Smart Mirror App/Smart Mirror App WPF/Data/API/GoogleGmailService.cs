@@ -71,7 +71,7 @@ namespace Smart_Mirror_App_WPF.Data.API
 
         protected override GoogleGmailModel ResponseParser(Message response)
         {
-            GoogleGmailModel email = new GoogleGmailModel();
+            var email = new GoogleGmailModel();
             email.userId = _credential.UserId;
             email.snippet = response.Snippet;
             email.id = response.Id;
