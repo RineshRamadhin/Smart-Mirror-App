@@ -11,7 +11,7 @@ using System.Collections.Generic;
 namespace Smart_Mirror_App_WPF_Unit_Tests
 {
     [TestClass]
-    public class GooglePlusUnitTests
+    public class GoogleApiUnitTests
     {
         private AuthenticationGoogle googleAuthenticator = new AuthenticationGoogle();
         private GoogleProfileTable googleProfileDb = new GoogleProfileTable();
@@ -118,7 +118,7 @@ namespace Smart_Mirror_App_WPF_Unit_Tests
         }
 
         [TestMethod]
-        public async void RequestUserProfileService()
+        public async Task RequestUserProfileService()
         {
             await googleAuthenticator.LoginGoogle("user");
             var credential = googleAuthenticator.GetCurrentCredentials();
@@ -135,6 +135,18 @@ namespace Smart_Mirror_App_WPF_Unit_Tests
             var profile = googleProfileTable.GetRow("user");
             Assert.IsNotNull(profile);
         }
+
+        [TestMethod]
+        public async Task TestGoogleApiClient()
+        {
+            await googleAuthenticator.LoginGoogle("user");
+            var credentials = googleAuthenticator.GetCurrentCredentials();
+            var googleApiClient = new GoogleApiClient(credentials);
+            Assert.IsNotNull(googleApiClient.GetCurrentUser());
+            Assert.IsNotNull(googleApiClient.GetEventsUser());
+            Assert.IsNotNull(googleApiClient.GetGmailsUser());
+        }
+
 
         private async Task SetupTestEnvironment()
         {

@@ -105,7 +105,7 @@
   </Choose>
   <ItemGroup>
     <Compile Include="GoogleAuthenticationTests.cs" />
-    <Compile Include="GooglePlusUnitTests.cs" />
+    <Compile Include="GoogleApiUnitTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

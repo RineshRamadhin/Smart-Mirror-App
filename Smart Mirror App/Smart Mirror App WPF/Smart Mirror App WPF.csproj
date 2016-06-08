@@ -174,6 +174,7 @@
     <Compile Include="Authentication\Google\AuthenticationGoogle.cs" />
     <Compile Include="Data\API\DefaultGoogleData.cs" />
     <Compile Include="Data\API\DefaultGoogleService.cs" />
+    <Compile Include="Data\API\GoogleApiClient.cs" />
     <Compile Include="Data\API\GoogleCalendarData.cs" />
     <Compile Include="Data\API\GoogleGmailService.cs" />
     <Compile Include="Data\API\GooglePlusService.cs" />
