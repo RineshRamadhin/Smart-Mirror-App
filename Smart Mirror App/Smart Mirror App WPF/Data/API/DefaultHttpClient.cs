@@ -3,10 +3,12 @@ using System.Threading.Tasks;
 
 namespace Smart_Mirror_App_WPF.Data.API
 {
+    interface IDefaultHttpClient<T>
     {
         T GetData();
     }
 
+    public abstract class DefaultHttpClient<T> : IDefaultHttpClient<T>
     {
         public abstract Task HttpRequestData();
         protected abstract void ResponseParser(HttpResponseMessage response);
