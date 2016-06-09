@@ -16,11 +16,9 @@ namespace Smart_Mirror_App_WPF.Data.Database
 
         public override GoogleCalendarModel GetRow(string primaryKey)
         {
-            var calendarEvent = from wantedEvent in database.Table<GoogleCalendarModel>()
-                        where wantedEvent.id.Equals(primaryKey)
-                        select wantedEvent;
-
-            return calendarEvent.FirstOrDefault();
+            return (from wantedEvent in database.Table<GoogleCalendarModel>()
+                   where wantedEvent.id.Equals(primaryKey)
+                   select wantedEvent).FirstOrDefault();
         }
 
         public override void InsertRow(GoogleCalendarModel model)
@@ -36,19 +34,15 @@ namespace Smart_Mirror_App_WPF.Data.Database
 
         public List<GoogleCalendarModel> GetRecords(int some, string primaryKey)
         {
-            var calendarEvents = (from events in database.Table<GoogleCalendarModel>()
-                                 where events.userId.Equals(primaryKey)
-                                 orderby events.startDate descending
-                                 select events).Take(some);
-
-            return calendarEvents.ToList();
+            return (from events in database.Table<GoogleCalendarModel>()
+                    where events.userId.Equals(primaryKey)
+                    orderby events.startDate descending
+                    select events).Take(some).ToList();
         }
 
         protected override void UpdateRow(GoogleCalendarModel model)
         {
-            var existingEvent = this.GetRow(model.id);
-
-            if (existingEvent != null)
+            if (this.GetRow(model.id) != null)
             {
                 database.BeginTransaction();
                 database.Update(model);
@@ -58,14 +52,7 @@ namespace Smart_Mirror_App_WPF.Data.Database
 
         private bool CheckIfRecordExist(string primaryKey)
         {
-            var existingRecord = this.GetRow(primaryKey);
-            if (existingRecord == null)
-            {
-                return false;
-            } else
-            {
-                return true;
-            }
+            return !(this.GetRow(primaryKey) == null);
         }
     }
 }
