@@ -79,6 +79,12 @@ namespace Smart_Mirror_App_WPF.Data.API
             email.snippet = response.Snippet;
             email.id = response.Id;
             email.labels = FilterLabels(response.LabelIds);
+            email = FilterHeadersMail(response, email);
+            return email;
+        }
+
+        private GoogleGmailModel FilterHeadersMail(Message response, GoogleGmailModel email)
+        {
             foreach (var header in response.Payload.Headers)
             {
                 if (header.Name == "From")
@@ -88,6 +94,12 @@ namespace Smart_Mirror_App_WPF.Data.API
                 if (header.Name == "Subject")
                 {
                     email.subject = header.Value;
+                }
+                if (header.Name == "Date")
+                {
+                    DateTime date;
+                    DateTime.TryParse(header.Value, out date);
+                    email.date = date;
                 }
             }
             return email;

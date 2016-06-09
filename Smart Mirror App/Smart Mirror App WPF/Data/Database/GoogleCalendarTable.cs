@@ -34,6 +34,16 @@ namespace Smart_Mirror_App_WPF.Data.Database
             } 
         }
 
+        public List<GoogleCalendarModel> GetRecords(int some, string primaryKey)
+        {
+            var calendarEvents = (from events in database.Table<GoogleCalendarModel>()
+                                 where events.userId.Equals(primaryKey)
+                                 orderby events.startDate descending
+                                 select events).Take(some);
+
+            return calendarEvents.ToList();
+        }
+
         protected override void UpdateRow(GoogleCalendarModel model)
         {
             var existingEvent = this.GetRow(model.id);

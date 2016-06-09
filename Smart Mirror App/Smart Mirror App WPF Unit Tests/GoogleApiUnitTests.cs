@@ -77,6 +77,14 @@ namespace Smart_Mirror_App_WPF_Unit_Tests
         }
 
         [TestMethod]
+        public void GetMailsOfUser()
+        {
+            GoogleGmailTable gmailTable = new GoogleGmailTable();
+            var allMails = gmailTable.GetRecords(20, _testUsername);
+            Assert.IsNotNull(allMails);
+        }
+
+        [TestMethod]
         public async Task RequestGoogleCalendarData()
         {
             await googleAuthenticator.LoginGoogle(_testUsername);
@@ -115,6 +123,14 @@ namespace Smart_Mirror_App_WPF_Unit_Tests
         }
 
         [TestMethod]
+        public void GetCalendarEventsUser()
+        {
+            GoogleCalendarTable calendarTable = new GoogleCalendarTable();
+            var allEvents = calendarTable.GetRecords(20, _testUsername);
+            Assert.IsNotNull(allEvents);
+        }
+
+        [TestMethod]
         public async Task RequestUserProfileService()
         {
             await googleAuthenticator.LoginGoogle(_testUsername);
@@ -143,7 +159,6 @@ namespace Smart_Mirror_App_WPF_Unit_Tests
             Assert.IsNotNull(googleApiClient.GetGmailsUser());
             Assert.IsNotNull(googleApiClient.GetCurrentWeather(user.location));
         }
-
 
         private async Task SetupTestEnvironment()
         {

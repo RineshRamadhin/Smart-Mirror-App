@@ -35,6 +35,17 @@ namespace Smart_Mirror_App_WPF.Data.Database
             
         }
 
+        public List<GoogleGmailModel> GetRecords(int some, string primaryKey)
+        {
+            var allMails = (from mails in database.Table<GoogleGmailModel>()
+                                 where mails.userId.Equals(primaryKey)
+                                 orderby mails.date descending
+                                 select mails).Take(some); 
+
+            return allMails.ToList();
+        }
+
+
         protected override void UpdateRow(GoogleGmailModel model)
         {
             var existingMail = this.GetRow(model.id);

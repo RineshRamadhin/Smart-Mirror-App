@@ -16,5 +16,6 @@ namespace Smart_Mirror_App_WPF.Data.Models
         public string snippet { get; set; }
         public string subject { get; set; }
         public string labels { get; set; }
+        public DateTime date { get; set; }
     }
 }
