@@ -65,8 +65,23 @@ namespace Smart_Mirror_App_WPF.Data.API
             userProfile.displayName = response.DisplayName;
             userProfile.gender = response.Gender;
             userProfile.imageUrl = response.Image.Url;
-
+            userProfile.location = FilterLocationResponse(response);
+ 
             return userProfile;
+        }
+
+        private string FilterLocationResponse(Person response)
+        {
+            string location = "";
+            foreach (var placesLived in response.PlacesLived)
+            {
+                if (placesLived.Primary == true)
+                {
+                    location = placesLived.Value;
+                    break;
+                }
+            }
+            return location;
         }
 
         protected override void SetData(List<GoogleProfileModel> itemList)
