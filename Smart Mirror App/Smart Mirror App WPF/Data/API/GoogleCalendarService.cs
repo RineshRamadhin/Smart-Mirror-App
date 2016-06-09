@@ -35,8 +35,7 @@ namespace Smart_Mirror_App_WPF.Data.API
                 Events events = calendarRequest.Execute();
                 var allEvents = new List<GoogleCalendarModel>();
                 foreach (var item in events.Items) {
-                    var parsedItem = this.ResponseParser(item);
-                    allEvents.Add(parsedItem);
+                    allEvents.Add(this.ResponseParser(item));
                 }
                 this.SetData(allEvents);
                 this.InsertToDb(allEvents);

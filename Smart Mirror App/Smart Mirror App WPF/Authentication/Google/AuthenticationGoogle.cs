@@ -60,9 +60,7 @@ namespace Smart_Mirror_App_WPF.Authentication.Google
                         new[] { CalendarService.Scope.Calendar, GmailService.Scope.GmailReadonly, GmailService.Scope.MailGoogleCom, PlusService.Scope.PlusMe },
                         smartMirrorUsername, CancellationToken.None, new FileDataStore(this._dataStoreLocation));
                 };
-
-                GoogleUserModel newUser = this.ParseUserCredentials(credential, smartMirrorUsername);
-                this.SetCurrentUser(newUser);
+                this.SetCurrentUser(this.ParseUserCredentials(credential, smartMirrorUsername));
                 this._currentUserCredential = credential;
             }
             catch (Exception Error)
@@ -181,14 +179,7 @@ namespace Smart_Mirror_App_WPF.Authentication.Google
 
         private bool CheckUserExist(string smartMirrorUsername)
         {
-            var user = this.GetSpecificUser(smartMirrorUsername);
-            if (user == null)
-            {
-                return false;
-            } else
-            {
-                return true;
-            }
+            return !(this.GetSpecificUser(smartMirrorUsername) == null);
         }
 
         private void InsertUserInDb(GoogleUserModel user)

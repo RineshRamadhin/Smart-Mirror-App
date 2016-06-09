@@ -65,8 +65,7 @@ namespace Smart_Mirror_App_WPF.Data.API
             foreach (var message in emails)
             {
                 UsersResource.MessagesResource.GetRequest mailRequest = service.Users.Messages.Get("me", message.Id);
-                Message mailDetails = mailRequest.Execute();
-                var email = this.ResponseParser(mailDetails);
+                var email = this.ResponseParser(mailRequest.Execute());
                 allMails.Add(email);
             }
             return allMails;

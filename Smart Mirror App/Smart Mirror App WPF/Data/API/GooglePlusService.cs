@@ -33,8 +33,7 @@ namespace Smart_Mirror_App_WPF.Data.API
             });
 
             PeopleResource.GetRequest personRequest = service.People.Get("me");
-            Person me = personRequest.Execute();
-            var profile = this.ResponseParser(me);
+            var profile = this.ResponseParser(personRequest.Execute());
             var profiles = new List<GoogleProfileModel>();
 
             profiles.Add(profile);
