@@ -11,7 +11,6 @@ namespace Smart_Mirror_App_WPF.Data.API
     public class GoogleApiClient
     {
         private UserCredential _credential;
-
         /// <summary>
         /// The Google Api Client for retrieving google data. Support the following API:
         /// - Google Calendar
@@ -43,6 +42,13 @@ namespace Smart_Mirror_App_WPF.Data.API
             var googleGmailService = new GoogleGmailService(_credential);
             googleGmailService.CreateService();
             return googleGmailService.GetData();
+        }
+
+        public async Task<OpenWeatherModel> GetCurrentWeather(string userLocation)
+        {
+            var openWeatherService = new OpenWeatherService();
+            await openWeatherService.HttpRequestData(userLocation);
+            return openWeatherService.GetData();
         }
     }
 }

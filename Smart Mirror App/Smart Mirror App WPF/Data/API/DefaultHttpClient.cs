@@ -10,10 +10,10 @@ namespace Smart_Mirror_App_WPF.Data.API
 
     public abstract class DefaultHttpClient<T> : IDefaultHttpClient<T>
     {
-        public abstract Task HttpRequestData();
+        public abstract Task HttpRequestData(string query);
         protected abstract void ResponseParser(HttpResponseMessage response);
         public abstract T GetData();
         protected abstract void SetData(T dataModel);
-        public abstract void InsertToDb(T data);
+        protected abstract void InsertToDb(T data);
     }
 }

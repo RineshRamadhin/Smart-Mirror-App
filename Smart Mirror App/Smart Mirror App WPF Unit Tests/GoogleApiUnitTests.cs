@@ -137,9 +137,11 @@ namespace Smart_Mirror_App_WPF_Unit_Tests
             await googleAuthenticator.LoginGoogle(_testUsername);
             var credentials = googleAuthenticator.GetCurrentCredentials();
             var googleApiClient = new GoogleApiClient(credentials);
-            Assert.IsNotNull(googleApiClient.GetCurrentUser());
+            var user = googleApiClient.GetCurrentUser();
+            Assert.IsNotNull(user);
             Assert.IsNotNull(googleApiClient.GetEventsUser());
             Assert.IsNotNull(googleApiClient.GetGmailsUser());
+            Assert.IsNotNull(googleApiClient.GetCurrentWeather(user.location));
         }
 
 
