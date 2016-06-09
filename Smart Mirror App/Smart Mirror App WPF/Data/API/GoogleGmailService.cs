@@ -40,6 +40,9 @@ namespace Smart_Mirror_App_WPF.Data.API
             });
 
             UsersResource.MessagesResource.ListRequest allMailRequest = service.Users.Messages.List("me");
+            allMailRequest.LabelIds = "CATEGORY_PERSONAL";
+            allMailRequest.IncludeSpamTrash = false;
+
             try
             {
                 IList<Message> messages = allMailRequest.Execute().Messages;

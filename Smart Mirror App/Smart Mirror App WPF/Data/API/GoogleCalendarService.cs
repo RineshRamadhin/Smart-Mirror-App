@@ -73,6 +73,7 @@ namespace Smart_Mirror_App_WPF.Data.API
             var calenderItem = new GoogleCalendarModel();
             calenderItem.userId = _credential.UserId;
             calenderItem.id = response.Id;
+            calenderItem.attendees = FilterEventAttendeesMail(response);
             calenderItem.htmlLink = response.HtmlLink;
             calenderItem.location = response.Location;
             calenderItem.startDate = (DateTime)response.Start.DateTime;
@@ -81,6 +82,17 @@ namespace Smart_Mirror_App_WPF.Data.API
             calenderItem.creatorMail = response.Creator.Email;
 
             return calenderItem;
+        }
+
+        private string FilterEventAttendeesMail(Event response)
+        {
+            string attendeesMails = "";
+            foreach (var attendee in response.Attendees)
+            {
+                attendeesMails += attendee.Email;
+            }
+
+            return attendeesMails;
         }
 
         public override void InsertToDb(List<GoogleCalendarModel> data)

@@ -12,6 +12,7 @@ namespace Smart_Mirror_App_WPF_Unit_Tests
         public async Task OpenWeatherServiceTest()
         {
             var openWeatherService = new OpenWeatherService();
+            await openWeatherService.HttpRequestData("Rotterdam");
             var currentWeather = openWeatherService.GetData();
             Assert.IsNotNull(currentWeather);
         }
