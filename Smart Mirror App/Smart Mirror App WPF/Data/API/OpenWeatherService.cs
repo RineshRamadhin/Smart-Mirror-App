@@ -7,21 +7,20 @@ using Newtonsoft.Json.Linq;
 
 namespace Smart_Mirror_App_WPF.Data.API
 {
-
-    class OpenWeatherConstants
+    internal class OpenWeatherConstants
     {
-        public const string token = "ca6815d653dbe8e9abec6a4f0ca09032";
-        public const string metric = "&units=metric";
+        public const string Token = "ca6815d653dbe8e9abec6a4f0ca09032";
+        public const string Metric = "&units=metric";
     }
 
     public class OpenWeatherService : DefaultHttpClient<OpenWeatherModel>
     {
-        private string _openWeatherToken;
+        private readonly string _openWeatherToken;
         private OpenWeatherModel _weather;
 
         public OpenWeatherService()
         {
-            this._openWeatherToken = OpenWeatherConstants.token;
+            this._openWeatherToken = OpenWeatherConstants.Token;
         }
 
 
@@ -34,9 +33,9 @@ namespace Smart_Mirror_App_WPF.Data.API
         public override async Task HttpRequestData(string city)
         {
             var weatherHttpResponse = new OpenWeatherModel();
-            HttpClient httpClient = new HttpClient();
+            var httpClient = new HttpClient();
             var tokenUrl = "&APPID=" + this._openWeatherToken;
-            var weatherRequestUrl = "http://api.openweathermap.org/data/2.5/weather?q="+ city + tokenUrl + OpenWeatherConstants.metric;
+            var weatherRequestUrl = "http://api.openweathermap.org/data/2.5/weather?q="+ city + tokenUrl + OpenWeatherConstants.Metric;
 
             try
             {
@@ -56,7 +55,7 @@ namespace Smart_Mirror_App_WPF.Data.API
         protected override async void ResponseParser(HttpResponseMessage response)
         {
             var openWeatherModel = new OpenWeatherModel();
-            JObject weatherResponse = JObject.Parse(await response.Content.ReadAsStringAsync());
+            var weatherResponse = JObject.Parse(await response.Content.ReadAsStringAsync());
             openWeatherModel.temp = FloatParser(weatherResponse["main"]["temp"].ToString());
             openWeatherModel.city = weatherResponse["name"].ToString();
             openWeatherModel.mainWeatherDescription = weatherResponse["weather"][0]["description"].ToString();
@@ -71,7 +70,7 @@ namespace Smart_Mirror_App_WPF.Data.API
             this.SetData(openWeatherModel);
         }
 
-        private float FloatParser(string value)
+        private static float FloatParser(string value)
         {
             return float.Parse(value);
         }

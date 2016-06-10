@@ -4,9 +4,9 @@
     /// Default methods for creating a service
     /// </summary>
     /// <typeparam name="T">The Model of the data you need</typeparam>
-    /// <typeparam name="U">A list of the model</typeparam>
-    /// <typeparam name="Z">The service response class of the Google API</typeparam>
-    public abstract class DefaultGoogleService<T, U, Z>
+    /// <typeparam name="TU">A list of the model</typeparam>
+    /// <typeparam name="TZ">The service response class of the Google API</typeparam>
+    public abstract class DefaultGoogleService<T, TU, TZ>
     {
         private bool retrievedData;
         /// <summary>
@@ -19,24 +19,24 @@
         /// </summary>
         /// <param name="response">Response made by the service request </param>
         /// <returns></returns>
-        protected abstract T ResponseParser(Z response);
+        protected abstract T ResponseParser(TZ response);
 
         /// <summary>
         /// Get parsed service data
         /// </summary>
         /// <returns>A list of the data in a model</returns>
-        public abstract U GetData();
+        public abstract TU GetData();
 
         /// <summary>
         /// Sets the parsed service data
         /// </summary>
         /// <param name="itemList">List of the parsed items in a model</param>
-        protected abstract void SetData(U itemList);
+        protected abstract void SetData(TU itemList);
 
         /// <summary>
         /// Inserts the request data in the db
         /// </summary>
         /// <param name="data">List of the parsed items in a model</param>
-        public abstract void InsertToDb(U data);
+        public abstract void InsertToDb(TU data);
     }
 }

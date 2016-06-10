@@ -13,7 +13,7 @@ namespace Smart_Mirror_App_WPF.Data.API
     {
         private List<GoogleProfileModel> _profiles = new List<GoogleProfileModel>();
         private GoogleProfileModel _currentUserProfile = new GoogleProfileModel();
-        private UserCredential _credential;
+        private readonly UserCredential _credential;
         private string _applicationName = "Smart Mirror Google Plus Service";
         
         public GooglePlusService(UserCredential credential)
@@ -29,9 +29,8 @@ namespace Smart_Mirror_App_WPF.Data.API
                 ApplicationName = _applicationName,
             });
 
-            var profiles = new List<GoogleProfileModel>();
+            var profiles = new List<GoogleProfileModel> {this.ResponseParser(service.People.Get("me").Execute())};
 
-            profiles.Add(this.ResponseParser(service.People.Get("me").Execute()));
             this.SetData(profiles);
             this.InsertToDb(profiles);
         }
@@ -53,37 +52,36 @@ namespace Smart_Mirror_App_WPF.Data.API
 
         protected override GoogleProfileModel ResponseParser(Person response)
         {
-            var userProfile = new GoogleProfileModel();
-            userProfile.smartMirrorUsername = _credential.UserId;
-            userProfile.displayName = response.DisplayName;
-            userProfile.gender = response.Gender;
-            userProfile.imageUrl = response.Image.Url;
-            userProfile.location = FilterLocationResponse(response);
-            userProfile.birthday = response.Birthday;
- 
+            var userProfile = new GoogleProfileModel
+            {
+                smartMirrorUsername = _credential.UserId,
+                displayName = response.DisplayName,
+                gender = response.Gender,
+                imageUrl = response.Image.Url,
+                location = FilterLocationResponse(response),
+                birthday = response.Birthday
+            };
+
             return userProfile;
         }
 
-        private string FilterLocationResponse(Person response)
+        private static string FilterLocationResponse(Person response)
         {
             string location = "";
-            if (response.PlacesLived != null) {
-                foreach (var placesLived in response.PlacesLived)
-                {
-                    if (placesLived.Primary == true)
-                    {
-                        location = placesLived.Value;
-                        break;
-                    }
-                }
+            if (response.PlacesLived == null) return location;
+            foreach (var placesLived in response.PlacesLived)
+            {
+                if (placesLived.Primary != true) continue;
+                location = placesLived.Value;
+                break;
             }
             return location;
         }
 
         protected override void SetData(List<GoogleProfileModel> itemList)
         {
-            this._profiles = itemList;
-            this._currentUserProfile = _profiles.FirstOrDefault();
+            _profiles = itemList;
+            _currentUserProfile = _profiles.FirstOrDefault();
         }
     }
 }

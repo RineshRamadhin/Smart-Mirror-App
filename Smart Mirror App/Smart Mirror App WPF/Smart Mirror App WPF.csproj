@@ -182,6 +182,7 @@
     <Compile Include="Data\API\GoogleCalendarService.cs" />
     <Compile Include="Data\API\GoogleGmailService.cs" />
     <Compile Include="Data\API\GooglePlusService.cs" />
+    <Compile Include="Data\API\Interfaces\IDefaultHttpClient.cs" />
     <Compile Include="Data\API\OpenWeatherService.cs" />
     <Compile Include="Data\Bot\GoogleDataCorrelator.cs" />
     <Compile Include="Data\Database\DefaultDatabase.cs" />

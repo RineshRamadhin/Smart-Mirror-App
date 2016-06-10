@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Calendar.v3.Data;
 using Google.Apis.Calendar.v3;
@@ -13,7 +14,7 @@ namespace Smart_Mirror_App_WPF.Data.API
     public class GoogleCalendarService : DefaultGoogleService<GoogleCalendarModel, List<GoogleCalendarModel>, Event>
     {
         private List<GoogleCalendarModel> _calendarEvents = new List<GoogleCalendarModel>();
-        private UserCredential _credential;
+        private readonly UserCredential _credential;
         private string _applicationName = "Smart Mirror Google Calendar Service";
 
         public GoogleCalendarService(UserCredential credential)
@@ -31,11 +32,8 @@ namespace Smart_Mirror_App_WPF.Data.API
 
             try
             {
-                Events events = this.SetupServiceRequest(service).Execute();
-                var allEvents = new List<GoogleCalendarModel>();
-                foreach (var item in events.Items) {
-                    allEvents.Add(this.ResponseParser(item));
-                }
+                var events = SetupServiceRequest(service).Execute();
+                var allEvents = events.Items.Select(this.ResponseParser).ToList();
                 this.SetData(allEvents);
                 this.InsertToDb(allEvents);
             } catch (Exception error)
@@ -44,9 +42,9 @@ namespace Smart_Mirror_App_WPF.Data.API
             }       
         }
 
-        private EventsResource.ListRequest SetupServiceRequest(CalendarService service)
+        private static EventsResource.ListRequest SetupServiceRequest(CalendarService service)
         {
-            EventsResource.ListRequest request = service.Events.List("primary");
+            var request = service.Events.List("primary");
             request.TimeMin = DateTime.Now;
             request.ShowDeleted = false;
             request.SingleEvents = true;
@@ -68,30 +66,26 @@ namespace Smart_Mirror_App_WPF.Data.API
 
         protected override GoogleCalendarModel ResponseParser(Event response)
         {
-            var calenderItem = new GoogleCalendarModel();
-            calenderItem.userId = _credential.UserId;
-            calenderItem.id = response.Id;
-            calenderItem.attendees = FilterEventAttendeesMail(response);
-            calenderItem.htmlLink = response.HtmlLink;
-            calenderItem.location = response.Location;
-            calenderItem.startDate = (DateTime)response.Start.DateTime;
-            calenderItem.summary = response.Summary;
-            calenderItem.createDate = (DateTime)response.Created;
-            calenderItem.creatorName = response.Creator.DisplayName;
-            calenderItem.creatorMail = response.Creator.Email;
+            var calenderItem = new GoogleCalendarModel
+            {
+                userId = _credential.UserId,
+                id = response.Id,
+                attendees = FilterEventAttendeesMail(response),
+                htmlLink = response.HtmlLink,
+                location = response.Location,
+                startDate = (DateTime) response.Start.DateTime,
+                summary = response.Summary,
+                createDate = (DateTime) response.Created,
+                creatorName = response.Creator.DisplayName,
+                creatorMail = response.Creator.Email
+            };
 
             return calenderItem;
         }
 
-        private string FilterEventAttendeesMail(Event response)
+        private static string FilterEventAttendeesMail(Event response)
         {
-            string attendeesMails = "";
-            foreach (var attendee in response.Attendees)
-            {
-                attendeesMails += attendee.Email;
-            }
-
-            return attendeesMails;
+            return response.Attendees.Aggregate("", (current, attendee) => current + (attendee.Email + "-"));
         }
 
         public override void InsertToDb(List<GoogleCalendarModel> data)

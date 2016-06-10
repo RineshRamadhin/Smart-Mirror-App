@@ -6,6 +6,7 @@ using Google.Apis.Gmail.v1;
 using Google.Apis.Services;
 using Google.Apis.Gmail.v1.Data;
 using System.Diagnostics;
+using System.Linq;
 using Smart_Mirror_App_WPF.Data.Database;
 
 namespace Smart_Mirror_App_WPF.Data.API
@@ -13,7 +14,7 @@ namespace Smart_Mirror_App_WPF.Data.API
     public class GoogleGmailService : DefaultGoogleService<GoogleGmailModel, List<GoogleGmailModel>, Message>
     {
         private List<GoogleGmailModel> _gmails = new List<GoogleGmailModel>();
-        private UserCredential _credential;
+        private readonly UserCredential _credential;
         private string _applicationName = "Smart Mirror Gmail Service";
 
         public GoogleGmailService(UserCredential credential)
@@ -46,13 +47,11 @@ namespace Smart_Mirror_App_WPF.Data.API
 
             try
             {
-                IList<Message> messages = allMailRequest.Execute().Messages;
-                if (messages != null && messages.Count > 0)
-                {
-                    var allMails = this.GetDetailsMail(messages, service);
-                    this.SetData(allMails);
-                    this.InsertToDb(_gmails);
-                }
+                var messages = allMailRequest.Execute().Messages;
+                if (messages == null || messages.Count <= 0) return;
+                var allMails = this.GetDetailsMail(messages, service);
+                this.SetData(allMails);
+                this.InsertToDb(_gmails);
             } catch (Exception error)
             {
                 // TODO; Catch 400 error meaning user has no gmail 
@@ -60,11 +59,11 @@ namespace Smart_Mirror_App_WPF.Data.API
             }
         }
  
-        private List<GoogleGmailModel> GetDetailsMail(IList<Message> emails, GmailService service)
+        private List<GoogleGmailModel> GetDetailsMail(IEnumerable<Message> emails, GmailService service)
         {
             var allMails = new List<GoogleGmailModel>();
             foreach (var message in emails)
-            {;
+            {
                 allMails.Add(this.ResponseParser(service.Users.Messages.Get("me", message.Id).Execute()));
             }
             return allMails;
@@ -72,16 +71,18 @@ namespace Smart_Mirror_App_WPF.Data.API
 
         protected override GoogleGmailModel ResponseParser(Message response)
         {
-            var email = new GoogleGmailModel();
-            email.userId = _credential.UserId;
-            email.snippet = response.Snippet;
-            email.id = response.Id;
-            email.labels = FilterLabels(response.LabelIds);
+            var email = new GoogleGmailModel
+            {
+                userId = _credential.UserId,
+                snippet = response.Snippet,
+                id = response.Id,
+                labels = FilterLabels(response.LabelIds)
+            };
             email = FilterHeadersMail(response, email);
             return email;
         }
 
-        private GoogleGmailModel FilterHeadersMail(Message response, GoogleGmailModel email)
+        private static GoogleGmailModel FilterHeadersMail(Message response, GoogleGmailModel email)
         {
             foreach (var header in response.Payload.Headers)
             {
@@ -103,14 +104,9 @@ namespace Smart_Mirror_App_WPF.Data.API
             return email;
         }
 
-        private string FilterLabels(IList<string> labels)
+        private static string FilterLabels(IEnumerable<string> labels)
         {
-            string returnLabel = "";
-            foreach (var label in labels)
-            {
-                returnLabel += label + "-";
-            }
-            return returnLabel;
+            return labels.Aggregate("", (current, label) => current + (label + "-"));
         }
 
         public override void InsertToDb(List<GoogleGmailModel> data)
