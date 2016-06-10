@@ -2,12 +2,9 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:Smart_Mirror_App_WPF"
-             xmlns:clock="clr-namespace:Smart_Mirror_App_WPF.View"
-             xmlns:test="clr-namespace:Smart_Mirror_App_WPF.View"
-             StartupUri="MainWindow.xaml"
-             >
+             StartupUri="MainWindow.xaml">
 
     <Application.Resources>
-        <clock:ClockView x:Key="clock"/>
+        <ResourceDictionary Source="Themes/ExpressionDark.xaml"/>
     </Application.Resources>
 </Application>

@@ -3,43 +3,15 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Smart_Mirror_App_WPF"
+        xmlns:local="clr-namespace:System.Windows.Controls;assembly=PresentationFramework"
         mc:Ignorable="d"
-        Title="MainWindow" Height="600" Width="800"
-        DataContext="{StaticResource clock}"
-       >
-    <Grid Background="Black">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="1*"/>
-            <ColumnDefinition Name="iets" Width="1*" />
-            <ColumnDefinition Name="weather" Width="1*" />
-            <ColumnDefinition Width="1*" />
-        </Grid.ColumnDefinitions>
-        <!--
-        
-        
-         <Window.DataContext></Window.DataContext> -->
-        <Grid.RowDefinitions>
-            <!-- clock, date and weather-->
-
-            <RowDefinition Height="0.50*" />
-            <RowDefinition Height="0.15*" />
-
-            <RowDefinition Height="1*" />
-            <RowDefinition Height="1*" />
-            <RowDefinition Height="1*" />
-        </Grid.RowDefinitions>
-        <TextBlock Grid.Column="0" Name="time" FontSize="30" Foreground="white" Margin="20,5,0,0"/>
-        <TextBlock Grid.Column="1"  Name="date" FontSize="30"   Foreground="white" Margin="20,5,0,0" />
-        <Button Grid.Column="3" Background="Transparent" BorderThickness="0" BorderBrush="Transparent" Focusable="False" Click="Button_Click" >
-            <StackPanel Orientation="Horizontal">
-                <Image Source="https://lh3.googleusercontent.com/-BrQTD5mOV98/AAAAAAAAAAI/AAAAAAAAAAA/-HCZEj5TVAI/photo.jpg"></Image>
-            </StackPanel>
-        </Button>
-        <TextBlock Grid.Column="3" Grid.Row="1" Text="Tjarda" FontSize="15" Foreground="white" HorizontalAlignment="Center" ></TextBlock>
-
-    
+        Title="MainWindow" Height="350" Width="525">
+    <Grid>
+        <StackPanel>
+            <local:Frame Name="MainFrame" NavigationUIVisibility="Hidden" >
+                
+            </local:Frame>
+            
+        </StackPanel>
     </Grid>
-   
-
 </Window>
