@@ -1,9 +1,9 @@
 ﻿using System.Windows;
 using System.Windows.Input;
 using System.Windows.Navigation;
+
 using Smart_Mirror_App_WPF.Util;
 using System;
-using Smart_Mirror_App_WPF.Input.Motion.LeapMotion;
 
 namespace Smart_Mirror_App_WPF
 {
