@@ -1,5 +1,4 @@
 ﻿using Smart_Mirror_App_WPF.Data.Models;
-using SQLite;
 using System.Collections;
 
 namespace Smart_Mirror_App_WPF.Data.Database

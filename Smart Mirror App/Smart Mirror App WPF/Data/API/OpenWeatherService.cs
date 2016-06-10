@@ -1,13 +1,8 @@
 ﻿using Smart_Mirror_App_WPF.Data.Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Net.Http;
 using System.Diagnostics;
-using Newtonsoft.Json;
-using Newtonsoft;
 using Newtonsoft.Json.Linq;
 
 namespace Smart_Mirror_App_WPF.Data.API

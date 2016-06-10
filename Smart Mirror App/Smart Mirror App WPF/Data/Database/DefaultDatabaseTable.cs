@@ -1,10 +1,4 @@
-﻿using Smart_Mirror_App_WPF.Data.Database;
-using SQLite;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using SQLite;
 
 namespace Smart_Mirror_App_WPF.Data.Database
 {
