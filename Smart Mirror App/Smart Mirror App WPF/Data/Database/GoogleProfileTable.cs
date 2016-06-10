@@ -29,12 +29,10 @@ namespace Smart_Mirror_App_WPF.Data.Database
 
         protected override void UpdateRow(GoogleProfileModel profile)
         {
-            if (this.GetRow(profile.smartMirrorUsername) != null)
-            {
-                database.BeginTransaction();
-                database.Update(profile);
-                database.Commit();
-            }
+            if (this.GetRow(profile.smartMirrorUsername) == null) return;
+            database.BeginTransaction();
+            database.Update(profile);
+            database.Commit();
         }
 
         public override GoogleProfileModel GetRow(string username)

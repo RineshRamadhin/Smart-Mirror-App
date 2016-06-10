@@ -40,7 +40,7 @@ namespace Smart_Mirror_App_WPF.Data.API
                 ApplicationName = _applicationName,
             });
 
-            UsersResource.MessagesResource.ListRequest allMailRequest = service.Users.Messages.List("me");
+            var allMailRequest = service.Users.Messages.List("me");
             allMailRequest.MaxResults = 20;
             allMailRequest.LabelIds = "CATEGORY_PERSONAL";
             allMailRequest.IncludeSpamTrash = false;

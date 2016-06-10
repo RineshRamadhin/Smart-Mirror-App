@@ -25,12 +25,10 @@ namespace Smart_Mirror_App_WPF.Data.Database
 
         protected override void UpdateRow(GoogleUserModel newUserCredentials)
         {
-            if (this.GetRow(newUserCredentials.name) != null)
-            {
-                database.BeginTransaction();
-                database.Update(newUserCredentials);
-                database.Commit();
-            }
+            if (this.GetRow(newUserCredentials.name) == null) return;
+            database.BeginTransaction();
+            database.Update(newUserCredentials);
+            database.Commit();
         }
 
         public override GoogleUserModel GetRow(string username)
@@ -47,12 +45,14 @@ namespace Smart_Mirror_App_WPF.Data.Database
 
             foreach (var user in query)
             {
-                GoogleUserModel gotUser = new GoogleUserModel();
-                gotUser.name = user.name;
-                gotUser.avatarUrl = user.avatarUrl;
-                gotUser.accessToken = user.accessToken;
-                gotUser.refreshToken = user.refreshToken;
-                gotUser.expireDate = user.expireDate;
+                var gotUser = new GoogleUserModel
+                {
+                    name = user.name,
+                    avatarUrl = user.avatarUrl,
+                    accessToken = user.accessToken,
+                    refreshToken = user.refreshToken,
+                    expireDate = user.expireDate
+                };
 
                 users.Add(gotUser);
             }

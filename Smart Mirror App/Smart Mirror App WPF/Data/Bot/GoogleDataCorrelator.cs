@@ -6,9 +6,9 @@ namespace Smart_Mirror_App_WPF.Data.Bot
 {
     public class GoogleDataCorrelator
     {
-        private List<GoogleCalendarModel> _calenderEvents;
-        private List<GoogleGmailModel> _mails;
-        private GoogleProfileModel _profile;
+        private readonly List<GoogleCalendarModel> _calenderEvents;
+        private readonly List<GoogleGmailModel> _mails;
+        private readonly GoogleProfileModel _profile;
 
         public GoogleDataCorrelator(List<GoogleCalendarModel> calenderEvents, List<GoogleGmailModel> mails, GoogleProfileModel profile)
         {
@@ -24,8 +24,8 @@ namespace Smart_Mirror_App_WPF.Data.Bot
 
         public string GetUserBirthday()
         {
-            DateTime today = DateTime.Today;
-            DateTime parsedBirthday = DateTime.Parse(_profile.birthday);
+            var today = DateTime.Today;
+            var parsedBirthday = DateTime.Parse(_profile.birthday);
             int age = today.Year - parsedBirthday.Year;
             if (parsedBirthday > today.AddYears(-age))
                 age--;
@@ -50,17 +50,17 @@ namespace Smart_Mirror_App_WPF.Data.Bot
             return possibleCorrelation;
         }
 
-        private bool CheckMailDateBeforeEventStart(DateTime mailDate, DateTime eventDate)
+        private static bool CheckMailDateBeforeEventStart(DateTime mailDate, DateTime eventDate)
         {
             return (mailDate < eventDate);
         }
 
-        private bool CheckMailDateAfterEventCreation(DateTime mailDate, DateTime eventCreateDate)
+        private static bool CheckMailDateAfterEventCreation(DateTime mailDate, DateTime eventCreateDate)
         {
             return (mailDate > eventCreateDate);
         }
 
-        private bool CheckMailFromEventCreator(string mailFromUser, string eventCreatorMail)
+        private static bool CheckMailFromEventCreator(string mailFromUser, string eventCreatorMail)
         {
             return (mailFromUser.Contains(eventCreatorMail));
         }

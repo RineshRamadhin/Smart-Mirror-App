@@ -42,12 +42,10 @@ namespace Smart_Mirror_App_WPF.Data.Database
 
         protected override void UpdateRow(GoogleCalendarModel model)
         {
-            if (this.GetRow(model.id) != null)
-            {
-                database.BeginTransaction();
-                database.Update(model);
-                database.Commit();
-            }
+            if (this.GetRow(model.id) == null) return;
+            database.BeginTransaction();
+            database.Update(model);
+            database.Commit();
         }
 
         private bool CheckIfRecordExist(string primaryKey)

@@ -6,7 +6,7 @@ namespace Smart_Mirror_App_WPF.Data.Database
     /// Interface for DB Tables
     /// </summary>
     /// <typeparam name="T">The model of the data you want to insert to db</typeparam>
-    interface ITableFuctions<T> {
+    internal interface ITableFuctions<T> {
         void InsertRow(T model);
         void DeleteRow(string primaryKey);
         T GetRow(string primaryKey);
@@ -23,7 +23,7 @@ namespace Smart_Mirror_App_WPF.Data.Database
         /// Creates the table if it does not exist and makes a database connection
         /// </summary>
         protected void CreateTable() {
-            DefaultDatabase databaseConn = new DefaultDatabase();
+            var databaseConn = new DefaultDatabase();
             database = databaseConn.CreateDb();
             database.CreateTable<T>();
         }
@@ -32,7 +32,7 @@ namespace Smart_Mirror_App_WPF.Data.Database
         /// Insert method of db
         /// </summary>
         /// <param name="model"></param>
-        abstract public void InsertRow(T model);
+        public abstract void InsertRow(T model);
 
         /// <summary>
         /// Delete record of the db
@@ -46,13 +46,13 @@ namespace Smart_Mirror_App_WPF.Data.Database
         /// Updates a record that already exist in the table
         /// </summary>
         /// <param name="model"></param>
-        abstract protected void UpdateRow(T model);
+        protected abstract void UpdateRow(T model);
 
         /// <summary>
         /// Gets a record of the table
         /// </summary>
         /// <param name="primaryKey">Primary key of the record</param>
         /// <returns>The asked record</returns>
-        abstract public T GetRow(string primaryKey);
+        public abstract T GetRow(string primaryKey);
     }
 }

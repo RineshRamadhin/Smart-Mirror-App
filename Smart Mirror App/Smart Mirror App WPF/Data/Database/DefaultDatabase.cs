@@ -1,6 +1,6 @@
 ﻿using SQLite;
 
-interface IDefaultDb
+internal interface IDefaultDb
 {
     SQLiteConnection CreateDb();
 }
@@ -9,12 +9,12 @@ namespace Smart_Mirror_App_WPF.Data.Database
 {
     public class DefaultDatabase : IDefaultDb
     {
-        private string _dbName = "usersdatabase.db";
-        SQLiteConnection db;
+        private readonly string _dbName = "usersdatabase.db";
+        private SQLiteConnection _db;
 
         public SQLiteConnection CreateDb()
         {
-            return db = new SQLiteConnection(_dbName);
+            return _db = new SQLiteConnection(_dbName);
         }
     }
 }
