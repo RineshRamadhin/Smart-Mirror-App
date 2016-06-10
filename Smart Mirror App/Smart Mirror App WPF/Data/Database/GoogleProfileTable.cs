@@ -18,26 +18,22 @@ namespace Smart_Mirror_App_WPF.Data.Database
         public override void InsertRow(GoogleProfileModel profile)
         {
             if (CheckIfProfileExist(profile))
-            {
                 this.UpdateRow(profile);
-            }
             else
-            {
-                database.Insert(profile);
-            }
+                Database.Insert(profile);
         }
 
         protected override void UpdateRow(GoogleProfileModel profile)
         {
             if (this.GetRow(profile.smartMirrorUsername) == null) return;
-            database.BeginTransaction();
-            database.Update(profile);
-            database.Commit();
+            Database.BeginTransaction();
+            Database.Update(profile);
+            Database.Commit();
         }
 
         public override GoogleProfileModel GetRow(string username)
         {
-            return (from wantedProfile in database.Table<GoogleProfileModel>()
+            return (from wantedProfile in Database.Table<GoogleProfileModel>()
                     where wantedProfile.smartMirrorUsername.Equals(username)
                     select wantedProfile).FirstOrDefault();
         }

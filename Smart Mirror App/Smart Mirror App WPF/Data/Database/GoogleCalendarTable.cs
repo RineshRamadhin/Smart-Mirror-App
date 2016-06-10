@@ -16,7 +16,7 @@ namespace Smart_Mirror_App_WPF.Data.Database
 
         public override GoogleCalendarModel GetRow(string primaryKey)
         {
-            return (from wantedEvent in database.Table<GoogleCalendarModel>()
+            return (from wantedEvent in Database.Table<GoogleCalendarModel>()
                    where wantedEvent.id.Equals(primaryKey)
                    select wantedEvent).FirstOrDefault();
         }
@@ -24,17 +24,14 @@ namespace Smart_Mirror_App_WPF.Data.Database
         public override void InsertRow(GoogleCalendarModel model)
         {
             if (CheckIfRecordExist(model.id))
-            {
                 this.UpdateRow(model);
-            } else
-            {
-                database.Insert(model);
-            } 
+            else
+                Database.Insert(model);
         }
 
         public List<GoogleCalendarModel> GetRecords(int some, string primaryKey)
         {
-            return (from events in database.Table<GoogleCalendarModel>()
+            return (from events in Database.Table<GoogleCalendarModel>()
                     where events.userId.Equals(primaryKey)
                     orderby events.startDate descending
                     select events).Take(some).ToList();
@@ -43,9 +40,9 @@ namespace Smart_Mirror_App_WPF.Data.Database
         protected override void UpdateRow(GoogleCalendarModel model)
         {
             if (this.GetRow(model.id) == null) return;
-            database.BeginTransaction();
-            database.Update(model);
-            database.Commit();
+            Database.BeginTransaction();
+            Database.Update(model);
+            Database.Commit();
         }
 
         private bool CheckIfRecordExist(string primaryKey)

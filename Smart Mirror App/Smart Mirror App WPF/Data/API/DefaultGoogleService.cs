@@ -8,7 +8,6 @@
     /// <typeparam name="TZ">The service response class of the Google API</typeparam>
     public abstract class DefaultGoogleService<T, TU, TZ>
     {
-        private bool retrievedData;
         /// <summary>
         /// Creates the API service of Google
         /// </summary>

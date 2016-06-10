@@ -32,7 +32,6 @@ namespace Smart_Mirror_App_WPF.Data.API
 
         public override async Task HttpRequestData(string city)
         {
-            var weatherHttpResponse = new OpenWeatherModel();
             var httpClient = new HttpClient();
             var tokenUrl = "&APPID=" + this._openWeatherToken;
             var weatherRequestUrl = "http://api.openweathermap.org/data/2.5/weather?q="+ city + tokenUrl + OpenWeatherConstants.Metric;

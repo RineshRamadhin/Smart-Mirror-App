@@ -18,14 +18,14 @@ namespace Smart_Mirror_App_WPF.Data.Database
     /// <typeparam name="T">The model of the data you want to insert to db</typeparam>
     public abstract class DefaultDatabaseTable<T> : ITableFuctions<T>
     {
-        protected SQLiteConnection database;
+        protected SQLiteConnection Database;
         /// <summary>
         /// Creates the table if it does not exist and makes a database connection
         /// </summary>
         protected void CreateTable() {
             var databaseConn = new DefaultDatabase();
-            database = databaseConn.CreateDb();
-            database.CreateTable<T>();
+            Database = databaseConn.CreateDb();
+            Database.CreateTable<T>();
         }
 
         /// <summary>
@@ -39,7 +39,7 @@ namespace Smart_Mirror_App_WPF.Data.Database
         /// </summary>
         /// <param name="primaryKey">Primary key of the record</param>
         public void DeleteRow(string primaryKey) {
-            database.Delete<T>(primaryKey);
+            Database.Delete<T>(primaryKey);
         }
 
         /// <summary>

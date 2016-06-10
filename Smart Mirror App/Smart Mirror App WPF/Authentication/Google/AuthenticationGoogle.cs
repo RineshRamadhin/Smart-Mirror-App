@@ -29,8 +29,8 @@ namespace Smart_Mirror_App_WPF.Authentication.Google
     {
         private GoogleUserModel _currentUser;
         private UserCredential _currentUserCredential;
-        private string _dataStoreLocation = "Test.Auth.Store";
-        private string _googleClientSecretFileLocation = "client_secret.json";
+        private readonly string _dataStoreLocation = "Test.Auth.Store";
+        private readonly string _googleClientSecretFileLocation = "client_secret.json";
 
         /// <summary>
         /// Starts OAuth2.0 web authorization against Google
@@ -39,7 +39,7 @@ namespace Smart_Mirror_App_WPF.Authentication.Google
         /// <returns></returns>
         public async Task LoginGoogle(string smartMirrorUsername)
         {
-            await AuthorizeUsingWeb(smartMirrorUsername, this.GetGestureLeap());
+            await AuthorizeUsingWeb(smartMirrorUsername, GetGestureLeap());
         }
 
         /// <summary>
@@ -63,13 +63,13 @@ namespace Smart_Mirror_App_WPF.Authentication.Google
                 this.SetCurrentUser(this.ParseUserCredentials(credential, smartMirrorUsername, gesture));
                 this._currentUserCredential = credential;
             }
-            catch (Exception Error)
+            catch (Exception error)
             {
-                Debug.WriteLine(Error);
+                Debug.WriteLine(error);
             }
         }
 
-        private string GetGestureLeap()
+        private static string GetGestureLeap()
         {
             return "";
         }
@@ -95,9 +95,9 @@ namespace Smart_Mirror_App_WPF.Authentication.Google
                 GoogleRefreshTokenModel refreshTokens = JsonConvert.DeserializeObject<GoogleRefreshTokenModel>(await auth.Content.ReadAsStringAsync());
                 this.SetCurrentUser(this.ParseRefreshTokens(refreshTokens, user));
             }
-            catch (Exception Error)
+            catch (Exception error)
             {
-                Debug.WriteLine(Error);
+                Debug.WriteLine(error);
             }
         }
 
@@ -108,8 +108,8 @@ namespace Smart_Mirror_App_WPF.Authentication.Google
         /// <returns></returns>
         public async Task LogoutGoogle(string smartMirrorUsername)
         {
-            this._currentUser = new GoogleUserModel();
-            FileDataStore dataStore = new FileDataStore(this._dataStoreLocation);
+            _currentUser = new GoogleUserModel();
+            var dataStore = new FileDataStore(this._dataStoreLocation);
             await dataStore.DeleteAsync<TokenResponse>(smartMirrorUsername);
             DeleteSpecificUserFromDb(smartMirrorUsername);
         }
@@ -120,8 +120,8 @@ namespace Smart_Mirror_App_WPF.Authentication.Google
         /// <param name="smartMirrorUsername">The custom username id to verify which user it is in our application</param>
         public async void SwitchGoogleUser(string smartMirrorUsername)
         {
-            FileDataStore dataStore = new FileDataStore(this._dataStoreLocation);
-            TokenResponse otherUser = await dataStore.GetAsync<TokenResponse>(smartMirrorUsername);
+            var dataStore = new FileDataStore(this._dataStoreLocation);
+            var otherUser = await dataStore.GetAsync<TokenResponse>(smartMirrorUsername);
             if (otherUser != null)
             {
                 await LoginGoogle(smartMirrorUsername);
@@ -160,7 +160,7 @@ namespace Smart_Mirror_App_WPF.Authentication.Google
             user.uniqueGestureLeapMotion = gesture;
 
             double expireInSeconds = (double)credential.Token.ExpiresInSeconds;
-            user.expireDate = this.ConvertExpireData(expireInSeconds);
+            user.expireDate = ConvertExpireData(expireInSeconds);
 
             return user;
         }
@@ -170,7 +170,7 @@ namespace Smart_Mirror_App_WPF.Authentication.Google
         {
             user.accessToken = refreshTokens.access_token;
             double expireInSeconds = (double) refreshTokens.expires_in;
-            user.expireDate = this.ConvertExpireData(expireInSeconds);
+            user.expireDate = ConvertExpireData(expireInSeconds);
 
             return user;
         }
@@ -178,7 +178,7 @@ namespace Smart_Mirror_App_WPF.Authentication.Google
         private void SetCurrentUser(GoogleUserModel user)
         {
             this._currentUser = user;
-            this.InsertUserInDb(this._currentUser);
+            InsertUserInDb(this._currentUser);
         }
 
         private bool CheckUserExist(string smartMirrorUsername)
@@ -186,7 +186,7 @@ namespace Smart_Mirror_App_WPF.Authentication.Google
             return !(this.GetSpecificUser(smartMirrorUsername) == null);
         }
 
-        private void InsertUserInDb(GoogleUserModel user)
+        private static void InsertUserInDb(GoogleUserModel user)
         {
             new UsersTable().InsertRow(user);
         }
@@ -201,7 +201,7 @@ namespace Smart_Mirror_App_WPF.Authentication.Google
             new UsersTable().DeleteRow(smartMirrorUsername);
         }
 
-        private DateTime ConvertExpireData(double seconds)
+        private static DateTime ConvertExpireData(double seconds)
         {
             return DateTime.Now.AddSeconds(seconds);
         }

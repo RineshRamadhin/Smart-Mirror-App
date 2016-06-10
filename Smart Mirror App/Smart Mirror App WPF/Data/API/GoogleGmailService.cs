@@ -15,7 +15,7 @@ namespace Smart_Mirror_App_WPF.Data.API
     {
         private List<GoogleGmailModel> _gmails = new List<GoogleGmailModel>();
         private readonly UserCredential _credential;
-        private string _applicationName = "Smart Mirror Gmail Service";
+        private readonly string _applicationName = "Smart Mirror Gmail Service";
 
         public GoogleGmailService(UserCredential credential)
         {
@@ -87,13 +87,9 @@ namespace Smart_Mirror_App_WPF.Data.API
             foreach (var header in response.Payload.Headers)
             {
                 if (header.Name == "From")
-                {
                     email.from = header.Value;
-                }
                 if (header.Name == "Subject")
-                {
                     email.subject = header.Value;
-                }
                 if (header.Name == "Date")
                 {
                     DateTime date;

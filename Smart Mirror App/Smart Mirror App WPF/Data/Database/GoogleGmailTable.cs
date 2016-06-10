@@ -13,7 +13,7 @@ namespace Smart_Mirror_App_WPF.Data.Database
 
         public override GoogleGmailModel GetRow(string primaryKey)
         {
-            return (from wantedEmail in database.Table<GoogleGmailModel>()
+            return (from wantedEmail in Database.Table<GoogleGmailModel>()
                     where wantedEmail.id.Equals(primaryKey)
                     select wantedEmail).FirstOrDefault();
         }
@@ -21,17 +21,14 @@ namespace Smart_Mirror_App_WPF.Data.Database
         public override void InsertRow(GoogleGmailModel model)
         {
             if (CheckRecordExist(model.id) && model.id != null)
-            {
                 this.UpdateRow(model);
-            } else
-            {
-                this.database.Insert(model);
-            }
+            else
+                this.Database.Insert(model);
         }
 
         public List<GoogleGmailModel> GetRecords(int some, string primaryKey)
         {
-            return (from mails in database.Table<GoogleGmailModel>()
+            return (from mails in Database.Table<GoogleGmailModel>()
                     where mails.userId.Equals(primaryKey)
                     orderby mails.date descending
                     select mails).Take(some).ToList();
@@ -41,9 +38,9 @@ namespace Smart_Mirror_App_WPF.Data.Database
         protected override void UpdateRow(GoogleGmailModel model)
         {
             if (this.GetRow(model.id) == null) return;
-            database.BeginTransaction();
-            database.Update(model);
-            database.Commit();
+            Database.BeginTransaction();
+            Database.Update(model);
+            Database.Commit();
         }
 
         private bool CheckRecordExist(string primaryKey)

@@ -14,7 +14,7 @@ namespace Smart_Mirror_App_WPF.Data.API
         private List<GoogleProfileModel> _profiles = new List<GoogleProfileModel>();
         private GoogleProfileModel _currentUserProfile = new GoogleProfileModel();
         private readonly UserCredential _credential;
-        private string _applicationName = "Smart Mirror Google Plus Service";
+        private readonly string _applicationName = "Smart Mirror Google Plus Service";
         
         public GooglePlusService(UserCredential credential)
         {

@@ -15,7 +15,7 @@ namespace Smart_Mirror_App_WPF.Data.API
     {
         private List<GoogleCalendarModel> _calendarEvents = new List<GoogleCalendarModel>();
         private readonly UserCredential _credential;
-        private string _applicationName = "Smart Mirror Google Calendar Service";
+        private readonly string _applicationName = "Smart Mirror Google Calendar Service";
 
         public GoogleCalendarService(UserCredential credential)
         {
@@ -90,9 +90,10 @@ namespace Smart_Mirror_App_WPF.Data.API
 
         public override void InsertToDb(List<GoogleCalendarModel> data)
         {
+            var calendarTable = new GoogleCalendarTable();
             foreach (var calendarEvent in data)
             {
-                new GoogleCalendarTable().InsertRow(calendarEvent);
+                calendarTable.InsertRow(calendarEvent);
             }
         }
     }
