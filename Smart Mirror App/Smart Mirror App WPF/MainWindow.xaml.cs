@@ -1,9 +1,21 @@
-﻿using System.Windows;
-using System.Windows.Input;
-using System.Windows.Navigation;
-
-using Smart_Mirror_App_WPF.Util;
+﻿using Smart_Mirror_App_WPF.ViewModel;
 using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Forms;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace Smart_Mirror_App_WPF
 {
@@ -12,38 +24,33 @@ namespace Smart_Mirror_App_WPF
     /// </summary>
     public partial class MainWindow : Window
     {
-        private ICommand _navigateToAuthenticationPage;
 
         public MainWindow()
         {
             InitializeComponent();
-            NavigateToPage();
+            startclock();
+           
         }
 
-        public ICommand NavigateToAuthenticationPage
+        private void startclock()
         {
-            get
-            {
-                if (_navigateToAuthenticationPage == null)
-                {
-                    _navigateToAuthenticationPage = new RelayCommand(
-                        param => this.NavigateToPage(),
-                        param => this.CanNavigate()
-                    );
-                }
-                return _navigateToAuthenticationPage;
-            }
+            DispatcherTimer timer = new DispatcherTimer();
+            timer.Interval = TimeSpan.FromSeconds(1);
+            timer.Tick += tickevent;
+            timer.Start(); 
         }
 
-        private void NavigateToPage()
+        private void tickevent(object sender, EventArgs e)
         {
-            Authentication.Google.AuthenticationPage nextPage = new Authentication.Google.AuthenticationPage();
-            MainFrame.Navigate(nextPage);
+            //  throw new NotImplementedException();
+            time.Text = DateTime.Now.ToString("H:mm");
+            date.Text = DateTime.Today.ToString("M", CultureInfo.CreateSpecificCulture("nl-BE"));
         }
 
-        private bool CanNavigate()
+        private void Button_Click(object sender, RoutedEventArgs e)
         {
-            return true;
+            new SettingsWindow().Show();
+
         }
     }
 }
