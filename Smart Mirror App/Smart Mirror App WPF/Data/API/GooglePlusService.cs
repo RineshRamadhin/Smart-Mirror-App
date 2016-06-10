@@ -66,12 +66,15 @@ namespace Smart_Mirror_App_WPF.Data.API
         private string FilterLocationResponse(Person response)
         {
             string location = "";
-            foreach (var placesLived in response.PlacesLived)
-            {
-                if (placesLived.Primary == true)
+            response.PlacesLived = null;
+            if (response.PlacesLived != null) {
+                foreach (var placesLived in response.PlacesLived)
                 {
-                    location = placesLived.Value;
-                    break;
+                    if (placesLived.Primary == true)
+                    {
+                        location = placesLived.Value;
+                        break;
+                    }
                 }
             }
             return location;
