@@ -9,6 +9,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
+using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -45,7 +46,11 @@ namespace Smart_Mirror_App_WPF
             time.Text = DateTime.Now.ToString("H:mm");
             date.Text = DateTime.Today.ToString("M", CultureInfo.CreateSpecificCulture("nl-BE"));
         }
-        
-       
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            new SettingsWindow().Show();
+
+        }
     }
 }

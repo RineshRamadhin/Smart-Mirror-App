@@ -80,6 +80,9 @@
     <Compile Include="Model\BaseModel.cs" />
     <Compile Include="Model\PropertyChangedBaseModel.cs" />
     <Compile Include="Model\WeatherModel.cs" />
+    <Compile Include="SettingsWindow.xaml.cs">
+      <DependentUpon>SettingsWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ViewModel\ClockViewModel.cs" />
     <Compile Include="View\ClockView.xaml.cs">
       <DependentUpon>ClockView.xaml</DependentUpon>
@@ -97,6 +100,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="SettingsWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Themes\ExpressionDark.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
