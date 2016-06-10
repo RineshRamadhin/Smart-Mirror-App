@@ -107,9 +107,10 @@ namespace Smart_Mirror_App_WPF.Data.API
 
         public override void InsertToDb(List<GoogleGmailModel> data)
         {
+            var gmailTable = new GoogleGmailTable();
             foreach (var mail in data)
             {
-                new GoogleGmailTable().InsertRow(mail);
+                gmailTable.InsertRow(mail);
             }
         }
     }

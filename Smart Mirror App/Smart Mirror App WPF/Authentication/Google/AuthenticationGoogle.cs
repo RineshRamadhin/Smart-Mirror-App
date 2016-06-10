@@ -29,8 +29,8 @@ namespace Smart_Mirror_App_WPF.Authentication.Google
     {
         private GoogleUserModel _currentUser;
         private UserCredential _currentUserCredential;
-        private readonly string _dataStoreLocation = "Test.Auth.Store";
-        private readonly string _googleClientSecretFileLocation = "client_secret.json";
+        private const string DataStoreLocation = "Test.Auth.Store";
+        private const string GoogleClientSecretFileLocation = "client_secret.json";
 
         /// <summary>
         /// Starts OAuth2.0 web authorization against Google
@@ -53,12 +53,12 @@ namespace Smart_Mirror_App_WPF.Authentication.Google
             try
             {
                 UserCredential credential;
-                using (var stream = new FileStream(_googleClientSecretFileLocation, FileMode.Open, FileAccess.Read))
+                using (var stream = new FileStream(GoogleClientSecretFileLocation, FileMode.Open, FileAccess.Read))
                 {
                     credential = await GoogleWebAuthorizationBroker.AuthorizeAsync(
                         GoogleClientSecrets.Load(stream).Secrets,
                         new[] { CalendarService.Scope.Calendar, GmailService.Scope.GmailReadonly, GmailService.Scope.MailGoogleCom, PlusService.Scope.PlusMe },
-                        smartMirrorUsername, CancellationToken.None, new FileDataStore(this._dataStoreLocation));
+                        smartMirrorUsername, CancellationToken.None, new FileDataStore(DataStoreLocation));
                 };
                 this.SetCurrentUser(this.ParseUserCredentials(credential, smartMirrorUsername, gesture));
                 this._currentUserCredential = credential;
@@ -109,7 +109,7 @@ namespace Smart_Mirror_App_WPF.Authentication.Google
         public async Task LogoutGoogle(string smartMirrorUsername)
         {
             _currentUser = new GoogleUserModel();
-            var dataStore = new FileDataStore(this._dataStoreLocation);
+            var dataStore = new FileDataStore(DataStoreLocation);
             await dataStore.DeleteAsync<TokenResponse>(smartMirrorUsername);
             DeleteSpecificUserFromDb(smartMirrorUsername);
         }
@@ -120,7 +120,7 @@ namespace Smart_Mirror_App_WPF.Authentication.Google
         /// <param name="smartMirrorUsername">The custom username id to verify which user it is in our application</param>
         public async void SwitchGoogleUser(string smartMirrorUsername)
         {
-            var dataStore = new FileDataStore(this._dataStoreLocation);
+            var dataStore = new FileDataStore(DataStoreLocation);
             var otherUser = await dataStore.GetAsync<TokenResponse>(smartMirrorUsername);
             if (otherUser != null)
             {
