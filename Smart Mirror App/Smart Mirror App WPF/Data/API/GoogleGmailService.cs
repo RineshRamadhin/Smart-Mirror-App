@@ -64,10 +64,8 @@ namespace Smart_Mirror_App_WPF.Data.API
         {
             var allMails = new List<GoogleGmailModel>();
             foreach (var message in emails)
-            {
-                UsersResource.MessagesResource.GetRequest mailRequest = service.Users.Messages.Get("me", message.Id);
-                var email = this.ResponseParser(mailRequest.Execute());
-                allMails.Add(email);
+            {;
+                allMails.Add(this.ResponseParser(service.Users.Messages.Get("me", message.Id).Execute()));
             }
             return allMails;
         }
@@ -117,10 +115,9 @@ namespace Smart_Mirror_App_WPF.Data.API
 
         public override void InsertToDb(List<GoogleGmailModel> data)
         {
-            var gmailTable = new GoogleGmailTable();
             foreach (var mail in data)
             {
-                gmailTable.InsertRow(mail);
+                new GoogleGmailTable().InsertRow(mail);
             }
         }
     }

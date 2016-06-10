@@ -45,8 +45,7 @@ namespace Smart_Mirror_App_WPF.Data.API
 
             try
             {
-                HttpResponseMessage response = await httpClient.GetAsync(weatherRequestUrl);
-                ResponseParser(response);
+                ResponseParser(await httpClient.GetAsync(weatherRequestUrl));
             }
             catch (HttpRequestException httpError)
             {
@@ -61,9 +60,8 @@ namespace Smart_Mirror_App_WPF.Data.API
 
         protected override async void ResponseParser(HttpResponseMessage response)
         {
-            string jsonWeather = await response.Content.ReadAsStringAsync();
             var openWeatherModel = new OpenWeatherModel();
-            JObject weatherResponse = JObject.Parse(jsonWeather);
+            JObject weatherResponse = JObject.Parse(await response.Content.ReadAsStringAsync());
             openWeatherModel.temp = FloatParser(weatherResponse["main"]["temp"].ToString());
             openWeatherModel.city = weatherResponse["name"].ToString();
             openWeatherModel.mainWeatherDescription = weatherResponse["weather"][0]["description"].ToString();
@@ -74,6 +72,7 @@ namespace Smart_Mirror_App_WPF.Data.API
             openWeatherModel.humidity = FloatParser(weatherResponse["main"]["humidity"].ToString());
             openWeatherModel.tempMin = FloatParser(weatherResponse["main"]["temp_min"].ToString());
             openWeatherModel.tempMax = FloatParser(weatherResponse["main"]["temp_max"].ToString());
+
             this.SetData(openWeatherModel);
         }
 

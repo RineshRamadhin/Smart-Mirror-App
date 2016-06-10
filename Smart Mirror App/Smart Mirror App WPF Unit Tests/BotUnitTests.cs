@@ -17,8 +17,7 @@ namespace Smart_Mirror_App_WPF_Unit_Tests
         {
             var googleAuthenticator = new AuthenticationGoogle();
             await googleAuthenticator.LoginGoogle(_testUsername);
-            var credentials = googleAuthenticator.GetCurrentCredentials();
-            var googleApiClient = new GoogleApiClient(credentials);
+            var googleApiClient = new GoogleApiClient(googleAuthenticator.GetCurrentCredentials());
             var googleCorrelatorBot = new GoogleDataCorrelator();
             var correlation = googleCorrelatorBot.CorrelateCalendarWithGmail(googleApiClient.GetEventsUser(), googleApiClient.GetGmailsUser());
             Assert.IsNotNull(correlation);

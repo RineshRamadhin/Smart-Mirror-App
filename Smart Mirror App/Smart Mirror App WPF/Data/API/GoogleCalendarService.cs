@@ -29,10 +29,9 @@ namespace Smart_Mirror_App_WPF.Data.API
                 ApplicationName = _applicationName,
             });
 
-            var calendarRequest = this.SetupServiceRequest(service);
             try
             {
-                Events events = calendarRequest.Execute();
+                Events events = this.SetupServiceRequest(service).Execute();
                 var allEvents = new List<GoogleCalendarModel>();
                 foreach (var item in events.Items) {
                     allEvents.Add(this.ResponseParser(item));
@@ -96,10 +95,9 @@ namespace Smart_Mirror_App_WPF.Data.API
 
         public override void InsertToDb(List<GoogleCalendarModel> data)
         {
-            var calendarTable = new GoogleCalendarTable();
             foreach (var calendarEvent in data)
             {
-                calendarTable.InsertRow(calendarEvent);
+                new GoogleCalendarTable().InsertRow(calendarEvent);
             }
         }
     }

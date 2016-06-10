@@ -32,11 +32,9 @@ namespace Smart_Mirror_App_WPF.Data.API
                 ApplicationName = _applicationName,
             });
 
-            PeopleResource.GetRequest personRequest = service.People.Get("me");
-            var profile = this.ResponseParser(personRequest.Execute());
             var profiles = new List<GoogleProfileModel>();
 
-            profiles.Add(profile);
+            profiles.Add(this.ResponseParser(service.People.Get("me").Execute()));
             this.SetData(profiles);
             this.InsertToDb(profiles);
         }
@@ -53,8 +51,7 @@ namespace Smart_Mirror_App_WPF.Data.API
 
         public override void InsertToDb(List<GoogleProfileModel> data)
         {
-            var googleProfileTable = new GoogleProfileTable();
-            googleProfileTable.InsertRow(data.FirstOrDefault());
+            new GoogleProfileTable().InsertRow(data.FirstOrDefault());
         }
 
         protected override GoogleProfileModel ResponseParser(Person response)

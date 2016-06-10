@@ -14,6 +14,7 @@ namespace Smart_Mirror_App_WPF.Data.API
     /// <typeparam name="Z">The service response class of the Google API</typeparam>
     public abstract class DefaultGoogleService<T, U, Z>
     {
+        private bool retrievedData;
         /// <summary>
         /// Creates the API service of Google
         /// </summary>
