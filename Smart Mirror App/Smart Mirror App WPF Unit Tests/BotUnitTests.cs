@@ -20,10 +20,8 @@ namespace Smart_Mirror_App_WPF_Unit_Tests
             var credentials = googleAuthenticator.GetCurrentCredentials();
             var googleApiClient = new GoogleApiClient(credentials);
             var googleCorrelatorBot = new GoogleDataCorrelator();
-            var calenderEvents = googleApiClient.GetEventsUser();
-            var mails = googleApiClient.GetGmailsUser();
-            var test = googleCorrelatorBot.CorrelateCalendarWithGmail(calenderEvents, mails);
-
+            var correlation = googleCorrelatorBot.CorrelateCalendarWithGmail(googleApiClient.GetEventsUser(), googleApiClient.GetGmailsUser());
+            Assert.IsNotNull(correlation);
         }
     }
 }

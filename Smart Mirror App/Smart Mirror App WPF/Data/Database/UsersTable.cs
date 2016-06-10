@@ -14,8 +14,7 @@ namespace Smart_Mirror_App_WPF.Data.Database
 
         public override void InsertRow(GoogleUserModel user)
         {
-            var wantedUser = this.GetRow(user.name);
-            if (wantedUser == null)
+            if (this.GetRow(user.name) == null)
             {
                 database.Insert(user);
             }
@@ -27,9 +26,7 @@ namespace Smart_Mirror_App_WPF.Data.Database
 
         protected override void UpdateRow(GoogleUserModel newUserCredentials)
         {
-            var wantedUser = this.GetRow(newUserCredentials.name);
-
-            if (wantedUser != null)
+            if (this.GetRow(newUserCredentials.name) != null)
             {
                 database.BeginTransaction();
                 database.Update(newUserCredentials);
@@ -39,11 +36,9 @@ namespace Smart_Mirror_App_WPF.Data.Database
 
         public override GoogleUserModel GetRow(string username)
         {
-            var user = from wantedUser in database.Table<GoogleUserModel>()
-                       where wantedUser.name.Equals(username)
-                       select wantedUser;
-
-            return user.FirstOrDefault();
+            return (from wantedUser in database.Table<GoogleUserModel>()
+                    where wantedUser.name.Equals(username)
+                    select wantedUser).FirstOrDefault();
         }
 
         public ArrayList GetAllUsers()
