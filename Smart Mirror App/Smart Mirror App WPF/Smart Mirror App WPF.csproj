@@ -113,6 +113,9 @@
       <HintPath>..\packages\Google.Apis.Plus.v1.1.13.1.510\lib\portable-net45+netcore45+wpa81+wp8\Google.Apis.Plus.v1.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="LeapCSharp.NET4.0">
+      <HintPath>D:\Temp downloads\Leap_Motion_SDK_Windows_2.3.1\LeapDeveloperKit_2.3.1+31549_win\LeapSDK\lib\x64\LeapCSharp.NET4.0.dll</HintPath>
+    </Reference>
     <Reference Include="log4net, Version=1.2.15.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\packages\log4net.2.0.5\lib\net45-full\log4net.dll</HintPath>
       <Private>True</Private>
@@ -193,6 +196,19 @@
     <Compile Include="Data\Models\GoogleRefreshTokenModel.cs" />
     <Compile Include="Data\Models\GoogleUserModel.cs" />
     <Compile Include="Data\Models\OpenWeatherModel.cs" />
+    <Compile Include="Input\Motion\IMotion.cs" />
+    <Compile Include="Input\Motion\IMotionController.cs" />
+    <Compile Include="Input\Motion\IMotionData.cs" />
+    <Compile Include="Input\Motion\IMotionListener.cs" />
+    <Compile Include="Input\Motion\LeapMotion\Data\Devices.cs" />
+    <Compile Include="Input\Motion\LeapMotion\Data\Fingers.cs" />
+    <Compile Include="Input\Motion\LeapMotion\Data\Gestures.cs" />
+    <Compile Include="Input\Motion\LeapMotion\Data\Hands.cs" />
+    <Compile Include="Input\Motion\LeapMotion\Data\LeapMotionData.cs" />
+    <Compile Include="Input\Motion\LeapMotion\Data\Tools.cs" />
+    <Compile Include="Input\Motion\LeapMotion\LeapMotion.cs" />
+    <Compile Include="Input\Motion\LeapMotion\LeapMotionController.cs" />
+    <Compile Include="Input\Motion\LeapMotion\LeapMotionListener.cs" />
     <Compile Include="Model\BaseModel.cs" />
     <Compile Include="Model\ClockModel.cs" />
     <Compile Include="Model\PropertyChangedBaseModel.cs" />
