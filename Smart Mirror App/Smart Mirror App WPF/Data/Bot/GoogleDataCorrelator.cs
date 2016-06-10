@@ -1,4 +1,5 @@
 ﻿using Smart_Mirror_App_WPF.Data.Models;
+using System;
 using System.Collections.Generic;
 
 namespace Smart_Mirror_App_WPF.Data.Bot
@@ -22,7 +23,9 @@ namespace Smart_Mirror_App_WPF.Data.Bot
             {
                 foreach (var calenderEvent in calenderEvents)
                 {
-                    if (mail.from.Contains(calenderEvent.creatorMail) && mail.date < calenderEvent.startDate)
+                    if (CheckMailFromEventCreator(mail.from, calenderEvent.creatorMail) 
+                        && CheckMailDateAfterEventCreation(mail.date, calenderEvent.createDate) 
+                        && CheckMailDateBeforeEventStart(mail.date, calenderEvent.startDate))
                     {
                         possibleCorrelation = calenderEvent.creatorName + " send you an e-mail possibly about " + calenderEvent.summary + " event";
                         break;
@@ -30,6 +33,21 @@ namespace Smart_Mirror_App_WPF.Data.Bot
                 }
             }
             return possibleCorrelation;
+        }
+
+        private bool CheckMailDateBeforeEventStart(DateTime mailDate, DateTime eventDate)
+        {
+            return (mailDate < eventDate);
+        }
+
+        private bool CheckMailDateAfterEventCreation(DateTime mailDate, DateTime eventCreateDate)
+        {
+            return (mailDate > eventCreateDate);
+        }
+
+        private bool CheckMailFromEventCreator(string mailFromUser, string eventCreatorMail)
+        {
+            return (mailFromUser.Contains(eventCreatorMail));
         }
     }
 }

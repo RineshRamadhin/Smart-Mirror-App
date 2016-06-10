@@ -19,5 +19,6 @@ namespace Smart_Mirror_App_WPF.Data.Models
         public string location { get; set; }
         public string creatorName { get; set; }
         public string creatorMail { get; set; }
+        public DateTime createDate { get; set; }
     }
 }

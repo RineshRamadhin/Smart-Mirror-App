@@ -76,6 +76,7 @@ namespace Smart_Mirror_App_WPF.Data.API
             calenderItem.location = response.Location;
             calenderItem.startDate = (DateTime)response.Start.DateTime;
             calenderItem.summary = response.Summary;
+            calenderItem.createDate = (DateTime)response.Created;
             calenderItem.creatorName = response.Creator.DisplayName;
             calenderItem.creatorMail = response.Creator.Email;
 

@@ -270,6 +270,9 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Content Include="Leap.dll" />
+    <Content Include="LeapCSharp.dll" />
+    <Content Include="LeapCSharp.NET4.0.dll" />
     <Content Include="sqlite3.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
