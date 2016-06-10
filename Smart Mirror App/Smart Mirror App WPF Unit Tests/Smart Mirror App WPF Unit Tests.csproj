@@ -104,6 +104,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="BotUnitTests.cs" />
     <Compile Include="GoogleAuthenticationTests.cs" />
     <Compile Include="GoogleApiUnitTests.cs" />
     <Compile Include="OpenWeatherApiUnitTests.cs" />
