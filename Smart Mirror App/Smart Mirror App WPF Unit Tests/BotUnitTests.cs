@@ -22,5 +22,16 @@ namespace Smart_Mirror_App_WPF_Unit_Tests
             var correlation = googleCorrelatorBot.CorrelateCalendarWithGmail();
             Assert.IsNotNull(correlation);
         }
+
+        [TestMethod]
+        public async Task GetUserBirthdayTest()
+        {
+            var googleAuthenticator = new AuthenticationGoogle();
+            await googleAuthenticator.LoginGoogle(_testUsername);
+            var googleApiClient = new GoogleApiClient(googleAuthenticator.GetCurrentCredentials());
+            var googleCorrelatorBot = new GoogleDataCorrelator(googleApiClient.GetEventsUser(), googleApiClient.GetGmailsUser(), googleApiClient.GetCurrentUser());
+            var correlation = googleCorrelatorBot.GetUserBirthday();
+            Assert.IsNotNull(correlation);
+        }
     }
 }
