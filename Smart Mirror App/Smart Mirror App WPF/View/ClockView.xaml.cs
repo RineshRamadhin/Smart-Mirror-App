@@ -1,5 +1,4 @@
-﻿using Json;
-using Smart_Mirror_App_WPF.Model;
+﻿using Smart_Mirror_App_WPF.Model;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
