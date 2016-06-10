@@ -136,6 +136,8 @@
     <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
       <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
       <Private>True</Private>
+    <Reference Include="LeapCSharp.NET4.0">
+      <HintPath>D:\Temp downloads\Leap_Motion_SDK_Windows_2.3.1\LeapDeveloperKit_2.3.1+31549_win\LeapSDK\lib\x64\LeapCSharp.NET4.0.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -211,6 +213,19 @@
     <Compile Include="Authentication\Google\AuthenticationPage.xaml.cs">
       <DependentUpon>AuthenticationPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Input\Motion\IMotion.cs" />
+    <Compile Include="Input\Motion\IMotionController.cs" />
+    <Compile Include="Input\Motion\IMotionData.cs" />
+    <Compile Include="Input\Motion\IMotionListener.cs" />
+    <Compile Include="Input\Motion\LeapMotion\Data\Devices.cs" />
+    <Compile Include="Input\Motion\LeapMotion\Data\Fingers.cs" />
+    <Compile Include="Input\Motion\LeapMotion\Data\Gestures.cs" />
+    <Compile Include="Input\Motion\LeapMotion\Data\Hands.cs" />
+    <Compile Include="Input\Motion\LeapMotion\Data\LeapMotionData.cs" />
+    <Compile Include="Input\Motion\LeapMotion\Data\Tools.cs" />
+    <Compile Include="Input\Motion\LeapMotion\LeapMotion.cs" />
+    <Compile Include="Input\Motion\LeapMotion\LeapMotionController.cs" />
+    <Compile Include="Input\Motion\LeapMotion\LeapMotionListener.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -263,7 +278,12 @@
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets'))" />
   </Target>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+  <PropertyGroup>
+    <PostBuildEvent>xcopy /yr "E:\Documents\GitHub\Smart-Mirror-App\Smart Mirror App\Smart Mirror App WPF\Resources\Post-build\Leap.dll" "$(TargetDir)"
+xcopy /yr "E:\Documents\GitHub\Smart-Mirror-App\Smart Mirror App\Smart Mirror App WPF\Resources\Post-build\LeapCSharp.dll" "$(TargetDir)"
+</PostBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target>
