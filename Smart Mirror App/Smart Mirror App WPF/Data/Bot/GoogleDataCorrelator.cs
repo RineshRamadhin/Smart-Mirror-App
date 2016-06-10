@@ -6,22 +6,28 @@ namespace Smart_Mirror_App_WPF.Data.Bot
 {
     public class GoogleDataCorrelator
     {
-        public GoogleDataCorrelator()
-        {
+        private List<GoogleCalendarModel> _calenderEvents;
+        private List<GoogleGmailModel> _mails;
+        private GoogleProfileModel _profile;
 
+        public GoogleDataCorrelator(List<GoogleCalendarModel> calenderEvents, List<GoogleGmailModel> mails, GoogleProfileModel profile)
+        {
+            this._calenderEvents = calenderEvents;
+            this._mails = mails;
+            this._profile = profile;
         }
 
-        public string CorrelateCalendarWithGmail(List<GoogleCalendarModel> calenderEvents, List<GoogleGmailModel> mails)
+        public string CorrelateCalendarWithGmail()
         {
-            return this.PredictEventCreatorMailedUser(calenderEvents, mails); 
+            return this.PredictEventCreatorMailedUser(); 
         }
 
-        private string PredictEventCreatorMailedUser(List<GoogleCalendarModel> calenderEvents, List<GoogleGmailModel> mails)
+        private string PredictEventCreatorMailedUser()
         {
             string possibleCorrelation = "";
-            foreach (var mail in mails)
+            foreach (var mail in _mails)
             {
-                foreach (var calenderEvent in calenderEvents)
+                foreach (var calenderEvent in _calenderEvents)
                 {
                     if (CheckMailFromEventCreator(mail.from, calenderEvent.creatorMail) 
                         && CheckMailDateAfterEventCreation(mail.date, calenderEvent.createDate) 

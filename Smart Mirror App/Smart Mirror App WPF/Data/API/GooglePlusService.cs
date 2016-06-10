@@ -59,6 +59,7 @@ namespace Smart_Mirror_App_WPF.Data.API
             userProfile.gender = response.Gender;
             userProfile.imageUrl = response.Image.Url;
             userProfile.location = FilterLocationResponse(response);
+            userProfile.birthday = response.Birthday;
  
             return userProfile;
         }
@@ -66,7 +67,6 @@ namespace Smart_Mirror_App_WPF.Data.API
         private string FilterLocationResponse(Person response)
         {
             string location = "";
-            response.PlacesLived = null;
             if (response.PlacesLived != null) {
                 foreach (var placesLived in response.PlacesLived)
                 {
