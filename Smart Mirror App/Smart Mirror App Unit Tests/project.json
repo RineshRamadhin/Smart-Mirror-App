@@ -1,6 +1,12 @@
 ﻿{
   "dependencies": {
-    "Microsoft.NETCore.UniversalWindowsPlatform": "5.0.0"
+    "Google.Apis": "1.13.0",
+    "Google.Apis.Calendar.v3": "1.13.0.500",
+    "Google.Apis.Gmail.v1": "1.13.0.440",
+    "Google.Apis.Oauth2.v2": "1.13.0.454",
+    "Google.Apis.Plus.v1": "1.13.0.506",
+    "Microsoft.NETCore.UniversalWindowsPlatform": "5.1.0",
+    "sqlite-net": "1.0.8"
   },
   "frameworks": {
     "uap10.0": {}
