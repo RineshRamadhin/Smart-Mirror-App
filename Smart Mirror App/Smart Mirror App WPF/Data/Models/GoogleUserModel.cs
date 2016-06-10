@@ -11,5 +11,6 @@ namespace Smart_Mirror_App_WPF.Data.Models
         public string accessToken { get; set; }
         public string refreshToken { get; set; }
         public DateTime expireDate { get; set; }
+        public string uniqueGestureLeapMotion { get; set; }
     }
 }

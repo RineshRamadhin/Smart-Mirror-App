@@ -39,7 +39,7 @@ namespace Smart_Mirror_App_WPF.Authentication.Google
         /// <returns></returns>
         public async Task LoginGoogle(string smartMirrorUsername)
         {
-            await AuthorizeUsingWeb(smartMirrorUsername);
+            await AuthorizeUsingWeb(smartMirrorUsername, this.GetGestureLeap());
         }
 
         /// <summary>
@@ -48,7 +48,7 @@ namespace Smart_Mirror_App_WPF.Authentication.Google
         /// </summary>
         /// <param name="smartMirrorUsername"></param>
         /// <returns></returns>
-        private async Task AuthorizeUsingWeb(string smartMirrorUsername)
+        private async Task AuthorizeUsingWeb(string smartMirrorUsername, string gesture)
         {
             try
             {
@@ -60,13 +60,18 @@ namespace Smart_Mirror_App_WPF.Authentication.Google
                         new[] { CalendarService.Scope.Calendar, GmailService.Scope.GmailReadonly, GmailService.Scope.MailGoogleCom, PlusService.Scope.PlusMe },
                         smartMirrorUsername, CancellationToken.None, new FileDataStore(this._dataStoreLocation));
                 };
-                this.SetCurrentUser(this.ParseUserCredentials(credential, smartMirrorUsername));
+                this.SetCurrentUser(this.ParseUserCredentials(credential, smartMirrorUsername, gesture));
                 this._currentUserCredential = credential;
             }
             catch (Exception Error)
             {
                 Debug.WriteLine(Error);
             }
+        }
+
+        private string GetGestureLeap()
+        {
+            return "";
         }
 
         /// <summary>
@@ -87,10 +92,8 @@ namespace Smart_Mirror_App_WPF.Authentication.Google
                 new KeyValuePair<string, string>("client_secret",AuthenticationConstants.GoogleClientSecret),
                 new KeyValuePair<string, string>("grant_type","refresh_token"),
             }));
-                var tokensJson = await auth.Content.ReadAsStringAsync();
-                GoogleRefreshTokenModel refreshTokens = JsonConvert.DeserializeObject<GoogleRefreshTokenModel>(tokensJson);
-                user = this.ParseRefreshTokens(refreshTokens, user);
-                this.SetCurrentUser(user);
+                GoogleRefreshTokenModel refreshTokens = JsonConvert.DeserializeObject<GoogleRefreshTokenModel>(await auth.Content.ReadAsStringAsync());
+                this.SetCurrentUser(this.ParseRefreshTokens(refreshTokens, user));
             }
             catch (Exception Error)
             {
@@ -147,13 +150,14 @@ namespace Smart_Mirror_App_WPF.Authentication.Google
             return _currentUserCredential;
         }
 
-        private GoogleUserModel ParseUserCredentials(UserCredential credential, string smartMirrorUsername)
+        private GoogleUserModel ParseUserCredentials(UserCredential credential, string smartMirrorUsername, string gesture)
         {
             GoogleUserModel user = new GoogleUserModel();
 
             user.accessToken = credential.Token.AccessToken;
             user.refreshToken = credential.Token.RefreshToken;
             user.name = smartMirrorUsername;
+            user.uniqueGestureLeapMotion = gesture;
 
             double expireInSeconds = (double)credential.Token.ExpiresInSeconds;
             user.expireDate = this.ConvertExpireData(expireInSeconds);
@@ -184,20 +188,17 @@ namespace Smart_Mirror_App_WPF.Authentication.Google
 
         private void InsertUserInDb(GoogleUserModel user)
         {
-            UsersTable userTable = new UsersTable();
-            userTable.InsertRow(user);
+            new UsersTable().InsertRow(user);
         }
 
         public GoogleUserModel GetSpecificUser(string smartMirrorUsername)
         {
-            UsersTable userTable = new UsersTable();
-            return userTable.GetRow(smartMirrorUsername);
+            return new UsersTable().GetRow(smartMirrorUsername);
         }
 
         public void DeleteSpecificUserFromDb(string smartMirrorUsername)
         {
-            UsersTable userTable = new UsersTable();
-            userTable.DeleteRow(smartMirrorUsername);
+            new UsersTable().DeleteRow(smartMirrorUsername);
         }
 
         private DateTime ConvertExpireData(double seconds)

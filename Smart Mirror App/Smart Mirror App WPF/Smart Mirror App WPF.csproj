@@ -187,10 +187,8 @@
     <Compile Include="Data\Database\GoogleProfileTable.cs" />
     <Compile Include="Data\Database\UsersTable.cs" />
     <Compile Include="Data\Models\GoogleCalendarModel.cs" />
-    <Compile Include="Data\API\Models\GoogleCalendarResponseModel.cs" />
     <Compile Include="Data\Models\GoogleGmailModel.cs" />
     <Compile Include="Data\Models\GoogleProfileModel.cs" />
-    <Compile Include="Data\API\Models\GoogleProfileResponseModel.cs" />
     <Compile Include="Data\Models\GoogleRefreshTokenModel.cs" />
     <Compile Include="Data\Models\GoogleUserModel.cs" />
     <Compile Include="Data\Models\OpenWeatherModel.cs" />
