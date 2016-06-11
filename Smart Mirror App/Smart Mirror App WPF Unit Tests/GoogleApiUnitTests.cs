@@ -41,18 +41,19 @@ namespace Smart_Mirror_App_WPF_Unit_Tests
         public async Task RequestGoogleGmailData()
         {
             await googleAuthenticator.LoginGoogle(_testUsername);
-            UserCredential credential = googleAuthenticator.GetCurrentCredentials();
-            GoogleGmailService test = new GoogleGmailService(credential);
-            test.CreateService();
-            var mails = test.GetData();
+            var gmailService = new GoogleGmailService(googleAuthenticator.GetCurrentCredentials());
+            gmailService.CreateService();
+            var mails = gmailService.GetData();
         }
 
         [TestMethod]
         public void InsertedGoogleGmailData()
         {
-            GoogleGmailTable gmailTable = new GoogleGmailTable();
-            GoogleGmailModel mail = new GoogleGmailModel();
-            mail.id = _testMailId;
+            var gmailTable = new GoogleGmailTable();
+            var mail = new GoogleGmailModel
+            {
+                id = _testMailId
+            };
             gmailTable.InsertRow(mail);
             Assert.IsNotNull(gmailTable.GetRow(_testMailId));
         }
@@ -60,8 +61,8 @@ namespace Smart_Mirror_App_WPF_Unit_Tests
         [TestMethod]
         public void UpdateGoogleMailRecord()
         {
-            GoogleGmailTable gmailTable = new GoogleGmailTable();
-            GoogleGmailModel mail = new GoogleGmailModel();
+            var gmailTable = new GoogleGmailTable();
+            var mail = new GoogleGmailModel();
             mail.id = _testMailId;
             mail.subject = "testSubject";
             gmailTable.InsertRow(mail);
@@ -71,7 +72,7 @@ namespace Smart_Mirror_App_WPF_Unit_Tests
         [TestMethod]
         public void DeleteGoogleGmailRecord()
         {
-            GoogleGmailTable gmailTable = new GoogleGmailTable();
+            var gmailTable = new GoogleGmailTable();
             gmailTable.DeleteRow(_testMailId);
             Assert.IsNull(gmailTable.GetRow(_testMailId));
         }
@@ -79,7 +80,7 @@ namespace Smart_Mirror_App_WPF_Unit_Tests
         [TestMethod]
         public void GetMailsOfUser()
         {
-            GoogleGmailTable gmailTable = new GoogleGmailTable();
+            var gmailTable = new GoogleGmailTable();
             var allMails = gmailTable.GetRecords(20, _testUsername);
             Assert.IsNotNull(allMails);
         }
@@ -88,8 +89,7 @@ namespace Smart_Mirror_App_WPF_Unit_Tests
         public async Task RequestGoogleCalendarData()
         {
             await googleAuthenticator.LoginGoogle(_testUsername);
-            var credential = googleAuthenticator.GetCurrentCredentials();
-            GoogleCalendarService calendarService = new GoogleCalendarService(credential);
+            var calendarService = new GoogleCalendarService(googleAuthenticator.GetCurrentCredentials());
             calendarService.CreateService();
         }
 
@@ -125,7 +125,7 @@ namespace Smart_Mirror_App_WPF_Unit_Tests
         [TestMethod]
         public void GetCalendarEventsUser()
         {
-            GoogleCalendarTable calendarTable = new GoogleCalendarTable();
+            var calendarTable = new GoogleCalendarTable();
             var allEvents = calendarTable.GetRecords(20, _testUsername);
             Assert.IsNotNull(allEvents);
         }

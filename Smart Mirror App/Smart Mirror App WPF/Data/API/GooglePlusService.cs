@@ -73,7 +73,7 @@ namespace Smart_Mirror_App_WPF.Data.API
         }
 
         /// <summary>
-        /// Finds to current location of the user if he/she has one
+        /// Filters all the location of the user and get his/her primary location
         /// </summary>
         /// <param name="response">the API response</param>
         /// <returns>A string of the location of the user</returns>

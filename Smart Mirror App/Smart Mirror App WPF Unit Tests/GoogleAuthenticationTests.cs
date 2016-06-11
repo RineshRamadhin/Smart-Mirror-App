@@ -36,19 +36,14 @@ namespace Smart_Mirror_App_WPF_Unit_Tests
         {
             var googleAuthenticatorService = new AuthenticationGoogle();
             await googleAuthenticatorService.LoginGoogle(testUsername);
-            var user =  googleAuthenticatorService.GetCurrentUser();
-            testUser = user;
-            Assert.IsNotNull(user);
+            Assert.IsNotNull(googleAuthenticatorService.GetCurrentUser());
         }
 
         [TestMethod]
         public void GetSpecificUser()
         {
             var user = AuthenticationGoogle.GetSpecificUser(testUsername);
-            if (user == null)
-            {
-                Assert.IsNull(user);
-            }
+            Assert.IsNotNull(user);
         }
 
         /// <summary>
@@ -58,22 +53,20 @@ namespace Smart_Mirror_App_WPF_Unit_Tests
         [TestMethod]
         public async Task InsertedUserToDb()
         {
-            string wantedUserInDb = testUsername;
             var googleAuthenticatorService = new AuthenticationGoogle();
             var userTable = new UsersTable();
 
-            await googleAuthenticatorService.LoginGoogle(wantedUserInDb);
-            var user = userTable.GetRow(wantedUserInDb);
+            await googleAuthenticatorService.LoginGoogle(testUsername);
+            var user = userTable.GetRow(testUsername);
             
-            Assert.AreEqual(user.name, wantedUserInDb);
+            Assert.AreEqual(user.name, testUsername);
         }
 
         [TestMethod]
         public void GetAllUsersFromDb()
         {
             var googleAuthenticatorService = new AuthenticationGoogle();
-            var userTable = new UsersTable();
-            var allUsers = userTable.GetAllUsers();
+            Assert.IsNotNull(new UsersTable().GetAllUsers());
         }
 
         [TestMethod]
@@ -94,7 +87,7 @@ namespace Smart_Mirror_App_WPF_Unit_Tests
         {
             var userTable = new UsersTable();
             userTable.DeleteRow(testUsername);
-            this.GetSpecificUser();
+            GetSpecificUser();
         }
 
         //TODO: Check if DB is cleared
