@@ -51,5 +51,10 @@ namespace Smart_Mirror_App_WPF
             new SettingsWindow().Show();
 
         }
+
+        private void button_Click_1(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
