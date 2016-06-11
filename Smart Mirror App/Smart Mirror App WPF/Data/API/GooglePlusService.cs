@@ -23,7 +23,7 @@ namespace Smart_Mirror_App_WPF.Data.API
 
         public override void CreateService()
         {
-            var service = new PlusService(new BaseClientService.Initializer()
+            var service = new PlusService(new BaseClientService.Initializer
             {
                 HttpClientInitializer = _credential,
                 ApplicationName = _applicationName,

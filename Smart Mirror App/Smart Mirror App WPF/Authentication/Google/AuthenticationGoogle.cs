@@ -47,6 +47,7 @@ namespace Smart_Mirror_App_WPF.Authentication.Google
         /// User won't be redirected to the app so need to close the browser/tab.
         /// </summary>
         /// <param name="smartMirrorUsername"></param>
+        /// <param name="gesture"></param>
         /// <returns></returns>
         private async Task AuthorizeUsingWeb(string smartMirrorUsername, string gesture)
         {
@@ -72,33 +73,6 @@ namespace Smart_Mirror_App_WPF.Authentication.Google
         private static string GetGestureLeap()
         {
             return "";
-        }
-
-        /// <summary>
-        /// NOT USED!! Since the Google API handles tokens refreshing automatically
-        /// Request new tokens with a refresh token
-        /// </summary>
-        /// <param name="user"></param>
-        /// <returns></returns>
-        public async Task RefreshAuthenticationTokens(GoogleUserModel user)
-        {
-            try
-            {
-                var client = new HttpClient();
-                var auth = await client.PostAsync("https://accounts.google.com/o/oauth2/token", new FormUrlEncodedContent(new[]
-                {
-                new KeyValuePair<string, string>("refresh_token", user.refreshToken),
-                new KeyValuePair<string, string>("client_id",AuthenticationConstants.GoogleClientId),
-                new KeyValuePair<string, string>("client_secret",AuthenticationConstants.GoogleClientSecret),
-                new KeyValuePair<string, string>("grant_type","refresh_token"),
-            }));
-                var refreshTokens = JsonConvert.DeserializeObject<GoogleRefreshTokenModel>(await auth.Content.ReadAsStringAsync());
-                SetCurrentUser(ParseRefreshTokens(refreshTokens, user));
-            }
-            catch (Exception error)
-            {
-                Debug.WriteLine(error);
-            }
         }
 
         /// <summary>
@@ -179,7 +153,7 @@ namespace Smart_Mirror_App_WPF.Authentication.Google
             InsertUserInDb(_currentUser);
         }
 
-        private bool CheckUserExist(string smartMirrorUsername)
+        private static bool CheckUserExist(string smartMirrorUsername)
         {
             return !(GetSpecificUser(smartMirrorUsername) == null);
         }
@@ -189,12 +163,12 @@ namespace Smart_Mirror_App_WPF.Authentication.Google
             new UsersTable().InsertRow(user);
         }
 
-        public GoogleUserModel GetSpecificUser(string smartMirrorUsername)
+        public static GoogleUserModel GetSpecificUser(string smartMirrorUsername)
         {
             return new UsersTable().GetRow(smartMirrorUsername);
         }
 
-        public void DeleteSpecificUserFromDb(string smartMirrorUsername)
+        public static void DeleteSpecificUserFromDb(string smartMirrorUsername)
         {
             new UsersTable().DeleteRow(smartMirrorUsername);
         }

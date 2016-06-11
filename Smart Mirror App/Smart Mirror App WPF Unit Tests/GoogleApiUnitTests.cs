@@ -134,8 +134,7 @@ namespace Smart_Mirror_App_WPF_Unit_Tests
         public async Task RequestUserProfileService()
         {
             await googleAuthenticator.LoginGoogle(_testUsername);
-            var credential = googleAuthenticator.GetCurrentCredentials();
-            var googlePlusService = new GooglePlusService(credential);
+            var googlePlusService = new GooglePlusService(googleAuthenticator.GetCurrentCredentials());
             googlePlusService.CreateService();
             Assert.IsNotNull(googlePlusService.GetUserProfile());
         }
@@ -150,14 +149,14 @@ namespace Smart_Mirror_App_WPF_Unit_Tests
         [TestMethod]
         public async Task TestGoogleApiClient()
         {
+            var googleAuthenticator = new AuthenticationGoogle();
             await googleAuthenticator.LoginGoogle(_testUsername);
-            var credentials = googleAuthenticator.GetCurrentCredentials();
-            var googleApiClient = new GoogleApiClient(credentials);
+            var googleApiClient = new GoogleApiClient(googleAuthenticator.GetCurrentCredentials());
             var user = googleApiClient.GetCurrentUser();
             Assert.IsNotNull(user);
             Assert.IsNotNull(googleApiClient.GetEventsUser());
             Assert.IsNotNull(googleApiClient.GetGmailsUser());
-            Assert.IsNotNull(googleApiClient.GetCurrentWeather(user.location));
+            Assert.IsNotNull(GoogleApiClient.GetCurrentWeather(user.location));
         }
 
         private async Task SetupTestEnvironment()

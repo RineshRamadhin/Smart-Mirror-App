@@ -24,7 +24,7 @@ namespace Smart_Mirror_App_WPF.Data.API
 
         public override void CreateService()
         {
-            var service = new CalendarService(new BaseClientService.Initializer()
+            var service = new CalendarService(new BaseClientService.Initializer
             {
                 HttpClientInitializer = this._credential,
                 ApplicationName = _applicationName,

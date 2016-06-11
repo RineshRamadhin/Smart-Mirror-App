@@ -22,7 +22,7 @@ namespace Smart_Mirror_App_WPF_Unit_Tests
         [TestMethod]
         public void CanInstantiateAuthenticationGoogle()
         {
-            AuthenticationGoogle googleAuthenticatorService = new AuthenticationGoogle();
+            var googleAuthenticatorService = new AuthenticationGoogle();
         }
 
         /// <summary>
@@ -34,9 +34,9 @@ namespace Smart_Mirror_App_WPF_Unit_Tests
         [TestMethod]
         public async Task GoogleAuthentication()
         {
-            AuthenticationGoogle googleAuthenticatorService = new AuthenticationGoogle();
+            var googleAuthenticatorService = new AuthenticationGoogle();
             await googleAuthenticatorService.LoginGoogle(testUsername);
-            GoogleUserModel user =  googleAuthenticatorService.GetCurrentUser();
+            var user =  googleAuthenticatorService.GetCurrentUser();
             testUser = user;
             Assert.IsNotNull(user);
         }
@@ -44,8 +44,7 @@ namespace Smart_Mirror_App_WPF_Unit_Tests
         [TestMethod]
         public void GetSpecificUser()
         {
-            AuthenticationGoogle googleAuthenticatorService = new AuthenticationGoogle();
-            GoogleUserModel user = googleAuthenticatorService.GetSpecificUser(testUsername);
+            var user = AuthenticationGoogle.GetSpecificUser(testUsername);
             if (user == null)
             {
                 Assert.IsNull(user);
@@ -60,11 +59,11 @@ namespace Smart_Mirror_App_WPF_Unit_Tests
         public async Task InsertedUserToDb()
         {
             string wantedUserInDb = testUsername;
-            AuthenticationGoogle googleAuthenticatorService = new AuthenticationGoogle();
-            UsersTable userTable = new UsersTable();
+            var googleAuthenticatorService = new AuthenticationGoogle();
+            var userTable = new UsersTable();
 
             await googleAuthenticatorService.LoginGoogle(wantedUserInDb);
-            GoogleUserModel user = userTable.GetRow(wantedUserInDb);
+            var user = userTable.GetRow(wantedUserInDb);
             
             Assert.AreEqual(user.name, wantedUserInDb);
         }
@@ -72,20 +71,20 @@ namespace Smart_Mirror_App_WPF_Unit_Tests
         [TestMethod]
         public void GetAllUsersFromDb()
         {
-            AuthenticationGoogle googleAuthenticatorService = new AuthenticationGoogle();
-            UsersTable userTable = new UsersTable();
-            ArrayList allUsers = userTable.GetAllUsers();
+            var googleAuthenticatorService = new AuthenticationGoogle();
+            var userTable = new UsersTable();
+            var allUsers = userTable.GetAllUsers();
         }
 
         [TestMethod]
         public async Task UpdateSpecificUser()
         {
-            AuthenticationGoogle googleAuthenticatorService = new AuthenticationGoogle();
-            UsersTable userTable = new UsersTable();
+            var googleAuthenticatorService = new AuthenticationGoogle();
+            var userTable = new UsersTable();
             await googleAuthenticatorService.LoginGoogle(testUsername);
-            GoogleUserModel user = googleAuthenticatorService.GetCurrentUser();
+            var user = googleAuthenticatorService.GetCurrentUser();
             userTable.InsertRow(user);
-            GoogleUserModel updatedUser = googleAuthenticatorService.GetSpecificUser(testUsername);
+            var updatedUser = AuthenticationGoogle.GetSpecificUser(testUsername);
 
             Assert.AreNotEqual(user.expireDate, updatedUser.expireDate);
         }
@@ -93,7 +92,7 @@ namespace Smart_Mirror_App_WPF_Unit_Tests
         //[TestMethod]
         public void DeleteSpecificUserFromDb()
         {
-            UsersTable userTable = new UsersTable();
+            var userTable = new UsersTable();
             userTable.DeleteRow(testUsername);
             this.GetSpecificUser();
         }
@@ -101,14 +100,14 @@ namespace Smart_Mirror_App_WPF_Unit_Tests
         //TODO: Check if DB is cleared
         public void ClearUserDb()
         {
-            UsersTable userTable = new UsersTable();
+            var userTable = new UsersTable();
             userTable.ClearUserDatabase(true);
         }
 
         //[TestMethod]
         public async Task DeleteUserFromApplication()
         {
-            AuthenticationGoogle googleAuthenticatorService = new AuthenticationGoogle();
+            var googleAuthenticatorService = new AuthenticationGoogle();
             await googleAuthenticatorService.LogoutGoogle(testUsername);
         }
     }

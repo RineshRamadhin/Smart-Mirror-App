@@ -42,7 +42,7 @@ namespace Smart_Mirror_App_WPF.Data.API
             return googleGmailService.GetData();
         }
 
-        public async Task<OpenWeatherModel> GetCurrentWeather(string userLocation)
+        public static async Task<OpenWeatherModel> GetCurrentWeather(string userLocation)
         {
             var openWeatherService = new OpenWeatherService();
             await openWeatherService.HttpRequestData(userLocation);
