@@ -13,11 +13,6 @@ namespace Smart_Mirror_App_WPF.Input.Motion.LeapMotion
             _data = data;
         }
 
-        public override void OnInit(Leap.Controller controller)
-        {
-            Debug.WriteLine("Initialized");
-        }
-
         public override void OnConnect(Leap.Controller controller)
         {
             // SOURCE: LeapMotion Sample Example
@@ -25,16 +20,6 @@ namespace Smart_Mirror_App_WPF.Input.Motion.LeapMotion
             controller.EnableGesture(Gesture.GestureType.TYPE_KEY_TAP);
             controller.EnableGesture(Gesture.GestureType.TYPE_SCREEN_TAP);
             controller.EnableGesture(Gesture.GestureType.TYPE_SWIPE);
-        }
-
-        public override void OnDisconnect(Leap.Controller controller)
-        {
-            Debug.WriteLine("Disconnected");
-        }
-
-        public override void OnExit(Leap.Controller controller)
-        {
-            Debug.WriteLine("Exited");
         }
 
         public override void OnFrame(Leap.Controller controller)

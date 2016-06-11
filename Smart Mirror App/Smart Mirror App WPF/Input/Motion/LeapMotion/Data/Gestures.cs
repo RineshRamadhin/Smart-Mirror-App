@@ -62,31 +62,31 @@ namespace Smart_Mirror_App_WPF.Input.Motion.LeapMotion.Data
             }
 
 
-            //Debug.WriteLine("  Tap id: " + keytap.Id
-            //                + ", " + keytap.State
-            //                + ", position: " + keytap.Position
-            //                + ", direction: " + keytap.Direction);
+            Debug.WriteLine("  Tap id: " + keytap.Id
+                            + ", " + keytap.State
+                            + ", position: " + keytap.Position
+                            + ", direction: " + keytap.Direction);
         }
 
         private void OnScreenTap(Gesture gesture)
         {
             ScreenTapGesture screentap = new ScreenTapGesture(gesture);
 
-            //Debug.WriteLine("  Tap id: " + screentap.Id
-            //                + ", " + screentap.State
-            //                + ", position: " + screentap.Position
-            //                + ", direction: " + screentap.Direction);
+            Debug.WriteLine("  Tap id: " + screentap.Id
+                            + ", " + screentap.State
+                            + ", position: " + screentap.Position
+                            + ", direction: " + screentap.Direction);
         }
 
         private void OnSwipe(Gesture gesture)
         {
             SwipeGesture swipe = new SwipeGesture(gesture);
 
-            //Debug.WriteLine("  Swipe id: " + swipe.Id
-            //                + ", " + swipe.State
-            //                + ", position: " + swipe.Position
-            //                + ", direction: " + swipe.Direction
-            //                + ", speed: " + swipe.Speed);
+            Debug.WriteLine("  Swipe id: " + swipe.Id
+                            + ", " + swipe.State
+                            + ", position: " + swipe.Position
+                            + ", direction: " + swipe.Direction
+                            + ", speed: " + swipe.Speed);
         }
 
         private void OnCircle(Gesture gesture)
@@ -95,21 +95,20 @@ namespace Smart_Mirror_App_WPF.Input.Motion.LeapMotion.Data
 
             if (!_activeGesture)
             {
-                Debug.WriteLine("circle");
                 _activeGesture = true;
             }
-        
 
-            //var clockwiseness = circle.Pointable.Direction.AngleTo(circle.Normal) <= Math.PI / 2 ? "clockwise" : "counterclockwise";
 
-            //float sweptAngle = 0;
+            var clockwiseness = circle.Pointable.Direction.AngleTo(circle.Normal) <= Math.PI / 2 ? "clockwise" : "counterclockwise";
 
-            //Debug.WriteLine("  Circle id: " + circle.Id
-            //                + ", " + circle.State
-            //                + ", progress: " + circle.Progress
-            //                + ", radius: " + circle.Radius
-            //                + ", angle: " + sweptAngle
-            //                + ", " + clockwiseness);
+            float sweptAngle = 0;
+
+            Debug.WriteLine("  Circle id: " + circle.Id
+                            + ", " + circle.State
+                            + ", progress: " + circle.Progress
+                            + ", radius: " + circle.Radius
+                            + ", angle: " + sweptAngle
+                            + ", " + clockwiseness);
         }
 
     }
