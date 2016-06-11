@@ -6,7 +6,5 @@
         xmlns:local="clr-namespace:Smart_Mirror_App_WPF"
         mc:Ignorable="d"
         Title="SettingsWindow" Height="300" Width="300" ResizeMode="NoResize" WindowStyle="None">
-    <Grid>
-        
-    </Grid>
+    <Grid/>
 </Window>

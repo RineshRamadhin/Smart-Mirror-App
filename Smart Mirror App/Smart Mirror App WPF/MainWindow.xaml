@@ -32,7 +32,7 @@
         </Grid.RowDefinitions>
         <TextBlock Grid.Column="0" Name="time" FontSize="30" Foreground="white" Margin="20,5,0,0"/>
         <TextBlock Grid.Column="1"  Name="date" FontSize="30"   Foreground="white" Margin="20,5,0,0" />
-        <Button Grid.Column="3" Background="Transparent" BorderThickness="0" BorderBrush="Transparent" Focusable="False" Click="Button_Click" >
+        <Button Grid.Column="3" Name="GoogleUserImage" Background="Transparent" BorderThickness="0" BorderBrush="Transparent" Focusable="False" Click="Button_Click" >
             <StackPanel Orientation="Horizontal">
                 <Image Source="https://lh3.googleusercontent.com/-BrQTD5mOV98/AAAAAAAAAAI/AAAAAAAAAAA/-HCZEj5TVAI/photo.jpg"></Image>
             </StackPanel>

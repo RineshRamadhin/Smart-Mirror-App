@@ -15,6 +15,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
+using System.Windows.Forms;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Smart_Mirror_App_WPF
 {
@@ -29,9 +31,10 @@ namespace Smart_Mirror_App_WPF
             InitializeComponent();
             startclock();
            
-        }
 
-        private void startclock()
+        }
+               
+            private void startclock()
         {
             DispatcherTimer timer = new DispatcherTimer();
             timer.Interval = TimeSpan.FromSeconds(1);
@@ -41,17 +44,31 @@ namespace Smart_Mirror_App_WPF
 
         private void tickevent(object sender, EventArgs e)
         {
+   
             //  throw new NotImplementedException();
             time.Text = DateTime.Now.ToString("H:mm");
             date.Text = DateTime.Today.ToString("M", CultureInfo.CreateSpecificCulture("nl-BE"));
         }
 
+
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            new SettingsWindow().Show();
-
+           
+            SettingsWindow settingsWindow = System.Windows.Application.Current.Windows
+                                          .OfType<SettingsWindow>()
+                                          .FirstOrDefault();
+                           
+            if (settingsWindow == null)
+            {
+                settingsWindow = new SettingsWindow();
+                settingsWindow.Owner = System.Windows.Application.Current.MainWindow;
+                settingsWindow.Top = this.Top + 50;
+                settingsWindow.Left = this.Left + 40;
+            }
+            settingsWindow.Show();
         }
 
+      
         private void button_Click_1(object sender, RoutedEventArgs e)
         {
 
