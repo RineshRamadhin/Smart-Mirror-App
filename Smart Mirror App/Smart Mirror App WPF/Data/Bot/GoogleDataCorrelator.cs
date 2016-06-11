@@ -12,16 +12,20 @@ namespace Smart_Mirror_App_WPF.Data.Bot
 
         public GoogleDataCorrelator(List<GoogleCalendarModel> calenderEvents, List<GoogleGmailModel> mails, GoogleProfileModel profile)
         {
-            this._calenderEvents = calenderEvents;
-            this._mails = mails;
-            this._profile = profile;
+            _calenderEvents = calenderEvents;
+            _mails = mails;
+            _profile = profile;
         }
 
         public string CorrelateCalendarWithGmail()
         {
-            return this.PredictEventCreatorMailedUser(); 
+            return PredictEventCreatorMailedUser(); 
         }
 
+        /// <summary>
+        /// Calculates how much days the user has to wait till his/her birthday
+        /// </summary>
+        /// <returns>A sentence in a string </returns>
         public string GetUserBirthday()
         {
             var today = DateTime.Today;

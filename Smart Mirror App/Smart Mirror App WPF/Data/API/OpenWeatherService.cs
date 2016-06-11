@@ -29,7 +29,11 @@ namespace Smart_Mirror_App_WPF.Data.API
             return _weather;
         }
 
-
+        /// <summary>
+        /// Sends a request voor the current weather
+        /// </summary>
+        /// <param name="city">The city name of the current weather</param>
+        /// <returns></returns>
         public override async Task HttpRequestData(string city)
         {
             var httpClient = new HttpClient();

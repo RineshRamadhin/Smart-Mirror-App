@@ -48,17 +48,23 @@ namespace Smart_Mirror_App_WPF.Data.API
             try
             {
                 var messages = allMailRequest.Execute().Messages;
+                // messages does not contain all the details of the mail, so we need to get more details
                 if (messages == null || messages.Count <= 0) return;
-                var allMails = this.GetDetailsMail(messages, service);
-                this.SetData(allMails);
-                this.InsertToDb(_gmails);
+                SetData(GetDetailsMail(messages, service));
+                InsertToDb(_gmails);
             } catch (Exception error)
             {
                 // TODO; Catch 400 error meaning user has no gmail 
                 Debug.WriteLine(error);
             }
         }
- 
+
+        /// <summary>
+        /// Gets more details of all the mails
+        /// </summary>
+        /// <param name="emails">all the emails from the ListResponse</param>
+        /// <param name="service">the created GmailService</param>
+        /// <returns></returns>
         private List<GoogleGmailModel> GetDetailsMail(IEnumerable<Message> emails, GmailService service)
         {
             var allMails = new List<GoogleGmailModel>();
@@ -82,6 +88,12 @@ namespace Smart_Mirror_App_WPF.Data.API
             return email;
         }
 
+        /// <summary>
+        /// Filters only the neccessary data we need from the mail
+        /// </summary>
+        /// <param name="response">the mail detail response</param>
+        /// <param name="email">the mail we want to save/use</param>
+        /// <returns>the mail you want to save/use</returns>
         private static GoogleGmailModel FilterHeadersMail(Message response, GoogleGmailModel email)
         {
             foreach (var header in response.Payload.Headers)
@@ -100,6 +112,11 @@ namespace Smart_Mirror_App_WPF.Data.API
             return email;
         }
 
+        /// <summary>
+        /// Sets all Labels of the mail in one string
+        /// </summary>
+        /// <param name="labels">The list of labels</param>
+        /// <returns>One string with all labels seperated by a "-"</returns>
         private static string FilterLabels(IEnumerable<string> labels)
         {
             return labels.Aggregate("", (current, label) => current + (label + "-"));

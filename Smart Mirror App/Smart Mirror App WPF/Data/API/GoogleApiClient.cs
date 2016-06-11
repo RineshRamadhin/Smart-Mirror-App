@@ -21,6 +21,10 @@ namespace Smart_Mirror_App_WPF.Data.API
             this._credential = credential;
         }
 
+        /// <summary>
+        /// Get current user his/her profile
+        /// </summary>
+        /// <returns>UserProfile in a GoogleProfileModel</returns>
         public GoogleProfileModel GetCurrentUser()
         {
             var googlePlusService = new GooglePlusService(_credential);
@@ -28,6 +32,10 @@ namespace Smart_Mirror_App_WPF.Data.API
             return googlePlusService.GetUserProfile();
         }
 
+        /// <summary>
+        /// Get events from current user his/her google calendar
+        /// </summary>
+        /// <returns>A list of events in GoogleCalenderModel</returns>
         public List<GoogleCalendarModel> GetEventsUser()
         {
             var googleCalendarService = new GoogleCalendarService(_credential);
@@ -35,6 +43,10 @@ namespace Smart_Mirror_App_WPF.Data.API
             return googleCalendarService.GetData();
         }
 
+        /// <summary>
+        /// Get latest mails from current user his/her gmail
+        /// </summary>
+        /// <returns>A list of mails in GoogleGmailModel</returns>
         public List<GoogleGmailModel> GetGmailsUser()
         {
             var googleGmailService = new GoogleGmailService(_credential);
@@ -42,6 +54,11 @@ namespace Smart_Mirror_App_WPF.Data.API
             return googleGmailService.GetData();
         }
 
+        /// <summary>
+        /// Gets the current weather
+        /// </summary>
+        /// <param name="userLocation">The location of the user</param>
+        /// <returns>Weather details in a OpenWeatherModel</returns>
         public static async Task<OpenWeatherModel> GetCurrentWeather(string userLocation)
         {
             var openWeatherService = new OpenWeatherService();

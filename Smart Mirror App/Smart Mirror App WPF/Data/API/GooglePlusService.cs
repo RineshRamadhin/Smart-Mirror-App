@@ -21,6 +21,9 @@ namespace Smart_Mirror_App_WPF.Data.API
             _credential = credential;
         }
 
+        /// <summary>
+        /// Creates a service and starts requesting google+ data
+        /// </summary>
         public override void CreateService()
         {
             var service = new PlusService(new BaseClientService.Initializer
@@ -28,8 +31,12 @@ namespace Smart_Mirror_App_WPF.Data.API
                 HttpClientInitializer = _credential,
                 ApplicationName = _applicationName,
             });
+            RequestGooglePlusData(service);
+        }
 
-            var profiles = new List<GoogleProfileModel> {ResponseParser(service.People.Get("me").Execute())};
+        private void RequestGooglePlusData(PlusService service)
+        {
+            var profiles = new List<GoogleProfileModel> { ResponseParser(service.People.Get("me").Execute()) };
 
             SetData(profiles);
             InsertToDb(profiles);
@@ -65,6 +72,11 @@ namespace Smart_Mirror_App_WPF.Data.API
             return userProfile;
         }
 
+        /// <summary>
+        /// Finds to current location of the user if he/she has one
+        /// </summary>
+        /// <param name="response">the API response</param>
+        /// <returns>A string of the location of the user</returns>
         private static string FilterLocationResponse(Person response)
         {
             string location = "";

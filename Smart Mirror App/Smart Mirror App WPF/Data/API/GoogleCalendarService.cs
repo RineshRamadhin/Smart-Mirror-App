@@ -33,9 +33,8 @@ namespace Smart_Mirror_App_WPF.Data.API
             try
             {
                 var events = SetupServiceRequest(service).Execute();
-                var allEvents = events.Items.Select(ResponseParser).ToList();
-                SetData(allEvents);
-                InsertToDb(allEvents);
+                SetData(events.Items.Select(ResponseParser).ToList());
+                InsertToDb(_calendarEvents);
             } catch (Exception error)
             {
                 Debug.WriteLine(error);
@@ -83,6 +82,11 @@ namespace Smart_Mirror_App_WPF.Data.API
             return calenderItem;
         }
 
+        /// <summary>
+        /// Put all atttendees in one string
+        /// </summary>
+        /// <param name="response">The Event response from the request</param>
+        /// <returns>One string with all attendees of the event seperator by a "-"</returns>
         private static string FilterEventAttendeesMail(Event response)
         {
             return response.Attendees.Aggregate("", (current, attendee) => current + (attendee.Email + "-"));
