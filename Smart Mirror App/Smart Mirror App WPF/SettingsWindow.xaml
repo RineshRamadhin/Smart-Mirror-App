@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Smart_Mirror_App_WPF"
         mc:Ignorable="d"
-        Title="SettingsWindow" Height="300" Width="300" ResizeMode="NoResize" WindowStyle="None">
+        Title="SettingsWindow" Height="300" Width="300" ResizeMode="NoResize" WindowStyle="None"
+        WindowState="Maximized">
     <Grid/>
 </Window>
