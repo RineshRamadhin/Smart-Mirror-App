@@ -60,8 +60,8 @@ namespace Smart_Mirror_App_WPF.Authentication.Google
                         new[] { CalendarService.Scope.Calendar, GmailService.Scope.GmailReadonly, GmailService.Scope.MailGoogleCom, PlusService.Scope.PlusMe },
                         smartMirrorUsername, CancellationToken.None, new FileDataStore(DataStoreLocation));
                 };
-                this.SetCurrentUser(this.ParseUserCredentials(credential, smartMirrorUsername, gesture));
-                this._currentUserCredential = credential;
+                SetCurrentUser(ParseUserCredentials(credential, smartMirrorUsername, gesture));
+                _currentUserCredential = credential;
             }
             catch (Exception error)
             {
@@ -92,8 +92,8 @@ namespace Smart_Mirror_App_WPF.Authentication.Google
                 new KeyValuePair<string, string>("client_secret",AuthenticationConstants.GoogleClientSecret),
                 new KeyValuePair<string, string>("grant_type","refresh_token"),
             }));
-                GoogleRefreshTokenModel refreshTokens = JsonConvert.DeserializeObject<GoogleRefreshTokenModel>(await auth.Content.ReadAsStringAsync());
-                this.SetCurrentUser(this.ParseRefreshTokens(refreshTokens, user));
+                var refreshTokens = JsonConvert.DeserializeObject<GoogleRefreshTokenModel>(await auth.Content.ReadAsStringAsync());
+                SetCurrentUser(ParseRefreshTokens(refreshTokens, user));
             }
             catch (Exception error)
             {
@@ -123,13 +123,9 @@ namespace Smart_Mirror_App_WPF.Authentication.Google
             var dataStore = new FileDataStore(DataStoreLocation);
             var otherUser = await dataStore.GetAsync<TokenResponse>(smartMirrorUsername);
             if (otherUser != null)
-            {
                 await LoginGoogle(smartMirrorUsername);
-            }
             else
-            {
                 Debug.WriteLine(smartMirrorUsername + " does not exist in this application yet");
-            }
         }
 
         /// <summary>
@@ -150,15 +146,17 @@ namespace Smart_Mirror_App_WPF.Authentication.Google
             return _currentUserCredential;
         }
 
-        private GoogleUserModel ParseUserCredentials(UserCredential credential, string smartMirrorUsername, string gesture)
+        private static GoogleUserModel ParseUserCredentials(UserCredential credential, string smartMirrorUsername, string gesture)
         {
-            GoogleUserModel user = new GoogleUserModel();
+            var user = new GoogleUserModel
+            {
+                accessToken = credential.Token.AccessToken,
+                refreshToken = credential.Token.RefreshToken,
+                name = smartMirrorUsername,
+                uniqueGestureLeapMotion = gesture
+            };
 
-            user.accessToken = credential.Token.AccessToken;
-            user.refreshToken = credential.Token.RefreshToken;
-            user.name = smartMirrorUsername;
-            user.uniqueGestureLeapMotion = gesture;
-
+            if (credential.Token.ExpiresInSeconds == null) return user;
             double expireInSeconds = (double)credential.Token.ExpiresInSeconds;
             user.expireDate = ConvertExpireData(expireInSeconds);
 
@@ -166,7 +164,7 @@ namespace Smart_Mirror_App_WPF.Authentication.Google
         }
 
 
-        private GoogleUserModel ParseRefreshTokens(GoogleRefreshTokenModel refreshTokens, GoogleUserModel user)
+        private static GoogleUserModel ParseRefreshTokens(GoogleRefreshTokenModel refreshTokens, GoogleUserModel user)
         {
             user.accessToken = refreshTokens.access_token;
             double expireInSeconds = (double) refreshTokens.expires_in;
@@ -177,13 +175,13 @@ namespace Smart_Mirror_App_WPF.Authentication.Google
 
         private void SetCurrentUser(GoogleUserModel user)
         {
-            this._currentUser = user;
-            InsertUserInDb(this._currentUser);
+            _currentUser = user;
+            InsertUserInDb(_currentUser);
         }
 
         private bool CheckUserExist(string smartMirrorUsername)
         {
-            return !(this.GetSpecificUser(smartMirrorUsername) == null);
+            return !(GetSpecificUser(smartMirrorUsername) == null);
         }
 
         private static void InsertUserInDb(GoogleUserModel user)

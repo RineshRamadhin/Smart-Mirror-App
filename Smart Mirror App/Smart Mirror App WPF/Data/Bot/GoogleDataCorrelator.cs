@@ -30,7 +30,7 @@ namespace Smart_Mirror_App_WPF.Data.Bot
             if (parsedBirthday > today.AddYears(-age))
                 age--;
 
-            return (parsedBirthday.AddYears(age + 1) - today).TotalDays + " days till your birthday! :D" ;
+            return (parsedBirthday.AddYears(age + 1) - today).TotalDays + " days till your birthday! :D";
         }
 
         private string PredictEventCreatorMailedUser()
