@@ -18,7 +18,7 @@ namespace Smart_Mirror_App_WPF.Data.API
         
         public GooglePlusService(UserCredential credential)
         {
-            this._credential = credential;
+            _credential = credential;
         }
 
         public override void CreateService()
@@ -29,10 +29,10 @@ namespace Smart_Mirror_App_WPF.Data.API
                 ApplicationName = _applicationName,
             });
 
-            var profiles = new List<GoogleProfileModel> {this.ResponseParser(service.People.Get("me").Execute())};
+            var profiles = new List<GoogleProfileModel> {ResponseParser(service.People.Get("me").Execute())};
 
-            this.SetData(profiles);
-            this.InsertToDb(profiles);
+            SetData(profiles);
+            InsertToDb(profiles);
         }
 
         public override List<GoogleProfileModel> GetData()

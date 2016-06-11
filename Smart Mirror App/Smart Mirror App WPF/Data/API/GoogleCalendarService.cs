@@ -19,7 +19,7 @@ namespace Smart_Mirror_App_WPF.Data.API
 
         public GoogleCalendarService(UserCredential credential)
         {
-            this._credential = credential;
+            _credential = credential;
         }
 
         public override void CreateService()
@@ -33,9 +33,9 @@ namespace Smart_Mirror_App_WPF.Data.API
             try
             {
                 var events = SetupServiceRequest(service).Execute();
-                var allEvents = events.Items.Select(this.ResponseParser).ToList();
-                this.SetData(allEvents);
-                this.InsertToDb(allEvents);
+                var allEvents = events.Items.Select(ResponseParser).ToList();
+                SetData(allEvents);
+                InsertToDb(allEvents);
             } catch (Exception error)
             {
                 Debug.WriteLine(error);
