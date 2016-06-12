@@ -17,7 +17,7 @@ namespace Smart_Mirror_App_WPF.Data.API
         /// The http response parser
         /// </summary>
         /// <param name="response"></param>
-        protected abstract void ResponseParser(HttpResponseMessage response);
+        protected abstract Task ResponseParser(HttpResponseMessage response);
         public abstract T GetData();
         protected abstract void SetData(T dataModel);
         protected abstract void InsertToDb(T data);

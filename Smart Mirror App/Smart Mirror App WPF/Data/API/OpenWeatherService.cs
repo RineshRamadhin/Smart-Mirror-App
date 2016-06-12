@@ -7,7 +7,7 @@ using Smart_Mirror_App_WPF.Data.Models;
 
 namespace Smart_Mirror_App_WPF.Data.API
 {
-    internal class OpenWeatherConstants
+    internal static class OpenWeatherConstants
     {
         public const string Token = "ca6815d653dbe8e9abec6a4f0ca09032";
         public const string Metric = "&units=metric";
@@ -55,8 +55,9 @@ namespace Smart_Mirror_App_WPF.Data.API
             throw new NotImplementedException();
         }
 
-        protected override async void ResponseParser(HttpResponseMessage response)
+        protected override async Task ResponseParser(HttpResponseMessage response)
         {
+            // TODO: Implement a better way of parsing Json
             var openWeatherModel = new OpenWeatherModel();
             var weatherResponse = JObject.Parse(await response.Content.ReadAsStringAsync());
             openWeatherModel.temp = FloatParser(weatherResponse["main"]["temp"].ToString());

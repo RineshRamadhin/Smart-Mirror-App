@@ -10,7 +10,7 @@ namespace Smart_Mirror_App_WPF_Unit_Tests
     [TestClass]
     public class BotUnitTests
     {
-        private string _testUsername = "user";
+        private readonly string _testUsername = "user";
 
         [TestMethod]
         public async Task GoogleDataMailEventCorrelatorTest()
@@ -49,7 +49,8 @@ namespace Smart_Mirror_App_WPF_Unit_Tests
         public void GetGmailCalendarBotClientTest()
         {
             var bot = SetupBot().Result;
-            Assert.IsNotNull(bot.GetAdviceBasedOnGoogleInformation());
+            var advice = bot.GetAdviceBasedOnGoogleInformation();
+            Assert.IsNotNull(advice);
         }
 
         [TestMethod]
