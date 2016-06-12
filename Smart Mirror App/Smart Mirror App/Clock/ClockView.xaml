@@ -22,10 +22,7 @@
             Text="{Binding Path=CurrentDate, FallbackValue=Date will be shown here}" FontSize="26.667"
             />
 
-            <TextBlock
-                HorizontalAlignment="Right"
-                Text="{Binding Path=}" Margin="0,-68,20,0" FontSize="26.667"
-                />
+           
 
             <TextBlock
                 HorizontalAlignment="Right"
