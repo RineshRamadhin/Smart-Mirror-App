@@ -1,20 +1,21 @@
-﻿<Window x:Class="Smart_Mirror_App_WPF.MainWindow"
+﻿<Window
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Smart_Mirror_App_WPF"
+        xmlns:API="clr-namespace:Smart_Mirror_App_WPF.Data.API" x:Class="Smart_Mirror_App_WPF.MainWindow"
         mc:Ignorable="d"
         Title="MainWindow" Height="600" Width="800" WindowState="Maximized"
         DataContext="{StaticResource clock}"
        >
-    
+
     <Grid Background="Black">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="1*"/>
-            <ColumnDefinition Name="iets" Width="1*" />
-            <ColumnDefinition Name="weather" Width="1*" />
-            <ColumnDefinition Width="1*" />
+            <ColumnDefinition x:Name ="Showstime" Width="1*"/>
+            <ColumnDefinition x:Name="Showsdate" Width="1*" />
+            <ColumnDefinition x:Name="Showsweather" Width="1*" />
+            <ColumnDefinition x:Name="Showsnews" Width="1*" />
         </Grid.ColumnDefinitions>
         <!--
         
@@ -30,42 +31,48 @@
             <RowDefinition Height="1*" />
             <RowDefinition Height="1*" />
         </Grid.RowDefinitions>
-        <TextBlock Grid.Column="0" Name="time" FontSize="30" Foreground="white" Margin="20,5,0,0"/>
-        <TextBlock Grid.Column="1"  Name="date" FontSize="30"   Foreground="white" Margin="20,5,0,0" />
-        <Button Grid.Column="3" Name="GoogleUserImage" Background="Transparent" BorderThickness="0" BorderBrush="Transparent" Focusable="False" Click="Button_Click" >
+        <TextBlock Grid.Column="0" x:Name="time" FontSize="30" Foreground="white" Margin="20,5,0,0"/>
+        <TextBlock Grid.Column="1"  x:Name="date" FontSize="30"   Foreground="white" Margin="20,5,0,0" />
+        <TextBlock Grid.Column="2" x:Name="location" FontSize="20" Text="Rotterdam" Foreground="white"  Margin="20,5,0,0" HorizontalAlignment="Center"/>
+        <TextBlock Grid.Column="2" x:Name="weather" FontSize="20" Text="{Binding }" Foreground="white"  Margin="20,40,0,0" HorizontalAlignment="Center">
+
+            <TextBlock.DataContext>
+                <API:OpenWeatherConstants/>
+            </TextBlock.DataContext>
+
+        </TextBlock>
+
+
+        <Button Grid.Column="3" x:Name="GoogleUserImage" Background="Transparent" BorderThickness="0" BorderBrush="Transparent" Focusable="False" Click="Button_Click" >
             <StackPanel Orientation="Horizontal">
-                <Image Source="https://lh3.googleusercontent.com/-BrQTD5mOV98/AAAAAAAAAAI/AAAAAAAAAAA/-HCZEj5TVAI/photo.jpg"></Image>
+                <Image Source="https://lh3.googleusercontent.com/-BrQTD5mOV98/AAAAAAAAAAI/AAAAAAAAAAA/-HCZEj5TVAI/photo.jpg"/>
             </StackPanel>
         </Button>
-        <TextBlock Grid.Column="3" Grid.Row="1" Text="Tjarda" FontSize="15" Foreground="white" HorizontalAlignment="Center" ></TextBlock>
+        <TextBlock Grid.Column="3" Grid.Row="1" Text="Tjarda" FontSize="15" Foreground="white" HorizontalAlignment="Center" />
         <Button  Grid.Column="0" Grid.Row="2" Width="100" Height="100" BorderBrush="Transparent" BorderThickness="0" Focusable="False" Background="Transparent" Click="button_Click_1" HorizontalAlignment="Center">
 
             <StackPanel>
-                <Image Source="http://static.squarespace.com/static/51a75b39e4b01abd057686b2/51a8b184e4b08372c32d766c/51a8b1a7e4b08372c32d79b2/1252452090000/hkweather.png?format=original">
-                </Image>
+                <Image Source="http://static.squarespace.com/static/51a75b39e4b01abd057686b2/51a8b184e4b08372c32d766c/51a8b1a7e4b08372c32d79b2/1252452090000/hkweather.png?format=original"/>
             </StackPanel>
         </Button>
         <Button  Grid.Column="1" Grid.Row="2" Width="90" Height="90" BorderBrush="Transparent" BorderThickness="0" Focusable="False" Background="Transparent" Click="button_Click_1" HorizontalAlignment="Center">
 
             <StackPanel>
-                <Image Source="http://theapplegoogle.com/wp-content/uploads/2014/09/email.jpg">
-                </Image>
+                <Image Source="http://theapplegoogle.com/wp-content/uploads/2014/09/email.jpg"/>
             </StackPanel>
         </Button>
 
         <Button  Grid.Column="2" Grid.Row="2" Width="90" Height="90" BorderBrush="Transparent" BorderThickness="0" Focusable="False" Background="Transparent" Click="button_Click_1" HorizontalAlignment="Center">
 
             <StackPanel>
-                <Image Source="http://www.dailydooh.com/wp-content/uploads/img/calendar-icon.png">
-                </Image>
+                <Image Source="http://www.dailydooh.com/wp-content/uploads/img/calendar-icon.png"/>
             </StackPanel>
         </Button>
 
         <Button  Grid.Column="3" Grid.Row="2" Width="90" Height="90" BorderBrush="Transparent" BorderThickness="0" Focusable="False" Background="Transparent" Click="button_Click_1" HorizontalAlignment="Center">
 
             <StackPanel>
-                <Image Source="http://www.speelgoedprijzenvergelijken.nl/wp-content/uploads/2014/11/logo_ADNL.png">
-                </Image>
+                <Image Source="http://www.speelgoedprijzenvergelijken.nl/wp-content/uploads/2014/11/logo_ADNL.png"/>
             </StackPanel>
         </Button>
 
@@ -73,6 +80,6 @@
 
 
     </Grid>
-   
+
 
 </Window>

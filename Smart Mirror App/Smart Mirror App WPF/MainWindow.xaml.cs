@@ -17,6 +17,8 @@ using System.Windows.Shapes;
 using System.Windows.Threading;
 using System.Windows.Forms;
 using static System.Net.Mime.MediaTypeNames;
+using Smart_Mirror_App_WPF.Data.API;
+using Google.Apis.Calendar.v3.Data;
 
 namespace Smart_Mirror_App_WPF
 {
@@ -30,22 +32,29 @@ namespace Smart_Mirror_App_WPF
         {
             InitializeComponent();
             startclock();
-           
+
 
         }
-               
-            private void startclock()
+
+        private void startclock()
         {
             DispatcherTimer timer = new DispatcherTimer();
             timer.Interval = TimeSpan.FromSeconds(1);
             timer.Tick += tickevent;
-            timer.Start(); 
+            timer.Start();
+        }
+
+        public async void showWeather()
+        {
+            var openWeatherService = new OpenWeatherService();
+            await openWeatherService.HttpRequestData("Rotterdam");
+            var currentWeather = openWeatherService.GetData();
+            var temperature = currentWeather.temp;
         }
 
         private void tickevent(object sender, EventArgs e)
         {
    
-            //  throw new NotImplementedException();
             time.Text = DateTime.Now.ToString("H:mm");
             date.Text = DateTime.Today.ToString("M", CultureInfo.CreateSpecificCulture("nl-BE"));
         }
