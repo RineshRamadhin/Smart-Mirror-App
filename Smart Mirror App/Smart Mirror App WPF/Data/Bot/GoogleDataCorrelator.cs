@@ -37,6 +37,18 @@ namespace Smart_Mirror_App_WPF.Data.Bot
             return (parsedBirthday.AddYears(age + 1) - today).TotalDays + " days till your birthday! :D";
         }
 
+        public string CheckEventsToday()
+        {
+            string sentence = "";
+            foreach (var calendarEvent in _calenderEvents)
+            {
+                if (calendarEvent.startDate.Date != DateTime.Today) continue;
+                sentence = "Your first event today is " + calendarEvent.summary + " around " + calendarEvent.startDate.TimeOfDay;
+                break;
+            }
+            return sentence != "" ? sentence : "No events today!";
+        }
+
         private string PredictEventCreatorMailedUser()
         {
             string possibleCorrelation = "";
@@ -47,7 +59,7 @@ namespace Smart_Mirror_App_WPF.Data.Bot
                     if (CheckMailFromEventCreator(mail.from, calenderEvent.creatorMail) 
                         && CheckMailDateAfterEventCreation(mail.date, calenderEvent.createDate) 
                         && CheckMailDateBeforeEventStart(mail.date, calenderEvent.startDate))
-                            possibleCorrelation = calenderEvent.creatorName + " send you an e-mail possibly about " + calenderEvent.summary + " event";
+                            possibleCorrelation = calenderEvent.creatorName + " send you an e-mail possibly about the " + calenderEvent.summary + " event";
                             break;
                 }
             }

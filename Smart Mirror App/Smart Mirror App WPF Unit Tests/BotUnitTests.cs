@@ -33,5 +33,49 @@ namespace Smart_Mirror_App_WPF_Unit_Tests
             var correlation = googleCorrelatorBot.GetUserBirthday();
             Assert.IsNotNull(correlation);
         }
+
+        [TestMethod]
+        public async Task StartBotClientTest()
+        {
+            var googleAuthenticator = new AuthenticationGoogle();
+            await googleAuthenticator.LoginGoogle(_testUsername);
+            var googleApiClient = new GoogleApiClient(googleAuthenticator.GetCurrentCredentials());
+            var bot = BotClient.GetBotClientInstance();
+            Assert.IsNotNull(bot.StartBotClient(googleApiClient.GetEventsUser(), googleApiClient.GetGmailsUser(),
+                googleApiClient.GetCurrentUser()));
+        }
+
+        [TestMethod]
+        public void GetGmailCalendarBotClientTest()
+        {
+            var bot = SetupBot().Result;
+            Assert.IsNotNull(bot.GetAdviceBasedOnGoogleInformation());
+        }
+
+        [TestMethod]
+        public void GetUserBirthFromBot()
+        {
+            var bot = SetupBot().Result;
+            Assert.IsNotNull(bot.GetUserBirthday());
+        }
+
+        [TestMethod]
+        public void CheckIfThereAreEventTodayBot()
+        {
+            var bot = SetupBot().Result;
+            var sentence = bot.CheckUserHasEventsToday();
+            Assert.IsNotNull(sentence);
+        }
+
+        private async Task<BotClient> SetupBot()
+        {
+            var googleAuthenticator = new AuthenticationGoogle();
+            await googleAuthenticator.LoginGoogle(_testUsername);
+            var googleApiClient = new GoogleApiClient(googleAuthenticator.GetCurrentCredentials());
+            var bot = BotClient.GetBotClientInstance();
+            bot.StartBotClient(googleApiClient.GetEventsUser(), googleApiClient.GetGmailsUser(),
+                googleApiClient.GetCurrentUser());
+            return bot;
+        }
     }
 }
