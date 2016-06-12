@@ -1,9 +1,9 @@
-﻿using Smart_Mirror_App_WPF.Data.Models;
-using System;
-using System.Threading.Tasks;
-using System.Net.Http;
+﻿using System;
 using System.Diagnostics;
+using System.Net.Http;
+using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
+using Smart_Mirror_App_WPF.Data.Models;
 
 namespace Smart_Mirror_App_WPF.Data.API
 {
@@ -20,7 +20,7 @@ namespace Smart_Mirror_App_WPF.Data.API
 
         public OpenWeatherService()
         {
-            this._openWeatherToken = OpenWeatherConstants.Token;
+            _openWeatherToken = OpenWeatherConstants.Token;
         }
 
 
@@ -37,7 +37,7 @@ namespace Smart_Mirror_App_WPF.Data.API
         public override async Task HttpRequestData(string city)
         {
             var httpClient = new HttpClient();
-            var tokenUrl = "&APPID=" + this._openWeatherToken;
+            var tokenUrl = "&APPID=" + _openWeatherToken;
             var weatherRequestUrl = "http://api.openweathermap.org/data/2.5/weather?q="+ city + tokenUrl + OpenWeatherConstants.Metric;
 
             try
@@ -70,7 +70,7 @@ namespace Smart_Mirror_App_WPF.Data.API
             openWeatherModel.tempMin = FloatParser(weatherResponse["main"]["temp_min"].ToString());
             openWeatherModel.tempMax = FloatParser(weatherResponse["main"]["temp_max"].ToString());
 
-            this.SetData(openWeatherModel);
+            SetData(openWeatherModel);
         }
 
         private static float FloatParser(string value)
@@ -80,7 +80,7 @@ namespace Smart_Mirror_App_WPF.Data.API
 
         protected override void SetData(OpenWeatherModel dataModel)
         {
-            this._weather = dataModel;
+            _weather = dataModel;
         }
     }
 }

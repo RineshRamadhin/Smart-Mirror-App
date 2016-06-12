@@ -1,6 +1,6 @@
-﻿using Smart_Mirror_App_WPF.Data.Models;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using Smart_Mirror_App_WPF.Data.Models;
 
 namespace Smart_Mirror_App_WPF.Data.Database
 {
@@ -8,7 +8,7 @@ namespace Smart_Mirror_App_WPF.Data.Database
     {
         public GoogleGmailTable()
         {
-            this.CreateTable();
+            CreateTable();
         }
 
         public override GoogleGmailModel GetRow(string primaryKey)
@@ -21,9 +21,9 @@ namespace Smart_Mirror_App_WPF.Data.Database
         public override void InsertRow(GoogleGmailModel model)
         {
             if (CheckRecordExist(model.id) && model.id != null)
-                this.UpdateRow(model);
+                UpdateRow(model);
             else
-                this.Database.Insert(model);
+                Database.Insert(model);
         }
 
         public List<GoogleGmailModel> GetRecords(int some, string primaryKey)
@@ -37,7 +37,7 @@ namespace Smart_Mirror_App_WPF.Data.Database
 
         protected override void UpdateRow(GoogleGmailModel model)
         {
-            if (this.GetRow(model.id) == null) return;
+            if (GetRow(model.id) == null) return;
             Database.BeginTransaction();
             Database.Update(model);
             Database.Commit();
@@ -45,7 +45,7 @@ namespace Smart_Mirror_App_WPF.Data.Database
 
         private bool CheckRecordExist(string primaryKey)
         {
-            return !(this.GetRow(primaryKey) == null);
+            return GetRow(primaryKey) != null;
         }
     }
 }

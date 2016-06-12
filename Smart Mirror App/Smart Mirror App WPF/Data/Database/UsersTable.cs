@@ -1,5 +1,5 @@
-﻿using Smart_Mirror_App_WPF.Data.Models;
-using System.Collections;
+﻿using System.Collections;
+using Smart_Mirror_App_WPF.Data.Models;
 
 namespace Smart_Mirror_App_WPF.Data.Database
 {
@@ -8,20 +8,20 @@ namespace Smart_Mirror_App_WPF.Data.Database
 
         public UsersTable()
         {
-            this.CreateTable();
+            CreateTable();
         }
 
         public override void InsertRow(GoogleUserModel user)
         {
-            if (this.GetRow(user.name) == null)
+            if (GetRow(user.name) == null)
                 Database.Insert(user);
             else
-                this.UpdateRow(user);
+                UpdateRow(user);
         }
 
         protected override void UpdateRow(GoogleUserModel newUserCredentials)
         {
-            if (this.GetRow(newUserCredentials.name) == null) return;
+            if (GetRow(newUserCredentials.name) == null) return;
             Database.BeginTransaction();
             Database.Update(newUserCredentials);
             Database.Commit();

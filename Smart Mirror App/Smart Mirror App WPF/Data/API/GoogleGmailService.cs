@@ -15,7 +15,7 @@ namespace Smart_Mirror_App_WPF.Data.API
     {
         private List<GoogleGmailModel> _gmails = new List<GoogleGmailModel>();
         private readonly UserCredential _credential;
-        private readonly string _applicationName = "Smart Mirror Gmail Service";
+        private const string ApplicationName = "Smart Mirror Gmail Service";
 
         public GoogleGmailService(UserCredential credential)
         {
@@ -37,7 +37,7 @@ namespace Smart_Mirror_App_WPF.Data.API
             var service = new GmailService(new BaseClientService.Initializer
             {
                 HttpClientInitializer = _credential,
-                ApplicationName = _applicationName,
+                ApplicationName = ApplicationName,
             });
 
             var allMailRequest = service.Users.Messages.List("me");

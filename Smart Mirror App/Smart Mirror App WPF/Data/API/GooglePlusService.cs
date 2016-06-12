@@ -14,8 +14,8 @@ namespace Smart_Mirror_App_WPF.Data.API
         private List<GoogleProfileModel> _profiles = new List<GoogleProfileModel>();
         private GoogleProfileModel _currentUserProfile = new GoogleProfileModel();
         private readonly UserCredential _credential;
-        private readonly string _applicationName = "Smart Mirror Google Plus Service";
-        
+        private const string ApplicationName = "Smart Mirror Google Plus Service";
+
         public GooglePlusService(UserCredential credential)
         {
             _credential = credential;
@@ -29,7 +29,7 @@ namespace Smart_Mirror_App_WPF.Data.API
             var service = new PlusService(new BaseClientService.Initializer
             {
                 HttpClientInitializer = _credential,
-                ApplicationName = _applicationName,
+                ApplicationName = ApplicationName,
             });
             RequestGooglePlusData(service);
         }

@@ -1,6 +1,4 @@
-﻿using System;
-using Smart_Mirror_App_WPF.Data.Models;
-using SQLite;
+﻿using Smart_Mirror_App_WPF.Data.Models;
 
 namespace Smart_Mirror_App_WPF.Data.Database
 {
@@ -8,7 +6,7 @@ namespace Smart_Mirror_App_WPF.Data.Database
     {
         public GoogleProfileTable()
         {
-            this.CreateTable();
+            CreateTable();
         }
    
         /// <summary>
@@ -18,14 +16,14 @@ namespace Smart_Mirror_App_WPF.Data.Database
         public override void InsertRow(GoogleProfileModel profile)
         {
             if (CheckIfProfileExist(profile))
-                this.UpdateRow(profile);
+                UpdateRow(profile);
             else
                 Database.Insert(profile);
         }
 
         protected override void UpdateRow(GoogleProfileModel profile)
         {
-            if (this.GetRow(profile.smartMirrorUsername) == null) return;
+            if (GetRow(profile.smartMirrorUsername) == null) return;
             Database.BeginTransaction();
             Database.Update(profile);
             Database.Commit();
@@ -40,7 +38,7 @@ namespace Smart_Mirror_App_WPF.Data.Database
 
         private bool CheckIfProfileExist(GoogleProfileModel profile)
         {
-            return !(this.GetRow(profile.smartMirrorUsername) == null);
+            return GetRow(profile.smartMirrorUsername) != null;
         }
     }
 }

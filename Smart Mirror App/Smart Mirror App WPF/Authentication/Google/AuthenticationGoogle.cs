@@ -4,24 +4,15 @@ using System.Threading;
 
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Calendar.v3;
-using Google.Apis.Calendar.v3.Data;
 using Google.Apis.Plus.v1;
-using Google.Apis.Plus.v1.Data;
 using Google.Apis.Gmail.v1;
-using Google.Apis.Gmail.v1.Data;
-using Google.Apis.Services;
 using Google.Apis.Util.Store;
-using Google.Apis.Json;
-using Newtonsoft.Json;
 
 using System.Diagnostics;
 using Smart_Mirror_App_WPF.Data.Models;
 using System.Threading.Tasks;
 using Google.Apis.Auth.OAuth2.Responses;
 using Smart_Mirror_App_WPF.Data.Database;
-using System.Net.Http;
-using System.Collections.Generic;
-using Google.Apis.Auth.OAuth2.Flows;
 
 namespace Smart_Mirror_App_WPF.Authentication.Google
 {
