@@ -10,15 +10,10 @@ namespace Smart_Mirror_App_WPF.Data.Bot
 {
     public class BotClient
     {
-        private List<GoogleCalendarModel> _calenderEvents;
-        private List<GoogleGmailModel> _mails;
-        private GoogleProfileModel _profile;
-
         private static readonly object SyncLock = new object();
         private static BotClient _instance;
         private GoogleDataCorrelator _googleDataCorrelator;
 
-        // Constructor is 'protected'
         protected BotClient()
         {
         }
@@ -39,9 +34,6 @@ namespace Smart_Mirror_App_WPF.Data.Bot
 
         public string StartBotClient(List<GoogleCalendarModel> calenderEvents, List<GoogleGmailModel> mails, GoogleProfileModel profile)
         {
-            _calenderEvents = calenderEvents;
-            _mails = mails;
-            _profile = profile;
             _googleDataCorrelator = new GoogleDataCorrelator(calenderEvents, mails, profile);
             return EntrySentence();
         }
@@ -51,11 +43,11 @@ namespace Smart_Mirror_App_WPF.Data.Bot
             if (DateTime.Now.Hour < 12 && DateTime.Now.Hour > 0)
                 return "Good Morning!";
             else if (DateTime.Now.Hour > 12 && DateTime.Now.Hour < 18)
-                return "Good afternoon!";
+                return "Good Afternoon!";
             else if (DateTime.Now.Hour > 18 && DateTime.Now.Hour < 0)
-                return "Good evening!";
+                return "Good Evening!";
             else
-                return "You should be sleeping!";
+                return "You should be sleeping! :>";
         }
 
         public string GetAdviceBasedOnGoogleInformation()
