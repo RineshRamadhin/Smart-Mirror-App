@@ -14,36 +14,36 @@ namespace Smart_Mirror_App_WPF_Unit_Tests
     [TestClass]
     public class GoogleApiUnitTests
     {
-        private AuthenticationGoogle googleAuthenticator = new AuthenticationGoogle();
-        private GoogleProfileTable googleProfileDb = new GoogleProfileTable();
+        private readonly AuthenticationGoogle _googleAuthenticator = new AuthenticationGoogle();
+        private readonly GoogleProfileTable _googleProfileDb = new GoogleProfileTable();
 
-        private UserCredential user;
-        private GoogleProfileModel userProfile;
-        private GooglePlusService googlePlusService;
-        private string _testMailId = "test";
-        private string _testUsername = "user";
+        private UserCredential _user;
+        private GoogleProfileModel _userProfile;
+        private GooglePlusService _googlePlusService;
+        private readonly string _testMailId = "test";
+        private readonly string _testUsername = "user";
 
         [TestMethod]
         public async Task RequestGoogleUserProfile()
         {
-            await this.SetupTestEnvironment();
-            Assert.IsNotNull(userProfile.displayName);
+            await SetupTestEnvironment();
+            Assert.IsNotNull(_userProfile.displayName);
         }
 
         [TestMethod]
         public async Task InsertedGoogleUserProfileInDb()
         {
-             await this.SetupTestEnvironment();
-             Assert.IsNotNull(googleProfileDb.GetRow(userProfile.smartMirrorUsername));
+             await SetupTestEnvironment();
+             Assert.IsNotNull(_googleProfileDb.GetRow(_userProfile.smartMirrorUsername));
         }
 
         [TestMethod]
         public async Task RequestGoogleGmailData()
         {
-            await googleAuthenticator.LoginGoogle(_testUsername);
-            var gmailService = new GoogleGmailService(googleAuthenticator.GetCurrentCredentials());
+            await _googleAuthenticator.LoginGoogle(_testUsername);
+            var gmailService = new GoogleGmailService(_googleAuthenticator.GetCurrentCredentials());
             gmailService.CreateService();
-            var mails = gmailService.GetData();
+            Assert.IsNotNull(gmailService.GetData());
         }
 
         [TestMethod]
@@ -62,9 +62,11 @@ namespace Smart_Mirror_App_WPF_Unit_Tests
         public void UpdateGoogleMailRecord()
         {
             var gmailTable = new GoogleGmailTable();
-            var mail = new GoogleGmailModel();
-            mail.id = _testMailId;
-            mail.subject = "testSubject";
+            var mail = new GoogleGmailModel
+            {
+                id = _testMailId,
+                subject = "testSubject"
+            };
             gmailTable.InsertRow(mail);
             Assert.IsNotNull(gmailTable.GetRow(_testMailId));
         }
@@ -88,8 +90,8 @@ namespace Smart_Mirror_App_WPF_Unit_Tests
         [TestMethod]
         public async Task RequestGoogleCalendarData()
         {
-            await googleAuthenticator.LoginGoogle(_testUsername);
-            var calendarService = new GoogleCalendarService(googleAuthenticator.GetCurrentCredentials());
+            await _googleAuthenticator.LoginGoogle(_testUsername);
+            var calendarService = new GoogleCalendarService(_googleAuthenticator.GetCurrentCredentials());
             calendarService.CreateService();
         }
 
@@ -97,8 +99,7 @@ namespace Smart_Mirror_App_WPF_Unit_Tests
         public void InsertGoogleCalendarData()
         {
             var calendarTable = new GoogleCalendarTable();
-            var testEvent = new GoogleCalendarModel();
-            testEvent.id = _testMailId;
+            var testEvent = new GoogleCalendarModel {id = _testMailId};
             calendarTable.InsertRow(testEvent);
             Assert.IsNotNull(calendarTable.GetRow(_testMailId)); 
         }
@@ -107,9 +108,11 @@ namespace Smart_Mirror_App_WPF_Unit_Tests
         public void UpdateGoogleCalendarEvent()
         {
             var calendarTable = new GoogleCalendarTable();
-            var testEvent = new GoogleCalendarModel();
-            testEvent.id = _testMailId;
-            testEvent.summary = "Test Event WPF";
+            var testEvent = new GoogleCalendarModel
+            {
+                id = _testMailId,
+                summary = "Test Event WPF"
+            };
             calendarTable.InsertRow(testEvent);
             Assert.IsNotNull(calendarTable.GetRow(_testMailId).summary);
         }
@@ -133,8 +136,8 @@ namespace Smart_Mirror_App_WPF_Unit_Tests
         [TestMethod]
         public async Task RequestUserProfileService()
         {
-            await googleAuthenticator.LoginGoogle(_testUsername);
-            var googlePlusService = new GooglePlusService(googleAuthenticator.GetCurrentCredentials());
+            await _googleAuthenticator.LoginGoogle(_testUsername);
+            var googlePlusService = new GooglePlusService(_googleAuthenticator.GetCurrentCredentials());
             googlePlusService.CreateService();
             Assert.IsNotNull(googlePlusService.GetUserProfile());
         }
@@ -161,11 +164,11 @@ namespace Smart_Mirror_App_WPF_Unit_Tests
 
         private async Task SetupTestEnvironment()
         {
-            await googleAuthenticator.LoginGoogle(_testUsername);
-            this.user = googleAuthenticator.GetCurrentCredentials();
-            this.googlePlusService = new GooglePlusService(user);
-            googlePlusService.CreateService();
-            this.userProfile = googlePlusService.GetUserProfile();
+            await _googleAuthenticator.LoginGoogle(_testUsername);
+            _user = _googleAuthenticator.GetCurrentCredentials();
+            _googlePlusService = new GooglePlusService(_user);
+            _googlePlusService.CreateService();
+            _userProfile = _googlePlusService.GetUserProfile();
         }
     }
 }

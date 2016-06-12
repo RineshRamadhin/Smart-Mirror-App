@@ -36,10 +36,8 @@ namespace Smart_Mirror_App_WPF.Data.Database
 
         public ArrayList GetAllUsers()
         {
-            var query = Database.Table<GoogleUserModel>();
             var users = new ArrayList();
-
-            foreach (var user in query)
+            foreach (var user in Database.Table<GoogleUserModel>())
             {
                 users.Add(user);
             }

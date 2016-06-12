@@ -16,8 +16,8 @@ namespace Smart_Mirror_App_WPF_Unit_Tests
     [TestClass]
     public class GoogleAuthenticationTests
     {
-        string testUsername = "user";
-        GoogleUserModel testUser = new GoogleUserModel();
+        private readonly string _testUsername = "user";
+        private GoogleUserModel _testUser = new GoogleUserModel();
 
         [TestMethod]
         public void CanInstantiateAuthenticationGoogle()
@@ -35,14 +35,14 @@ namespace Smart_Mirror_App_WPF_Unit_Tests
         public async Task GoogleAuthentication()
         {
             var googleAuthenticatorService = new AuthenticationGoogle();
-            await googleAuthenticatorService.LoginGoogle(testUsername);
+            await googleAuthenticatorService.LoginGoogle(_testUsername);
             Assert.IsNotNull(googleAuthenticatorService.GetCurrentUser());
         }
 
         [TestMethod]
         public void GetSpecificUser()
         {
-            var user = AuthenticationGoogle.GetSpecificUser(testUsername);
+            var user = AuthenticationGoogle.GetSpecificUser(_testUsername);
             Assert.IsNotNull(user);
         }
 
@@ -56,10 +56,10 @@ namespace Smart_Mirror_App_WPF_Unit_Tests
             var googleAuthenticatorService = new AuthenticationGoogle();
             var userTable = new UsersTable();
 
-            await googleAuthenticatorService.LoginGoogle(testUsername);
-            var user = userTable.GetRow(testUsername);
+            await googleAuthenticatorService.LoginGoogle(_testUsername);
+            var user = userTable.GetRow(_testUsername);
             
-            Assert.AreEqual(user.name, testUsername);
+            Assert.AreEqual(user.name, _testUsername);
         }
 
         [TestMethod]
@@ -74,10 +74,10 @@ namespace Smart_Mirror_App_WPF_Unit_Tests
         {
             var googleAuthenticatorService = new AuthenticationGoogle();
             var userTable = new UsersTable();
-            await googleAuthenticatorService.LoginGoogle(testUsername);
+            await googleAuthenticatorService.LoginGoogle(_testUsername);
             var user = googleAuthenticatorService.GetCurrentUser();
             userTable.InsertRow(user);
-            var updatedUser = AuthenticationGoogle.GetSpecificUser(testUsername);
+            var updatedUser = AuthenticationGoogle.GetSpecificUser(_testUsername);
 
             Assert.AreNotEqual(user.expireDate, updatedUser.expireDate);
         }
@@ -86,7 +86,7 @@ namespace Smart_Mirror_App_WPF_Unit_Tests
         public void DeleteSpecificUserFromDb()
         {
             var userTable = new UsersTable();
-            userTable.DeleteRow(testUsername);
+            userTable.DeleteRow(_testUsername);
             GetSpecificUser();
         }
 
@@ -101,7 +101,7 @@ namespace Smart_Mirror_App_WPF_Unit_Tests
         public async Task DeleteUserFromApplication()
         {
             var googleAuthenticatorService = new AuthenticationGoogle();
-            await googleAuthenticatorService.LogoutGoogle(testUsername);
+            await googleAuthenticatorService.LogoutGoogle(_testUsername);
         }
     }
 }
