@@ -10,15 +10,20 @@ namespace Smart_Mirror_App_WPF.Input.Motion.LeapMotion
         public LeapMotionController Controller { get; set; }
         public LeapMotionData Data { get; set; }
 
+        /// <summary>
+        /// Initializes the LeapMotion object with the default controller, listener and data object
+        /// </summary>
         public LeapMotion()
         {
-            Debug.WriteLine("Initalizing leapmotion");
-
             Data = new LeapMotionData();
             Listener = new LeapMotionListener(Data);
             Controller = new LeapMotionController();
         }
 
+        /// <summary>
+        /// Connect the default listener to the controller using the controller's Connect method
+        /// </summary>
+        /// <returns>true when successful, otherwise false</returns>
         public bool Connect()
         {
             try
@@ -33,6 +38,10 @@ namespace Smart_Mirror_App_WPF.Input.Motion.LeapMotion
             return true;
         }
 
+        /// <summary>
+        /// Disconnect the default listener from the controller using the controller's Disconnect method
+        /// </summary>
+        /// <returns>true when successful, otherwise false</returns>
         public bool Disconnect()
         {
             try

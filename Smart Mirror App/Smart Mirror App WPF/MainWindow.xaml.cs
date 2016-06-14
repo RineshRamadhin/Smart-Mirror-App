@@ -19,6 +19,8 @@ using System.Windows.Forms;
 using static System.Net.Mime.MediaTypeNames;
 using Smart_Mirror_App_WPF.Data.API;
 using Google.Apis.Calendar.v3.Data;
+using Smart_Mirror_App_WPF.Input.Motion.LeapMotion;
+using Smart_Mirror_App_WPF.Input.Motion.LeapMotion.Data;
 
 namespace Smart_Mirror_App_WPF
 {
@@ -33,7 +35,14 @@ namespace Smart_Mirror_App_WPF
             InitializeComponent();
             startclock();
 
+            LeapMotion leapMotion = new LeapMotion();
+            leapMotion.Data.Gestures = new Gestures(null, null, null, OnCircle);
+            leapMotion.Connect();
+        }
 
+        private void OnCircle(Boolean clockwise)
+        {
+            // Main Application implementation when circle gesture
         }
 
         private void startclock()
@@ -78,6 +87,22 @@ namespace Smart_Mirror_App_WPF
         }
 
       
+        private void Rss_Button_Click(object sender, RoutedEventArgs e)
+        {
+            RssReaderWindow rssReaderWindow = System.Windows.Application.Current.Windows
+                                         .OfType<RssReaderWindow>()
+                                         .FirstOrDefault();
+
+            if (rssReaderWindow == null)
+            {
+                rssReaderWindow = new RssReaderWindow();
+                rssReaderWindow.Owner = System.Windows.Application.Current.MainWindow;
+                rssReaderWindow.Top = this.Top + this.ActualHeight - 325;
+                rssReaderWindow.Left = this.Left + 40;
+            }
+            rssReaderWindow.Show();
+        }
+
         private void button_Click_1(object sender, RoutedEventArgs e)
         {
 

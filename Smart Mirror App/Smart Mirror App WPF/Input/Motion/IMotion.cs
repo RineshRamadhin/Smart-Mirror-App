@@ -5,7 +5,7 @@ namespace Smart_Mirror_App_WPF.Input.Motion
 {
     interface IMotion
     {
-        bool Connect();
-        bool Disconnect();
+        //bool Connect();
+        //bool Disconnect();
     }
 }

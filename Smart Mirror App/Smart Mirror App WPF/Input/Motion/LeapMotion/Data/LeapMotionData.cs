@@ -12,14 +12,22 @@ namespace Smart_Mirror_App_WPF.Input.Motion.LeapMotion.Data
         public Tools Tools { get; set; }
         public Gestures Gestures { get; set; }
 
+        /// <summary>
+        /// initialized default sub objects
+        /// </summary>
         public LeapMotionData()
         {
             this.Hands = new Hands();
             this.Fingers = new Fingers();
             this.Tools = new Tools();
-            this.Gestures = new Gestures();
+            this.Gestures = new Gestures(null, null, null, null);
         }
-        
+
+        /// <summary>
+        /// Extracts data from a frame and forward subsets to the correct class
+        /// </summary>
+        /// <param name="controller">LeapMotion controller data</param>
+        /// <returns>true when successful, otherwise false</returns>
         public bool UpdateData(Leap.Controller controller)
         {
             Frame frame = controller.Frame();
@@ -48,9 +56,7 @@ namespace Smart_Mirror_App_WPF.Input.Motion.LeapMotion.Data
                 return true;
             }
             catch (Exception e)
-            {
-                
-                Debug.WriteLine("LeapMotionData.UpdateData: " + e);
+            {            
                 return false;
             }
         }
