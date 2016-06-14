@@ -56,12 +56,14 @@ namespace Smart_Mirror_App_WPF.Data.Bot
             {
                 foreach (var calenderEvent in _calenderEvents)
                 {
-                    if (CheckMailFromEventCreator(mail.from, calenderEvent.creatorMail) 
-                        && CheckMailDateAfterEventCreation(mail.date, calenderEvent.createDate) 
+                    if (CheckMailFromEventCreator(mail.from, calenderEvent.creatorMail) && CheckMailDateAfterEventCreation(mail.date, calenderEvent.createDate) 
                         && CheckMailDateBeforeEventStart(mail.date, calenderEvent.startDate))
-                            possibleCorrelation = calenderEvent.creatorName + " send you an e-mail possibly about the " + calenderEvent.summary + " event";
-                            break;
+                    {
+                        possibleCorrelation = calenderEvent.creatorName + " send you an e-mail possibly about the " + calenderEvent.summary + " event";
+                        break;
+                    }       
                 }
+                if (possibleCorrelation != "") break;
             }
             return possibleCorrelation;
         }
