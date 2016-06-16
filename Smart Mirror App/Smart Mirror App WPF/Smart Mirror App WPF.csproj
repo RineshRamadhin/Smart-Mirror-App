@@ -44,6 +44,9 @@
     <PlatformTarget>x86</PlatformTarget>
     <OutputPath>bin\x86\Release\</OutputPath>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>Smart_Mirror_App_WPF.App</StartupObject>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="BouncyCastle.Crypto, Version=1.8.1.0, Culture=neutral, PublicKeyToken=0e99375e54769942">
       <HintPath>..\packages\BouncyCastle.1.8.1\lib\BouncyCastle.Crypto.dll</HintPath>
@@ -213,10 +216,14 @@
     <Compile Include="Input\Motion\LeapMotion\LeapMotion.cs" />
     <Compile Include="Input\Motion\LeapMotion\LeapMotionController.cs" />
     <Compile Include="Input\Motion\LeapMotion\LeapMotionListener.cs" />
+    <Compile Include="Loaders\XmlLoader.cs" />
     <Compile Include="Model\BaseModel.cs" />
     <Compile Include="Model\ClockModel.cs" />
     <Compile Include="Model\PropertyChangedBaseModel.cs" />
     <Compile Include="Model\WeatherModel.cs" />
+    <Compile Include="RSSReaderWindow.xaml.cs">
+      <DependentUpon>RSSReaderWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>
@@ -247,6 +254,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="RSSReaderWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="SettingsWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -307,8 +318,8 @@
     <Error Condition="!Exists('..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets'))" />
   </Target>
   <PropertyGroup>
-    <PostBuildEvent>xcopy /yr "H:\downloads\Leap_Motion_SDK_Windows_2.3.1\LeapDeveloperKit_2.3.1+31549_win\LeapSDK\lib\x86\Leap.dll" "$(TargetDir)"
-xcopy /yr "H:\downloads\Leap_Motion_SDK_Windows_2.3.1\LeapDeveloperKit_2.3.1+31549_win\LeapSDK\lib\x86\LeapCSharp.dll" "$(TargetDir)"
+    <PostBuildEvent>xcopy /yr "D:\downloads\Leap_Motion_SDK_Windows_2.3.1\LeapDeveloperKit_2.3.1+31549_win\LeapSDK\lib\x86\Leap.dll" "$(TargetDir)"
+xcopy /yr "D:\downloads\Leap_Motion_SDK_Windows_2.3.1\LeapDeveloperKit_2.3.1+31549_win\LeapSDK\lib\x86\LeapCSharp.dll" "$(TargetDir)"
 </PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -16,9 +16,12 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 using System.Windows.Forms;
+using Google.Apis.Auth.OAuth2;
 using static System.Net.Mime.MediaTypeNames;
 using Smart_Mirror_App_WPF.Data.API;
 using Google.Apis.Calendar.v3.Data;
+using Smart_Mirror_App_WPF.Authentication.Google;
+using Smart_Mirror_App_WPF.Data.Models;
 using Smart_Mirror_App_WPF.Input.Motion.LeapMotion;
 using Smart_Mirror_App_WPF.Input.Motion.LeapMotion.Data;
 
@@ -29,20 +32,48 @@ namespace Smart_Mirror_App_WPF
     /// </summary>
     public partial class MainWindow : Window
     {
+        private UserCredential _curentUserCredential;
+        private GoogleApiClient _googleApiClient;
 
         public MainWindow()
         {
             InitializeComponent();
             startclock();
-
-            LeapMotion leapMotion = new LeapMotion();
+            var leapMotion = new LeapMotion();
             leapMotion.Data.Gestures = new Gestures(null, null, null, OnCircle);
             leapMotion.Connect();
         }
 
-        private void OnCircle(Boolean clockwise)
+        private async void OnCircle(bool clockwise)
         {
-            // Main Application implementation when circle gesture
+            if (clockwise)
+                _curentUserCredential = await GoogleSignin("Tjarda");
+            else
+                _curentUserCredential = await GoogleSignin("Rinesh");
+        }
+
+        private async Task<UserCredential> GoogleSignin(string username)
+        {
+            var googleAuthenticator = new AuthenticationGoogle();
+            await googleAuthenticator.LoginGoogle(username);
+            var currentUserCredentials = googleAuthenticator.GetCurrentCredentials();
+            _googleApiClient = new GoogleApiClient(currentUserCredentials);
+            return currentUserCredentials;
+        }
+
+        private List<GoogleGmailModel> GetGmailGoogleData()
+        {
+            return _googleApiClient.GetGmailsUser();
+        }
+
+        private List<GoogleCalendarModel> GetGoogleCalendarData()
+        {
+            return _googleApiClient.GetEventsUser();
+        }
+
+        private GoogleProfileModel GetGoogleProfileData()
+        {
+            return _googleApiClient.GetCurrentUser();
         }
 
         private void startclock()

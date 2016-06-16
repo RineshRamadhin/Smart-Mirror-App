@@ -1,15 +1,7 @@
 ﻿using Smart_Mirror_App_WPF.View;
 using Smart_Mirror_App_WPF.Controller;
 using Smart_Mirror_App_WPF.Model;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Navigation;
-using Smart_Mirror_App_WPF.ViewModel;
 
 namespace Smart_Mirror_App_WPF
 {

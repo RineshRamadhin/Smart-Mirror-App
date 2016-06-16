@@ -36,10 +36,6 @@
         <TextBlock Grid.Column="2" x:Name="location" FontSize="20" Text="Rotterdam" Foreground="white"  Margin="20,5,0,0" HorizontalAlignment="Center"/>
         <TextBlock Grid.Column="2" x:Name="weather" FontSize="20" Text="{Binding }" Foreground="white"  Margin="20,40,0,0" HorizontalAlignment="Center">
 
-            <TextBlock.DataContext>
-                <API:OpenWeatherConstants/>
-            </TextBlock.DataContext>
-
         </TextBlock>
 
 

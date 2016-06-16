@@ -21,13 +21,13 @@ namespace Smart_Mirror_App_WPF
     /// </summary>
     public partial class RssReaderWindow : Window
     {
-        private String defaultUrl = "http://www.ad.nl/home/rss.xml";
+        private string _defaultUrl = "http://www.ad.nl/home/rss.xml";
         private XmlLoader _xmlLoader = new XmlLoader();
 
         public RssReaderWindow()
         {
             InitializeComponent();
-            UpdateUI(_xmlLoader.Load(defaultUrl));
+            UpdateUI(_xmlLoader.Load(_defaultUrl));
         }
 
         //public void GetRssFeed(String url)
