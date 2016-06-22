@@ -160,7 +160,7 @@ namespace Smart_Mirror_App_WPF_Unit_Tests
             Assert.IsNotNull(currentUser);
             Assert.IsNotNull(googleApiClient.GetEventsUser());
             Assert.IsNotNull(googleApiClient.GetGmailsUser());
-            Assert.IsNotNull(GoogleApiClient.GetCurrentWeather(currentUser.location));
+            Assert.IsNotNull(googleApiClient.GetCurrentWeather(currentUser.location));
         }
 
         private async Task SetupTestEnvironment()

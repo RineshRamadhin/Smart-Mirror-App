@@ -33,7 +33,13 @@ namespace Smart_Mirror_App_WPF.Data.API
             try
             {
                 var events = SetupServiceRequest(service).Execute();
-                SetData(events.Items.Select(ResponseParser).ToList());
+                var allEvents = new List<GoogleCalendarModel>();
+                foreach (var item in events.Items)
+                {
+                    allEvents.Add(ResponseParser(item));
+                }
+                _calendarEvents = allEvents;
+                SetData(_calendarEvents);
                 InsertToDb(_calendarEvents);
             } catch (Exception error)
             {
@@ -65,19 +71,17 @@ namespace Smart_Mirror_App_WPF.Data.API
 
         protected override GoogleCalendarModel ResponseParser(Event response)
         {
-            var calenderItem = new GoogleCalendarModel
-            {
-                userId = _credential.UserId,
-                id = response.Id,
-                attendees = FilterEventAttendeesMail(response),
-                htmlLink = response.HtmlLink,
-                location = response.Location,
-                startDate = (DateTime) response.Start.DateTime,
-                summary = response.Summary,
-                createDate = (DateTime) response.Created,
-                creatorName = response.Creator.DisplayName,
-                creatorMail = response.Creator.Email
-            };
+            var calenderItem = new GoogleCalendarModel();
+            calenderItem.userId = _credential.UserId;
+            calenderItem.id = response.Id;
+            calenderItem.attendees = FilterEventAttendeesMail(response);
+            calenderItem.htmlLink = response.HtmlLink;
+            calenderItem.location = response.Location;
+            calenderItem.startDate = (DateTime)response.Start.DateTime;
+            calenderItem.summary = response.Summary;
+            calenderItem.createDate = (DateTime)response.Created;
+            calenderItem.creatorName = response.Creator.DisplayName;
+            calenderItem.creatorMail = response.Creator.Email;
 
             return calenderItem;
         }
@@ -89,7 +93,7 @@ namespace Smart_Mirror_App_WPF.Data.API
         /// <returns>One string with all attendees of the event seperator by a "-"</returns>
         private static string FilterEventAttendeesMail(Event response)
         {
-            return response.Attendees.Aggregate("", (current, attendee) => current + (attendee.Email + "-"));
+            return response.Attendees != null ? response.Attendees.Aggregate("", (current, attendee) => current + (attendee.Email + "-")) : "";
         }
 
         public override void InsertToDb(List<GoogleCalendarModel> data)

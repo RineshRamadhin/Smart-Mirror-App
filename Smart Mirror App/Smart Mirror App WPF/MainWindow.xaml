@@ -34,17 +34,17 @@
         <TextBlock Grid.Column="0" x:Name="time" FontSize="30" Foreground="white" Margin="20,5,0,0"/>
         <TextBlock Grid.Column="1"  x:Name="date" FontSize="30"   Foreground="white" Margin="20,5,0,0" />
         <TextBlock Grid.Column="2" x:Name="location" FontSize="20" Text="Rotterdam" Foreground="white"  Margin="20,5,0,0" HorizontalAlignment="Center"/>
-        <TextBlock Grid.Column="2" x:Name="weather" FontSize="20" Text="{Binding }" Foreground="white"  Margin="20,40,0,0" HorizontalAlignment="Center">
+        <TextBlock Grid.Column="2" x:Name="weather" FontSize="20" Text="" Foreground="white"  Margin="20,40,0,0" HorizontalAlignment="Center">
 
         </TextBlock>
 
 
         <Button Grid.Column="3" x:Name="GoogleUserImage" Background="Transparent" BorderThickness="0" BorderBrush="Transparent" Focusable="False" Click="Button_Click" >
             <StackPanel Orientation="Horizontal">
-                <Image Source="https://lh3.googleusercontent.com/-BrQTD5mOV98/AAAAAAAAAAI/AAAAAAAAAAA/-HCZEj5TVAI/photo.jpg"/>
+                <Image x:Name="userImage" Source="https://lh3.googleusercontent.com/-BrQTD5mOV98/AAAAAAAAAAI/AAAAAAAAAAA/-HCZEj5TVAI/photo.jpg"/>
             </StackPanel>
         </Button>
-        <TextBlock Grid.Column="3" Grid.Row="1" Text="Tjarda" FontSize="15" Foreground="white" HorizontalAlignment="Center" />
+        <TextBlock Grid.Column="3" x:Name="displayName" Grid.Row="1" Text="" FontSize="15" Foreground="white" HorizontalAlignment="Center" />
         <Button  Grid.Column="0" Grid.Row="2" Width="100" Height="100" BorderBrush="Transparent" BorderThickness="0" Focusable="False" Background="Transparent" Click="button_Click_1" HorizontalAlignment="Center">
 
             <StackPanel>
@@ -72,7 +72,58 @@
             </StackPanel>
         </Button>
 
+        <TextBlock Grid.Column="0" 
+                   Grid.Row="3" 
+                   x:Name="MailFrom" 
+                   TextWrapping="Wrap"
+                   FontSize="20" 
+                   Text="Latests Mail:"
+                   Foreground="white" 
+                   Margin="5,5,5,5" 
+                   VerticalAlignment="Top">
+        </TextBlock>
+        <TextBlock Grid.Column="0" 
+                   Grid.Row="3" 
+                   x:Name="mail1" 
+                   TextWrapping="Wrap"
+                   FontSize="20" 
+                   Text=""
+                   Foreground="white" 
+                   Margin="5,25,5,5" 
+                   VerticalAlignment="Top">
+        </TextBlock>
 
+        <TextBlock Grid.Column="0" 
+                   Grid.Row="4" 
+                   x:Name="UpcomingEventsLabel" 
+                   TextWrapping="Wrap"
+                   FontSize="20" 
+                   Text="Upcoming Events:"
+                   Foreground="white" 
+                   Margin="5,5,5,5" 
+                   VerticalAlignment="Top">
+        </TextBlock>
+        <TextBlock Grid.Column="0" 
+                   Grid.Row="4" 
+                   x:Name="UpcomingEventsList" 
+                   TextWrapping="Wrap"
+                   FontSize="20" 
+                   Text=""
+                   Foreground="white" 
+                   Margin="5,25,5,5" 
+                   VerticalAlignment="Top">
+        </TextBlock>
+
+        <TextBlock Grid.Column="3" 
+                   Grid.Row="4" 
+                   x:Name="BotText" 
+                   TextWrapping="Wrap"
+                   FontSize="20" 
+                   Text=""
+                   Foreground="white" 
+                   Margin="5,25,5,5" 
+                   VerticalAlignment="Top">
+        </TextBlock>
 
 
     </Grid>

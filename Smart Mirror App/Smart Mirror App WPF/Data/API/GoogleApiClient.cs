@@ -59,7 +59,7 @@ namespace Smart_Mirror_App_WPF.Data.API
         /// </summary>
         /// <param name="userLocation">The location of the user</param>
         /// <returns>Weather details in a OpenWeatherModel</returns>
-        public static async Task<OpenWeatherModel> GetCurrentWeather(string userLocation)
+        public async Task<OpenWeatherModel> GetCurrentWeather(string userLocation)
         {
             var openWeatherService = new OpenWeatherService();
             await openWeatherService.HttpRequestData(userLocation);

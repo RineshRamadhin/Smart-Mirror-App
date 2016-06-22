@@ -1,9 +1,11 @@
 ﻿using Smart_Mirror_App_WPF.ViewModel;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -21,6 +23,7 @@ using static System.Net.Mime.MediaTypeNames;
 using Smart_Mirror_App_WPF.Data.API;
 using Google.Apis.Calendar.v3.Data;
 using Smart_Mirror_App_WPF.Authentication.Google;
+using Smart_Mirror_App_WPF.Data.Bot;
 using Smart_Mirror_App_WPF.Data.Models;
 using Smart_Mirror_App_WPF.Input.Motion.LeapMotion;
 using Smart_Mirror_App_WPF.Input.Motion.LeapMotion.Data;
@@ -34,14 +37,17 @@ namespace Smart_Mirror_App_WPF
     {
         private UserCredential _curentUserCredential;
         private GoogleApiClient _googleApiClient;
+        private string _weather;
 
         public MainWindow()
         {
             InitializeComponent();
+            _curentUserCredential = GoogleSignin("user").Result;
             startclock();
             var leapMotion = new LeapMotion();
             leapMotion.Data.Gestures = new Gestures(null, null, null, OnCircle);
             leapMotion.Connect();
+            FillInUi();
         }
 
         private async void OnCircle(bool clockwise)
@@ -74,6 +80,82 @@ namespace Smart_Mirror_App_WPF
         private GoogleProfileModel GetGoogleProfileData()
         {
             return _googleApiClient.GetCurrentUser();
+        }
+
+        private async void FillInUi()
+        {
+            var weatherModel = await _googleApiClient.GetCurrentWeather("Rotterdam");
+            weather.Text = weatherModel.temp.ToString() + " degrees";
+            displayName.Text = GetGoogleProfileData().displayName;
+            var fullFilePath = GetGoogleProfileData().imageUrl;
+
+            BitmapImage bitmap = new BitmapImage();
+            bitmap.BeginInit();
+            bitmap.UriSource = new Uri(fullFilePath, UriKind.Absolute);
+            bitmap.EndInit();
+            userImage.Source = bitmap;
+
+            var mails = GetGmailGoogleData();
+            var events = GetGoogleCalendarData();
+            var userProfile = GetGoogleProfileData();
+
+            FillMailsData(mails);
+            FillCalendarData(events);
+            var botClient = BotClient.GetBotClientInstance();
+            botClient.StartBotClient(events, mails, userProfile);
+            if (botClient.GetAdviceBasedOnGoogleInformation() != "")
+            {
+                BotText.Text = botClient.GetAdviceBasedOnGoogleInformation();
+            } else
+            {
+                BotText.Text = botClient.GetUserBirthday();
+            }
+        }
+
+        private void FillMailsData(IReadOnlyList<GoogleGmailModel> mails)
+        { 
+            string mailsText = "";
+            for (int i = 0; i < 5; i++)
+            {
+                var mailSubject = mails[i].subject;
+                if (mailSubject.Length > 40)
+                {
+                    mailsText += mailSubject.Substring(0, 40) + "..." + "\r\n";
+                }
+                else
+                {
+                    mailsText += mailSubject + "\r\n";
+                }
+            }
+            mail1.Text = mailsText;
+        }
+
+        private void FillCalendarData(IReadOnlyList<GoogleCalendarModel> events)
+        { 
+            string eventsText = "";
+            for (int i = 0; i < events.Count; i++)
+            {
+                var eventSummary = events[i].summary;
+                var eventDay = events[i].startDate.Day;
+                var eventMonth = events[i].startDate.Month;
+
+                if (eventSummary.Length > 40)
+                {
+                    eventsText +=  eventDay + "-" + eventMonth + "  "+ eventSummary.Substring(0, 40) + "..." + "\r\n";
+                }
+                else
+                {
+                    eventsText +=  eventDay + "-" + eventMonth + "  " + eventSummary +  "\r\n";
+                }
+            }
+            if (eventsText == "")
+            {
+                UpcomingEventsLabel.Text = "No upcoming events!";
+            }
+            else
+            {
+                UpcomingEventsList.Text = eventsText;
+            } 
         }
 
         private void startclock()
