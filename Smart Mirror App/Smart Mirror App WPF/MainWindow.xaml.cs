@@ -18,6 +18,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 using System.Windows.Forms;
+using System.Xml;
 using Google.Apis.Auth.OAuth2;
 using static System.Net.Mime.MediaTypeNames;
 using Smart_Mirror_App_WPF.Data.API;
@@ -27,6 +28,7 @@ using Smart_Mirror_App_WPF.Data.Bot;
 using Smart_Mirror_App_WPF.Data.Models;
 using Smart_Mirror_App_WPF.Input.Motion.LeapMotion;
 using Smart_Mirror_App_WPF.Input.Motion.LeapMotion.Data;
+using Smart_Mirror_App_WPF.Loaders;
 
 namespace Smart_Mirror_App_WPF
 {
@@ -37,17 +39,23 @@ namespace Smart_Mirror_App_WPF
     {
         private UserCredential _curentUserCredential;
         private GoogleApiClient _googleApiClient;
-        private string _weather;
+        private string _defaultUrl = "http://www.ad.nl/home/rss.xml";
+        private XmlLoader _xmlLoader = new XmlLoader();
+        private LeapMotion leapMotion;
+
+        delegate void MyDel(BitmapImage img);
+
 
         public MainWindow()
         {
             InitializeComponent();
             _curentUserCredential = GoogleSignin("user").Result;
-            startclock();
-            var leapMotion = new LeapMotion();
-            leapMotion.Data.Gestures = new Gestures(null, null, null, OnCircle);
-            leapMotion.Connect();
             FillInUi();
+            GetRssFeed();
+            startclock();
+            leapMotion = new LeapMotion {Data = {Gestures = new Gestures(null, null, null, OnCircle)}};
+            leapMotion.Connect();
+
         }
 
         private async void OnCircle(bool clockwise)
@@ -56,6 +64,8 @@ namespace Smart_Mirror_App_WPF
                 _curentUserCredential = await GoogleSignin("Tjarda");
             else
                 _curentUserCredential = await GoogleSignin("Rinesh");
+            
+            FillInUi();
         }
 
         private async Task<UserCredential> GoogleSignin(string username)
@@ -84,16 +94,13 @@ namespace Smart_Mirror_App_WPF
 
         private async void FillInUi()
         {
-            var weatherModel = await _googleApiClient.GetCurrentWeather("Rotterdam");
-            weather.Text = weatherModel.temp.ToString() + " degrees";
-            displayName.Text = GetGoogleProfileData().displayName;
+            var weatherModel = await _googleApiClient.GetCurrentWeather("Rotterdam");  
             var fullFilePath = GetGoogleProfileData().imageUrl;
 
             BitmapImage bitmap = new BitmapImage();
             bitmap.BeginInit();
             bitmap.UriSource = new Uri(fullFilePath, UriKind.Absolute);
             bitmap.EndInit();
-            userImage.Source = bitmap;
 
             var mails = GetGmailGoogleData();
             var events = GetGoogleCalendarData();
@@ -101,15 +108,46 @@ namespace Smart_Mirror_App_WPF
 
             FillMailsData(mails);
             FillCalendarData(events);
+
             var botClient = BotClient.GetBotClientInstance();
             botClient.StartBotClient(events, mails, userProfile);
-            if (botClient.GetAdviceBasedOnGoogleInformation() != "")
+            this.Dispatcher.Invoke((Action)(() =>
             {
-                BotText.Text = botClient.GetAdviceBasedOnGoogleInformation();
-            } else
+                weather.Text = weatherModel.temp.ToString() + " degrees";
+                displayName.Text = userProfile.displayName;
+                //SwitchPic(bitmap);
+
+                if (botClient.GetAdviceBasedOnGoogleInformation() != "")
+                {
+                    BotText.Text = botClient.GetAdviceBasedOnGoogleInformation();
+                }
+                else if (botClient.GetUserBirthday() != "")
+                {
+                    BotText.Text = botClient.GetUserBirthday();
+                }
+                else
+                {
+                    Random rnd = new Random();
+                    int rNum = rnd.Next(1, 3);
+                    switch (rNum)
+                    {
+                        case 1:
+                            BotText.Text = "Next week you have a assessment";
+                            break;
+                        case 2:
+                            BotText.Text = "Summer vacation in three weeks!";
+                            break;
+                    }
+                }
+            }));
+        }
+
+        private void SwitchPic(BitmapImage img)
+        {
+            Dispatcher.BeginInvoke((Action)(() =>
             {
-                BotText.Text = botClient.GetUserBirthday();
-            }
+                userImage.Dispatcher.Invoke(new Action(() => userImage.Source = img));
+            }), DispatcherPriority.Render, null);
         }
 
         private void FillMailsData(IReadOnlyList<GoogleGmailModel> mails)
@@ -127,7 +165,11 @@ namespace Smart_Mirror_App_WPF
                     mailsText += mailSubject + "\r\n";
                 }
             }
-            mail1.Text = mailsText;
+      
+            this.Dispatcher.Invoke((Action)(() =>
+            {
+                mail1.Text = mailsText;
+            }));
         }
 
         private void FillCalendarData(IReadOnlyList<GoogleCalendarModel> events)
@@ -148,14 +190,45 @@ namespace Smart_Mirror_App_WPF
                     eventsText +=  eventDay + "-" + eventMonth + "  " + eventSummary +  "\r\n";
                 }
             }
-            if (eventsText == "")
+
+            this.Dispatcher.Invoke((Action) (() =>
             {
-                UpcomingEventsLabel.Text = "No upcoming events!";
+                if (eventsText == "")
+                {
+                    UpcomingEventsLabel.Text = "No upcoming events!";
+                    UpcomingEventsList.Text = "";
+                }
+                else
+                {
+                    UpcomingEventsList.Text = eventsText;
+                }
+            }));
+        }
+
+
+        public void GetRssFeed()
+        {
+            XmlDocument rssFeed = new XmlDocument();
+            rssFeed.Load(_defaultUrl);
+            UpdateUI(rssFeed);
+        }
+
+        private void UpdateUI(XmlDocument xml)
+        {
+            if (xml.DocumentElement != null)
+            {
+                XmlNodeList items = xml.DocumentElement.FirstChild.SelectNodes("item");
+                string adText = "";
+                if (items != null)
+                    foreach (XmlNode item in items)
+                    {
+                        string itemTitle = item["title"]?.InnerText;
+                        adText += itemTitle + "\r\n";
+                    }
+
+                AdTextBlock.Text = adText;
             }
-            else
-            {
-                UpcomingEventsList.Text = eventsText;
-            } 
+           
         }
 
         private void startclock()
@@ -212,6 +285,7 @@ namespace Smart_Mirror_App_WPF
                 rssReaderWindow.Owner = System.Windows.Application.Current.MainWindow;
                 rssReaderWindow.Top = this.Top + this.ActualHeight - 325;
                 rssReaderWindow.Left = this.Left + 40;
+                rssReaderWindow.GetRssFeed();
             }
             rssReaderWindow.Show();
         }

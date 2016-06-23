@@ -30,14 +30,14 @@ namespace Smart_Mirror_App_WPF
             UpdateUI(_xmlLoader.Load(_defaultUrl));
         }
 
-        //public void GetRssFeed(String url)
-        //{
-        //    Lable_Rss_Title.Content = "Loading RSS Feed (" + url + ")...";
-        //    XmlDocument rssFeed = new XmlDocument();
-        //    rssFeed.Load(url);
+        public void GetRssFeed()
+        {
+            Lable_Rss_Title.Content = "Loading RSS Feed (" + _defaultUrl + ")...";
+            XmlDocument rssFeed = new XmlDocument();
+            rssFeed.Load(_defaultUrl);
 
-        //    UpdateUI(rssFeed);
-        //}
+            UpdateUI(rssFeed);
+        }
 
         private void UpdateUI(XmlDocument xml)
         {

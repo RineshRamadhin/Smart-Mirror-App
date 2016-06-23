@@ -29,12 +29,16 @@ namespace Smart_Mirror_App_WPF.Data.Bot
         public string GetUserBirthday()
         {
             var today = DateTime.Today;
-            var parsedBirthday = DateTime.Parse(_profile.birthday);
-            int age = today.Year - parsedBirthday.Year;
-            if (parsedBirthday > today.AddYears(-age))
-                age--;
+            if (_profile.birthday != null)
+            {
+                var parsedBirthday = DateTime.Parse(_profile.birthday);
+                int age = today.Year - parsedBirthday.Year;
+                if (parsedBirthday > today.AddYears(-age))
+                    age--;
 
-            return (parsedBirthday.AddYears(age + 1) - today).TotalDays + " days till your birthday! :D";
+                return (parsedBirthday.AddYears(age + 1) - today).TotalDays + " days till your birthday! :D";
+            }
+
         }
 
         public string CheckEventsToday()

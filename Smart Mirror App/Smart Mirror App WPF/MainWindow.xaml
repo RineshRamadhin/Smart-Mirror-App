@@ -125,6 +125,17 @@
                    VerticalAlignment="Top">
         </TextBlock>
 
+        <TextBlock Grid.Column="3" 
+                   Grid.Row="3" 
+                   x:Name="AdTextBlock" 
+                   TextWrapping="Wrap"
+                   FontSize="20" 
+                   Text=""
+                   Foreground="white" 
+                   Margin="5,5,5,5" 
+                   VerticalAlignment="Top">
+        </TextBlock>
+
 
     </Grid>
 
