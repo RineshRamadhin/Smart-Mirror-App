@@ -28,7 +28,6 @@ namespace Smart_Mirror_App_WPF.Data.API
         public GoogleProfileModel GetCurrentUser()
         {
             var googlePlusService = new GooglePlusService(_credential);
-            googlePlusService.CreateService();
             return googlePlusService.GetUserProfile();
         }
 
@@ -39,7 +38,6 @@ namespace Smart_Mirror_App_WPF.Data.API
         public List<GoogleCalendarModel> GetEventsUser()
         {
             var googleCalendarService = new GoogleCalendarService(_credential);
-            googleCalendarService.CreateService();
             return googleCalendarService.GetData();
         }
 
@@ -50,7 +48,6 @@ namespace Smart_Mirror_App_WPF.Data.API
         public List<GoogleGmailModel> GetGmailsUser()
         {
             var googleGmailService = new GoogleGmailService(_credential);
-            googleGmailService.CreateService();
             return googleGmailService.GetData();
         }
 

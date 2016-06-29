@@ -29,6 +29,7 @@ using Smart_Mirror_App_WPF.Data.Models;
 using Smart_Mirror_App_WPF.Input.Motion.LeapMotion;
 using Smart_Mirror_App_WPF.Input.Motion.LeapMotion.Data;
 using Smart_Mirror_App_WPF.Loaders;
+using System.Diagnostics;
 
 namespace Smart_Mirror_App_WPF
 {
@@ -94,17 +95,12 @@ namespace Smart_Mirror_App_WPF
 
         private async void FillInUi()
         {
-            var weatherModel = await _googleApiClient.GetCurrentWeather("Rotterdam");  
-            var fullFilePath = GetGoogleProfileData().imageUrl;
-
-            BitmapImage bitmap = new BitmapImage();
-            bitmap.BeginInit();
-            bitmap.UriSource = new Uri(fullFilePath, UriKind.Absolute);
-            bitmap.EndInit();
-
+            var weatherModel = await _googleApiClient.GetCurrentWeather("Rotterdam");
+            var userProfile = GetGoogleProfileData();
             var mails = GetGmailGoogleData();
             var events = GetGoogleCalendarData();
-            var userProfile = GetGoogleProfileData();
+
+            InsertUserImage(userProfile.imageUrl);
 
             FillMailsData(mails);
             FillCalendarData(events);
@@ -115,7 +111,6 @@ namespace Smart_Mirror_App_WPF
             {
                 weather.Text = weatherModel.temp.ToString() + " degrees";
                 displayName.Text = userProfile.displayName;
-                //SwitchPic(bitmap);
 
                 if (botClient.GetAdviceBasedOnGoogleInformation() != "")
                 {
@@ -125,29 +120,23 @@ namespace Smart_Mirror_App_WPF
                 {
                     BotText.Text = botClient.GetUserBirthday();
                 }
-                else
-                {
-                    Random rnd = new Random();
-                    int rNum = rnd.Next(1, 3);
-                    switch (rNum)
-                    {
-                        case 1:
-                            BotText.Text = "Next week you have a assessment";
-                            break;
-                        case 2:
-                            BotText.Text = "Summer vacation in three weeks!";
-                            break;
-                    }
-                }
             }));
         }
 
-        private void SwitchPic(BitmapImage img)
+        private void InsertUserImage(string imgUrl)
         {
-            Dispatcher.BeginInvoke((Action)(() =>
+            try
             {
-                userImage.Dispatcher.Invoke(new Action(() => userImage.Source = img));
-            }), DispatcherPriority.Render, null);
+                BitmapImage bitmap = new BitmapImage();
+                bitmap.BeginInit();
+                bitmap.UriSource = new Uri(imgUrl, UriKind.Absolute);
+                bitmap.EndInit();
+                userImage.Source = bitmap;
+            } catch (Exception error)
+            {
+                Debug.WriteLine(error);
+            }
+            
         }
 
         private void FillMailsData(IReadOnlyList<GoogleGmailModel> mails)

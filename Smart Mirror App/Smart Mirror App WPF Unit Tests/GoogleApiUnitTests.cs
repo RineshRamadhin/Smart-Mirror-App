@@ -42,7 +42,6 @@ namespace Smart_Mirror_App_WPF_Unit_Tests
         {
             await _googleAuthenticator.LoginGoogle(_testUsername);
             var gmailService = new GoogleGmailService(_googleAuthenticator.GetCurrentCredentials());
-            gmailService.CreateService();
             Assert.IsNotNull(gmailService.GetData());
         }
 
@@ -92,7 +91,6 @@ namespace Smart_Mirror_App_WPF_Unit_Tests
         {
             await _googleAuthenticator.LoginGoogle(_testUsername);
             var calendarService = new GoogleCalendarService(_googleAuthenticator.GetCurrentCredentials());
-            calendarService.CreateService();
         }
 
         [TestMethod]
@@ -139,7 +137,6 @@ namespace Smart_Mirror_App_WPF_Unit_Tests
         {
             await _googleAuthenticator.LoginGoogle(_testUsername);
             _googlePlusService = new GooglePlusService(_googleAuthenticator.GetCurrentCredentials());
-            _googlePlusService.CreateService();
             Assert.IsNotNull(_googlePlusService.GetUserProfile());
         }
 
@@ -168,7 +165,6 @@ namespace Smart_Mirror_App_WPF_Unit_Tests
             await _googleAuthenticator.LoginGoogle(_testUsername);
             _user = _googleAuthenticator.GetCurrentCredentials();
             _googlePlusService = new GooglePlusService(_user);
-            _googlePlusService.CreateService();
             _userProfile = _googlePlusService.GetUserProfile();
         }
     }

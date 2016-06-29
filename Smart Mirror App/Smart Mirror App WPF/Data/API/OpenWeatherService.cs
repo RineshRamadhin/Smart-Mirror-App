@@ -42,7 +42,7 @@ namespace Smart_Mirror_App_WPF.Data.API
 
             try
             {
-                ResponseParser(await httpClient.GetAsync(weatherRequestUrl));
+                await ResponseParser(await httpClient.GetAsync(weatherRequestUrl));
             }
             catch (HttpRequestException httpError)
             {

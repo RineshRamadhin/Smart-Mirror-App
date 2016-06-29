@@ -11,7 +11,7 @@ using Smart_Mirror_App_WPF.Data.Database;
 
 namespace Smart_Mirror_App_WPF.Data.API
 {
-    public class GoogleCalendarService : DefaultGoogleService<GoogleCalendarModel, List<GoogleCalendarModel>, Event>
+    public class GoogleCalendarService : DefaultGoogleService<GoogleCalendarModel, Event>
     {
         private List<GoogleCalendarModel> _calendarEvents = new List<GoogleCalendarModel>();
         private readonly UserCredential _credential;
@@ -20,9 +20,10 @@ namespace Smart_Mirror_App_WPF.Data.API
         public GoogleCalendarService(UserCredential credential)
         {
             _credential = credential;
+            CreateService();
         }
 
-        public override void CreateService()
+        protected sealed override void CreateService()
         {
             var service = new CalendarService(new BaseClientService.Initializer
             {
@@ -30,6 +31,11 @@ namespace Smart_Mirror_App_WPF.Data.API
                 ApplicationName = _applicationName,
             });
 
+            StartSerivce(service);    
+        }
+
+        private void StartSerivce(CalendarService service)
+        {
             try
             {
                 var events = SetupServiceRequest(service).Execute();
@@ -41,10 +47,11 @@ namespace Smart_Mirror_App_WPF.Data.API
                 _calendarEvents = allEvents;
                 SetData(_calendarEvents);
                 InsertToDb(_calendarEvents);
-            } catch (Exception error)
+            }
+            catch (Exception error)
             {
                 Debug.WriteLine(error);
-            }       
+            }
         }
 
         private static EventsResource.ListRequest SetupServiceRequest(CalendarService service)

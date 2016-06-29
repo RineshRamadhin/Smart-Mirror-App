@@ -11,7 +11,7 @@ using Smart_Mirror_App_WPF.Data.Database;
 
 namespace Smart_Mirror_App_WPF.Data.API
 {
-    public class GoogleGmailService : DefaultGoogleService<GoogleGmailModel, List<GoogleGmailModel>, Message>
+    public class GoogleGmailService : DefaultGoogleService<GoogleGmailModel, Message>
     {
         private List<GoogleGmailModel> _gmails = new List<GoogleGmailModel>();
         private readonly UserCredential _credential;
@@ -19,7 +19,8 @@ namespace Smart_Mirror_App_WPF.Data.API
 
         public GoogleGmailService(UserCredential credential)
         {
-            this._credential = credential;
+            _credential = credential;
+            CreateService();
         }
 
         public override List<GoogleGmailModel> GetData()
@@ -29,10 +30,13 @@ namespace Smart_Mirror_App_WPF.Data.API
 
         protected override void SetData(List<GoogleGmailModel> itemList)
         {
-            this._gmails = itemList;
+            _gmails = itemList;
         }
 
-        public override void CreateService()
+        /// <summary>
+        /// Starts the Gmail Service and will automatically retrieve latest e-mails of current user
+        /// </summary>
+        protected sealed override void CreateService()
         {
             var service = new GmailService(new BaseClientService.Initializer
             {
@@ -40,23 +44,33 @@ namespace Smart_Mirror_App_WPF.Data.API
                 ApplicationName = ApplicationName,
             });
 
-            var allMailRequest = service.Users.Messages.List("me");
-            allMailRequest.MaxResults = 20;
-            allMailRequest.LabelIds = "CATEGORY_PERSONAL";
-            allMailRequest.IncludeSpamTrash = false;
+            StartService(service);
+        }
 
+        private void StartService(GmailService service)
+        {
             try
             {
-                var messages = allMailRequest.Execute().Messages;
+                var messages = SetupRequest(service).Execute().Messages;
                 // messages does not contain all the details of the mail, so we need to get more details
                 if (messages == null || messages.Count <= 0) return;
                 SetData(GetDetailsMail(messages, service));
                 InsertToDb(_gmails);
-            } catch (Exception error)
+            }
+            catch (Exception error)
             {
                 // TODO; Catch 400 error meaning user has no gmail 
                 Debug.WriteLine(error);
             }
+        }
+
+        private UsersResource.MessagesResource.ListRequest SetupRequest(GmailService service)
+        {
+            var allMailRequest = service.Users.Messages.List("me");
+            allMailRequest.MaxResults = 20;
+            allMailRequest.LabelIds = "CATEGORY_PERSONAL";
+            allMailRequest.IncludeSpamTrash = false;
+            return allMailRequest;
         }
 
         /// <summary>

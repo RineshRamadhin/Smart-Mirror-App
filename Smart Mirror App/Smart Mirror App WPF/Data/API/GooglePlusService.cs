@@ -11,7 +11,7 @@ using System.Linq;
 
 namespace Smart_Mirror_App_WPF.Data.API
 {
-    public class GooglePlusService : DefaultGoogleService<GoogleProfileModel, List<GoogleProfileModel>, Person>
+    public class GooglePlusService : DefaultGoogleService<GoogleProfileModel, Person>
     {
         private List<GoogleProfileModel> _profiles = new List<GoogleProfileModel>();
         private GoogleProfileModel _currentUserProfile = new GoogleProfileModel();
@@ -21,12 +21,13 @@ namespace Smart_Mirror_App_WPF.Data.API
         public GooglePlusService(UserCredential credential)
         {
             _credential = credential;
+            CreateService();
         }
 
         /// <summary>
         /// Creates a service and starts requesting google+ data
         /// </summary>
-        public override void CreateService()
+        protected sealed override void CreateService()
         {
             var service = new PlusService(new BaseClientService.Initializer
             {
@@ -48,7 +49,6 @@ namespace Smart_Mirror_App_WPF.Data.API
             {
                 Debug.WriteLine(error);
             }
-             
         }
 
         public override List<GoogleProfileModel> GetData()
