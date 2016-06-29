@@ -33,7 +33,7 @@
         </Grid.RowDefinitions>
         <TextBlock Grid.Column="0" x:Name="time" FontSize="30" Foreground="white" Margin="20,5,0,0"/>
         <TextBlock Grid.Column="1"  x:Name="date" FontSize="30"   Foreground="white" Margin="20,5,0,0" />
-        <TextBlock Grid.Column="2" x:Name="location" FontSize="20" Text="Rotterdam" Foreground="white"  Margin="20,5,0,0" HorizontalAlignment="Center"/>
+        <TextBlock Grid.Column="2" x:Name="location" FontSize="20" Text="Barendrecht" Foreground="white"  Margin="20,5,0,0" HorizontalAlignment="Center"/>
         <TextBlock Grid.Column="2" x:Name="weather" FontSize="20" Text="" Foreground="white"  Margin="20,40,0,0" HorizontalAlignment="Center">
 
         </TextBlock>
@@ -79,7 +79,7 @@
                    FontSize="20" 
                    Text="Latests Mail:"
                    Foreground="white" 
-                   Margin="5,5,5,5" 
+                   Margin="5,0,5,5" 
                    VerticalAlignment="Top">
         </TextBlock>
         <TextBlock Grid.Column="0" 
@@ -100,7 +100,7 @@
                    FontSize="20" 
                    Text="Upcoming Events:"
                    Foreground="white" 
-                   Margin="5,5,5,5" 
+                   Margin="5,0,5,5" 
                    VerticalAlignment="Top">
         </TextBlock>
         <TextBlock Grid.Column="0" 

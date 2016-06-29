@@ -38,6 +38,7 @@ namespace Smart_Mirror_App_WPF.Data.Bot
 
                 return (parsedBirthday.AddYears(age + 1) - today).TotalDays + " days till your birthday! :D";
             }
+            return "";
 
         }
 

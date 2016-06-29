@@ -218,12 +218,18 @@ namespace Smart_Mirror_App_WPF
             if (xml.DocumentElement != null)
             {
                 XmlNodeList items = xml.DocumentElement.FirstChild.SelectNodes("item");
-                string adText = "";
+                int x = 0;
+                string adText = "Ad Headlines: " + "\r\n" ;
                 if (items != null)
                     foreach (XmlNode item in items)
                     {
                         string itemTitle = item["title"]?.InnerText;
                         adText += itemTitle + "\r\n";
+                        x++;
+                        if (x == 7)
+                        {
+                            break;
+                        }
                     }
 
                 AdTextBlock.Text = adText;

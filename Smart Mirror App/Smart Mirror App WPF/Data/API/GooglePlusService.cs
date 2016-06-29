@@ -4,7 +4,9 @@ using Google.Apis.Plus.v1.Data;
 using Google.Apis.Services;
 using Smart_Mirror_App_WPF.Data.Database;
 using Smart_Mirror_App_WPF.Data.Models;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace Smart_Mirror_App_WPF.Data.API
@@ -36,10 +38,17 @@ namespace Smart_Mirror_App_WPF.Data.API
 
         private void RequestGooglePlusData(PlusService service)
         {
-            var profiles = new List<GoogleProfileModel> { ResponseParser(service.People.Get("me").Execute()) };
+            try
+            {
+                var profiles = new List<GoogleProfileModel> { ResponseParser(service.People.Get("me").Execute()) };
 
-            SetData(profiles);
-            InsertToDb(profiles);
+                SetData(profiles);
+                InsertToDb(profiles);
+            } catch (Exception error)
+            {
+                Debug.WriteLine(error);
+            }
+             
         }
 
         public override List<GoogleProfileModel> GetData()
